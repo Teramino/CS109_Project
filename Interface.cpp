@@ -482,6 +482,6 @@ void Interface::run()
 		}
 
 		cin.clear();
-		cin.ignore(.5, '\n');
+		cin.ignore(1, '\n');
 	}
 }
