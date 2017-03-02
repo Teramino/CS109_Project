@@ -294,12 +294,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 //cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 //cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          //                    for(auto i:  get<1>(it))
@@ -314,12 +314,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                                // cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 //cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          
@@ -334,12 +334,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 //cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 //cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          if(param2.compare(params[1]) == 0)
@@ -381,13 +381,13 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
                      {
                          if (i==0)
                          {
-                             cout << get<1>(it)[i] << ", ";
+                             //cout << get<1>(it)[i] << ", ";
                              logicalOp = get<1>(it)[i]; // holds the operator
                              
                          }
                          else if(i <= get<1>(it).size()-2)
                          {
-                             cout << get<1>(it)[i] << ", ";
+                             //cout << get<1>(it)[i] << ", ";
                              decltype(get<1>(it)[i]) fact = get<1>(it)[i]; // variable holding a fact inside rule
                              // need to parse fact name from params
                              ruleTemp.push_back(fact);
@@ -405,7 +405,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
                          else
                          {
                              
-                             cout << get<1>(it)[i] << endl;
+                             //cout << get<1>(it)[i] << endl;
                              decltype(get<1>(it)[i]) fact = get<1>(it)[i]; // variable holding a fact inside rule
                              // need to parse fact name from params
                              ruleTemp.push_back(fact);
@@ -759,7 +759,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             match.push_back(retrieveFact(parseKey(query[i]),keyParams[0],keyParams[1]));
         }
         
-        cout << "RESULTS " << endl;
+        //cout << "RESULTS " << endl;
         //	        for(int i = 0; i < match.size(); i++)
         //	        {
         //	        	for(int param = 0; param < match[i].size(); param++)
@@ -900,7 +900,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             match.push_back(retrieveFact(parseKey(query[i]),keyParams[0],keyParams[1]));
         }
         
-        cout << "RESULTS " << endl;
+        //cout << "RESULTS " << endl;
         for(int i = 0; i < match.size(); i++)
         {
             //                	for(int param = 0; param < match[i].size(); param++)
@@ -1060,7 +1060,7 @@ void Helper:: DumpHelp(string path)
     vector<tuple<string,vector<string>>>& Rulebase = tCommands->getRule();
     try
     {
-        cout << "In the dump function" << endl;
+       // cout << "In the dump function" << endl;
         // open/create file
         file.open (f, ios::out);
         if(Factbase.size() != 0){
@@ -1104,13 +1104,13 @@ void Helper:: DumpHelp(string path)
                          for(int i=0; i < get<1>(it).size(); i++)
                          {
                              if (i==0){
-                                 cout << "This is the logical operator " << get<1>(it)[i] << endl;
+                             //   cout << "This is the logical operator " << get<1>(it)[i] << endl;
                                  logicalOperater = get<1>(it)[i]; // holds the operator
                                  temp.append(logicalOperater + " ");
                              } else if (i <= get<1>(it).size()-1){
                                  //cout << "What is this? " << get<1>(it)[i] << ", ";
                                  temp.append(get<1>(it)[i] + " ");
-                                 cout << temp << endl;
+                             //    cout << temp << endl;
                              }
                          }
                          
@@ -1134,7 +1134,7 @@ void Helper:: DumpHelp(string path)
 
 void Helper:: LoadHelp(string path)
 {
-    cout << "in Load Help" << endl;
+   // cout << "in Load Help" << endl;
     const char* f = path.c_str();
     fstream file;
     // line
@@ -1145,17 +1145,17 @@ void Helper:: LoadHelp(string path)
     string drop_string = "DROP";
     string dump_string = "DUMP";
     file.exceptions ( fstream::badbit );
-    cout << "How do you make this project in a week and a half?" << endl;
+   // cout << "How do you make this project in a week and a half?" << endl;
     try
     {
         // open file
         file.open (f, ios::in);
-        cout << "Trying to open file" << endl;
+     //   cout << "Trying to open file" << endl;
         
         while ( getline(file, l) )
         {
-            cout << "right before string altering" << endl;
-            cout << "this is l before alteration: " << l << endl;
+       //     cout << "right before string altering" << endl;
+       //     cout << "this is l before alteration: " << l << endl;
             
             //this process is the same as ParseCommand; Later we will use the method instead.
             string delimeter = " ";
@@ -1174,8 +1174,8 @@ void Helper:: LoadHelp(string path)
                 string key = ""; // holds the key or fact name
                 pos2 = l.find(delimiter); //set pos2 to the index where the ( is located in the string.
                 key = parseKey(l); // saves the relaton part of the string as key, so it can be passed to storeBase later.
-                cout << "this is l: " << l << endl;
-                cout << "this is the key: " << key << endl;
+           //     cout << "this is l: " << l << endl;
+           //     cout << "this is the key: " << key << endl;
                 
                 vector<string> parameters;
                 
@@ -1204,9 +1204,9 @@ void Helper:: LoadHelp(string path)
                 string key = ""; // holds the key or fact name
                 pos2 = l.find(delimiter); //set pos2 to the index where the ( is located in the string.
                 key = parseKey(l); // saves the relaton part of the string as key, so it can be passed to storeBase later.
-                cout << "this is l: " << l << endl;
-                cout << "this is the key: " << key << endl;
-                
+              //  cout << "this is l: " << l << endl;
+             //   cout << "this is the key: " << key << endl;
+             
                 vector<string> params2 = parseRule(l);
                 
                 storeBase(tCommands->getRule(), params2, key);
@@ -1299,7 +1299,7 @@ void Helper:: ParseQuery(string rest)
 {
     vector<vector<string>> tempFacts;
     string key;
-    cout << "in Parse Query" << endl;
+  //  cout << "in Parse Query" << endl;
     string empty_string = "";
     string temp = "";
     size_t ch = rest.find(")"); // find the location of the space in our string
@@ -1308,14 +1308,14 @@ void Helper:: ParseQuery(string rest)
     ch++;
     rest.erase(0, ch);
     vector<string> parameters;
-    cout << "This is rest after the erase " << endl;
+  //  cout << "This is rest after the erase " << endl;
     if (rest.compare(empty_string) == 0)
     {
         //call the inference part where we only need to print
         parameters = parseParams(temp);
-        cout << "This is the basic inference case" << endl;
+  //      cout << "This is the basic inference case" << endl;
         key = parseKey(temp);
-        cout << "this is the key: " << key << endl;
+   //     cout << "this is the key: " << key << endl;
         auto opParams = retrieveRule(parameters,key);
         vector<vector<string>> rule = get<3>(opParams);
         
@@ -1329,15 +1329,15 @@ void Helper:: ParseQuery(string rest)
     }
     else
     {
-        cout << "This is the other inference case" << endl;
+    //    cout << "This is the other inference case" << endl;
         //there is an extra part of the string for inference.
         string key2 = parseKey(temp); //parses our full string saved in temp to get key2 as Grandmother.
         parameters = parseParams(temp);
         size_t space = rest.find(" ");
         space++;
         key = rest.substr (space); //Obtain the acronym (GF) as our key and save it for when we store the results in the fact vector.
-        cout << "This is the key" << endl;
-        cout << key << endl;
+    //    cout << "This is the key" << endl;
+    //    cout << key << endl;
         
         auto opParams = retrieveRule(parameters,key2);
         vector<vector<string>> rule = get<3>(opParams);
@@ -1359,7 +1359,7 @@ void Helper:: ParseQuery(string rest)
         
         vector<string> fact = singleVecCondense(tempFacts);
         storeBase(tCommands->getFact(), fact, key);
-        
+  
         cout << endl << key << " Inference: ";
         for(auto b: fact)
             cout << b << " ";

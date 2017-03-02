@@ -30,9 +30,9 @@ Transactional_Commands:: Transactional_Commands(){
 // ===================================================================================
 
 void Transactional_Commands:: loadCommand(string path){
-    cout << "start of load function." << endl;
+    //cout << "start of load function." << endl;
     Helper:: instance()->LoadHelp(path);
-    cout << "end of load function." << endl;
+   // cout << "end of load function." << endl;
 //    const char* f = path.c_str();
 //    fstream file;
 //    // line
@@ -68,9 +68,9 @@ void Transactional_Commands:: loadCommand(string path){
 
 void Transactional_Commands:: dumpCommand(string path) //vector<tuple<string,vector<string>>>& base)
 {
-    cout << "start of dump function" << endl;
+    //cout << "start of dump function" << endl;
     Helper:: instance()->DumpHelp(path);
-    cout << "end of dump function" << endl;
+   // cout << "end of dump function" << endl;
 }
 
 

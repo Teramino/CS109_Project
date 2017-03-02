@@ -481,7 +481,7 @@ void Interface::run()
 			}
 		}
 
-		cin.clear();
+//		cin.clear();
 		cin.ignore(1, '\n');
 	}
 }
