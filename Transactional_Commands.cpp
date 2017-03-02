@@ -14,7 +14,7 @@ Transactional_Commands:: Transactional_Commands(){
     commandMap["DUMP"] = dumpCommand;
     
     
-    cout << "Transactional Command initialized\n";
+//    cout << "Transactional Command initialized\n";
 
 }
 
