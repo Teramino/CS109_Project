@@ -389,7 +389,7 @@ void Interface::run()
 		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
 		//or the new line char is encountered
 		cin.clear();
-		cin.ignore(100, '\n');
+//		cin.ignore(100, '\n');
 		cout << endl;
 
 		string_version_UserInput = UserInput;
