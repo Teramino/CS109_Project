@@ -1129,6 +1129,7 @@ void Helper:: DumpHelp(string path)
         cerr << "Failed to dump file\n";
     }
     
+    cout << endl;
 }
 
 
@@ -1146,6 +1147,7 @@ void Helper:: LoadHelp(string path)
     string dump_string = "DUMP";
     file.exceptions ( fstream::badbit );
    // cout << "How do you make this project in a week and a half?" << endl;
+    
     try
     {
         // open file
@@ -1246,6 +1248,8 @@ void Helper:: LoadHelp(string path)
     {
         cerr << "Failed to load file\n";
     }
+    
+    cout << endl;
     
 }
 

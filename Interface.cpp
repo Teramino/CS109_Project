@@ -251,7 +251,7 @@ bool Valid_DROP_Input(string drop_defenition, bool& user_mess_up)
 bool Valid_DUMP_Input(string dump_defenition, bool& user_mess_up)
 {
 
-	size_t looking_for_specific_file_ending = dump_defenition.find(".sri"); 
+	size_t looking_for_specific_file_ending = dump_defenition.find(".txt"); 
 
 	if (looking_for_specific_file_ending != dump_defenition.npos)
 	{
@@ -294,7 +294,7 @@ bool Valid_LOAD_Input(string path, bool& user_mess_up)
 			for (int i = 0; i < (int)command.size(); ++i) //captalizes all the words in the first part
 			{
 				command[i] = toupper(command[i]);
-				cout << endl;
+//				cout << endl;
 			}
 
 			if (command == "FACT"){
@@ -479,6 +479,10 @@ void Interface::run()
 			{
 				program_looping = false;
 			}
+            else
+            {
+                error_commited = false;
+            }
 		}
 
 //		cin.clear();
