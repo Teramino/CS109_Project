@@ -232,10 +232,11 @@ bool Valid_INFERENCE_Input(string inference_defenition, bool& user_mess_up)
 
 bool Valid_DROP_Input(string drop_defenition, bool& user_mess_up)
 {
-
-	for (char& c : drop_defenition)//loop through the string char by char, and only push when encoutering a parentheses
+	for(int i = 0;i< drop_defenition.length(); ++i) //loop through the string char by char, and only push when encoutering a parentheses
 	{
-		if (isalpha(c) == 0)
+		
+		cout << "This is the text: "<< drop_defenition[i] << " ============"<<endl;
+		if (isalpha(drop_defenition[i]) == 0)
 		{
 			cout << "The DROP name must only be alphabets, no spaces or symbols before or after the name" << endl;
 			cout << "Example: 'DROP Father' " << endl;
@@ -251,7 +252,12 @@ bool Valid_DROP_Input(string drop_defenition, bool& user_mess_up)
 bool Valid_DUMP_Input(string dump_defenition, bool& user_mess_up)
 {
 
+<<<<<<< HEAD
 	size_t looking_for_specific_file_ending = dump_defenition.find(".txt"); 
+=======
+	//size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
+	size_t looking_for_specific_file_ending = dump_defenition.find(".txt");
+>>>>>>> 0e8c3ef1c545bc46343edca78ed5a36a50fa0fe1
 
 	if (looking_for_specific_file_ending != dump_defenition.npos)
 	{
@@ -279,6 +285,12 @@ bool Valid_LOAD_Input(string path, bool& user_mess_up)
 	{
 		// open file
 		file.open(f, ios::in);
+		if(!file)
+		{
+			cout<<"The file doesn't exist"<<endl;
+			cout<<"Please type everything correctly for the file to be loaded"<<endl<<endl;
+			return false;
+		}
 		while (getline(file, line))
 		{
 			++count;
@@ -479,10 +491,17 @@ void Interface::run()
 			{
 				program_looping = false;
 			}
+<<<<<<< HEAD
             else
             {
                 error_commited = false;
             }
+=======
+			else
+			{
+				error_commited = false;
+			}
+>>>>>>> 0e8c3ef1c545bc46343edca78ed5a36a50fa0fe1
 		}
 
 //		cin.clear();
