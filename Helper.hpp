@@ -27,7 +27,7 @@ public:
     void storeBase(vector<tuple<string,vector<string>>>&,vector<string>&,string);
     //void getBase(vector<tuple<string,vector<string>>>&,string);
     void dropBase(string);
-    vector<vector<string>> op(string,string,vector<string>,vector<vector<string>>,vector<vector<string>>);
+    vector<vector<vector<string>>> op(string,string,vector<string>,vector<vector<string>>,vector<vector<string>>);
     vector<vector<string>> andOperator(string,vector<string>,vector<string>,vector<vector<string>>);
     vector<vector<string>> orOperator(string,vector<string>,vector<string>);
     vector<vector<string>> orOperator2(string,vector<string>,vector<string>, vector<vector<string>>);
