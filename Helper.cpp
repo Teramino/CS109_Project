@@ -1482,13 +1482,8 @@ void Helper:: ParseQuery(string rest)
         
         vector<string> fact = singleVecCondense(tempFacts);
         storeBase(tCommands->getFact(), fact, key);
-<<<<<<< HEAD
-  
-        cout << endl << key << " Inference: "<<endl;
-=======
         
-        cout << endl << key << " Inference: ";
->>>>>>> 2363c5330f88b35493fd2e068cc9d91426a9cf26
+        cout << endl << key << " Inference: " << endl;
         for(auto b: fact)
             cout << "    -"<<b << endl;
         cout<<endl;
