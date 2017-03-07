@@ -294,12 +294,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 //cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 //cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          //                    for(auto i:  get<1>(it))
@@ -314,12 +314,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-                                // cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 //cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          
@@ -334,12 +334,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 //cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-                                 //cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          if(param2.compare(params[1]) == 0)
@@ -431,14 +431,15 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
     //    else if (logicalOperater=="OR")
     //        orOperator(key, params, query);
     //    return op(logicalOp, key, params, rule); // need to figure out how to call
+    
     return make_tuple(logicalOp, key, params,rule);
 }
 
 
-vector<vector<vector<string>>> Helper:: op(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
+vector<vector<string>> Helper:: op(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
-    //    vector<vector<string>> facts;
+        vector<vector<string>> facts;
     for(int i=0; i < rule.size(); i++)
     {
         if(logicalOp=="AND")
@@ -448,10 +449,10 @@ vector<vector<vector<string>>> Helper:: op(string logicalOp, string key,vector<s
         //            orOperator(key, keyParams, rule[i]);
     }
     
-    //    facts = vectorCondense(data);
+        facts = vectorCondense(data);
     
-    //    return facts;
-    return data;
+        return facts;
+//    return data;
 }
 
 vector<vector<string>> Helper:: vectorCondense(vector<vector<vector<string>>> v)
@@ -532,63 +533,59 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     
     
     paramIndex = paramCorr(paramData);
+    
+    bool isGeneric = true;
+    // check to see if params are specific or not
+    for(int i=0; i<keyParams.size(); i++)
+    {
+        if (keyParams[i][0] != '$')
+        {
+            isGeneric = false;
+            break;
+        }
+    }
+    
+    // get facts of first defined rule target
+    if (isGeneric) // params are generic Father($x,$y)
+    {
+        // check if rule target has a defined rule
+        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
+        // get<3> holds defined rule
+        auto tempRule = get<3>(tempTuple);
+        
+        if(tempRule.size() == 0) // theres no defined rule
+        {
+            factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+        }
+        else
+        {
+            factData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
+        }
+    }
+    else // params are specific Father(John,$y)
+    {
+        // check if rule target has a defined rule
+        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
+        // get<3> holds defined rule
+        auto tempRule = get<3>(tempTuple);
+        
+        if(tempRule.size() == 0) // theres no defined rule
+        {
+            factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+        }
+        else
+        {
+            factData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
+        }
+    }
 
     
     
     vector<vector<string>> temp;
     
-    
+//    
         auto tempTup = retrieveRule(keyParams, parseKey(rule[0]));
-        if((temp = get<3>(tempTup)).size() == 0) // if rule is not defined
-        {
-            //         holds data from fact from left parememter
-            //                if (paramData[0][0][0] == '$' && paramData[0][1][0] == '$') // both parameters are generic
-            //                {
-            //                    factData = retrieveFact(parseKey(rule[0]),paramData[0][0],paramData[0][1]);
-            //                }
-            //                else  if (paramData[0][0][0] != '$' && paramData[0][1][0] == '$') // the left parameter is specific
-            //                {
-            //                     factData = retrieveFact(parseKey(rule[0]),keyParams[0],paramData[0][1]);
-            //                }
-            //                else  if (paramData[0][0][0] == '$' && paramData[0][1][0] != '$') // the right paremeter is specific
-            //                {
-            //                  factData = retrieveFact(parseKey(rule[0]), paramData[0][0],keyParams[1]);
-            //                }
-            
-            //          holds data from fact from each individual query in rule ie. Grandmother():- Mother() Mother()
-            factData = retrieveFact(parseKey(rule[0]),paramData[0][0],paramData[0][1]);
-        }
-        else // if rule is defined
-        {
-            //        holds data from fact from left parememter
-            //        if (paramData[0][0] == keyParams[0] && paramData[0][1] == keyParams[1]) // both parameters are generic
-            //        {
-            //            auto temp = op(get<0>(tempTup), get<1>(tempTup), get<2>(tempTup), get<3>(tempTup));
-            //            factData = vectorCondense(temp);
-            //        }
-            //        else  if (paramData[0][0] != keyParams[0] && paramData[0][1] == keyParams[1]) // the left parameter is specific
-            //        {
-            //            vector<string> param;
-            //            param.push_back(keyParams[0]);
-            //            param.push_back(paramData[0][1]);
-            //            auto temp = op(get<0>(tempTup), get<1>(tempTup), param, get<3>(tempTup));
-            //            factData = vectorCondense(temp);        }
-            //        else  if (paramData[0][0] == keyParams[0] && paramData[0][1] != keyParams[1]) // the right paremeter is specific
-            //        {
-            //            vector<string> param;
-            //            param.push_back(paramData[0][0]);
-            //            param.push_back(keyParams[1]);
-            //            auto temp = op(get<0>(tempTup), get<1>(tempTup), param, get<3>(tempTup));
-            //            factData = vectorCondense(temp);
-            //        }
-            vector<string> param;
-            param.push_back(paramData[0][0]);
-            param.push_back(paramData[0][1]);
-            
-            auto temp = op(get<0>(tempTup), get<1>(tempTup), param, get<3>(tempTup), factData);
-            factData = vectorCondense(temp);
-        }
-        
+    
         //this variable pulls the facts for the first rule target only; the preceding rule target may used the first rule target which will be handeled later
         
     
@@ -614,7 +611,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 }
                 else // if rule is defined
                 {
-                    relationalData = op(get<0>(tempTup), get<1>(tempTup), get<2>(tempTup), get<3>(tempTup), factData);
+//                    relationalData = op(get<0>(tempTup), get<1>(tempTup), get<2>(tempTup), get<3>(tempTup), factData);
                     break;
                 }
             }
@@ -1344,7 +1341,8 @@ void Helper:: ParseQuery(string rest)
         else
         {
             vector<vector<string>> factData;
-            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+//            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
         }
     }
     else
@@ -1367,7 +1365,8 @@ void Helper:: ParseQuery(string rest)
         else
         {
             vector<vector<string>> factData;
-            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+//            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
         }
     }
     //cout << ch << " This is the position of the space"
