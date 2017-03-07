@@ -451,7 +451,8 @@ vector<vector<vector<string>>> Helper:: op(string logicalOp, string key,vector<s
         if(logicalOp=="AND")
             data.push_back(andOperator(key, keyParams, rule[i], fact));
         else if (logicalOp=="OR")
-            data.push_back(orOperator2(key, keyParams, rule[i], fact));
+            data.push_back(orOperator(key, keyParams, rule[i]));
+//        data.push_back(orOperator2(key, keyParams, rule[i], fact));
         //            orOperator(key, keyParams, rule[i]);
     }
     
@@ -732,7 +733,7 @@ vector<vector<string>> Helper:: orOperator2(string key, vector<string> keyParams
         }
         else
         {
-            factData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
+            factData = vectorCondense(op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
     }
     else // params are specific Father(John,$y)
@@ -748,14 +749,14 @@ vector<vector<string>> Helper:: orOperator2(string key, vector<string> keyParams
         }
         else
         {
-            factData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
+            factData = vectorCondense(op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
     }
     
     
+    vector<vector<string>> shit;
     
-    
-    
+    return shit;
 }
 
 
