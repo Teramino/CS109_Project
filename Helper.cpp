@@ -62,8 +62,8 @@ void Helper::parseCommand(string user_input)
     string rest = user_input.substr (ch);
     
     //prints out command and the rest of the string just for simplicity.
-    cout << "The command is: " << command << endl;
-    cout << "The contents are: " << rest << endl;
+    //cout << "The command is: " << command << endl;
+    //cout << "The contents are: " << rest << endl;
     
     
     tCommands->getMapCommand()[command](rest); //calls the proper function in transactional commands
@@ -136,7 +136,9 @@ vector<string> Helper:: parseParams(string &input)
     pos = input.find(delimiter); // find the
     
     string temp = input.substr(0, pos);
-    cout << "Input key: " << input.substr(0, pos) << endl;
+    cout << "----------------------------------------" << endl;
+
+    cout << "Key: " << input.substr(0, pos) << endl;
     pos++; // eats delimiter;
     
     string parsedInput = input.substr(pos, input.length());
@@ -155,7 +157,7 @@ vector<string> Helper:: parseParams(string &input)
     pos = parsedInput.find(delimiter);
     parameters.push_back(parsedInput.substr(0, pos));
     cout << "Parameter(" << count << "): " << parameters[parameters.size()-1] << endl;
-    
+    cout <<"----------------------------------------"<<endl;
     
     return parameters;
     
@@ -177,6 +179,8 @@ vector<string> Helper:: parseRule(string input)
     vector<string> param;
     string delimiter = ":-";
     size_t pos = input.find(delimiter);
+     cout << "----------------------------------------" << endl;
+    cout << "Key: " << input.substr(0, pos) << endl;
     pos++; // eats up delimiter :
     pos++; // eats up delimiter -
     
@@ -199,6 +203,8 @@ vector<string> Helper:: parseRule(string input)
     pos = parsedInput.find(delimiter);
     param.push_back(parsedInput.substr(0, pos));
     cout << "Parameter(" << count << "): " << param[param.size()-1] << endl;
+    cout <<"----------------------------------------"<<endl;
+
     return param;
 }
 
@@ -220,7 +226,7 @@ void Helper:: parseDefinition(char function, string def)
     if (function=='f') //
     {
         string key = parseKey(def); //parse the key part of def.  Example being Father.
-        cout << "Key: " << key << endl;
+        //cout << "Key: " << key << endl;
         vector<string> parameters = parseParams(def); //obtain the perameters of our string.  Example being (Roger, John).
         
         
@@ -230,7 +236,7 @@ void Helper:: parseDefinition(char function, string def)
     {
         
         string key = parseKey(def);
-        cout << "Key: " << key << endl;
+        //cout << "Key: " << key << endl;
         //        vector<string> keyParams = parseParams(def); unused may need later
         
         vector<string> params2 = parseRule(def);
@@ -1079,6 +1085,7 @@ void Helper:: DumpHelp(string path)
        // cout << "In the dump function" << endl;
         // open/create file
         file.open (f, ios::out);
+        cout <<"Saving in to the file: " << f << endl;
         if(Factbase.size() != 0){
             for_each(Factbase.begin(), Factbase.end()-1,[&](decltype(*Factbase.begin()) it) -> void // iterates through vector
                      {
@@ -1114,9 +1121,9 @@ void Helper:: DumpHelp(string path)
                      {
                          string temp = "RULE ";
                          temp.append(get<0>(it));
-                         cout << temp << endl;
+                         //cout << temp << endl; //this prints out the when the user dumps 
                          temp.append("($X,$Y):- ");
-                         cout << temp << endl;
+                         //cout << temp << endl;
                          for(int i=0; i < get<1>(it).size(); i++)
                          {
                              if (i==0){
@@ -1144,7 +1151,7 @@ void Helper:: DumpHelp(string path)
     {
         cerr << "Failed to dump file\n";
     }
-    
+    cout <<"File has been saved"<<endl;
     cout << endl;
 }
 
@@ -1273,6 +1280,7 @@ void Helper:: LoadHelp(string path)
 void Helper::dropBase(string command)
 {
     int count = 0; // iterates through the for loops
+    cout << "Dropping: "<< command<<endl<<endl;
     vector<int> factIndex;
     
     for(vector<tuple<string,vector<string>>>::iterator i = tCommands->getFact().begin(); i != tCommands->getFact().end(); i++) // iterates through vector
