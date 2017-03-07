@@ -137,7 +137,7 @@ vector<string> Helper:: parseParams(string &input)
     
     string temp = input.substr(0, pos);
     cout << "----------------------------------------" << endl;
-
+    
     cout << "Key: " << input.substr(0, pos) << endl;
     pos++; // eats delimiter;
     
@@ -179,7 +179,7 @@ vector<string> Helper:: parseRule(string input)
     vector<string> param;
     string delimiter = ":-";
     size_t pos = input.find(delimiter);
-     cout << "----------------------------------------" << endl;
+    cout << "----------------------------------------" << endl;
     cout << "Key: " << input.substr(0, pos) << endl;
     pos++; // eats up delimiter :
     pos++; // eats up delimiter -
@@ -204,7 +204,7 @@ vector<string> Helper:: parseRule(string input)
     param.push_back(parsedInput.substr(0, pos));
     cout << "Parameter(" << count << "): " << param[param.size()-1] << endl;
     cout <<"----------------------------------------"<<endl;
-
+    
     return param;
 }
 
@@ -445,7 +445,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
 vector<vector<string>> Helper:: op(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
-        vector<vector<string>> facts;
+    vector<vector<string>> facts;
     for(int i=0; i < rule.size(); i++)
     {
         if(logicalOp=="AND")
@@ -455,10 +455,10 @@ vector<vector<string>> Helper:: op(string logicalOp, string key,vector<string> k
         //            orOperator(key, keyParams, rule[i]);
     }
     
-        facts = vectorCondense(data);
+    facts = vectorCondense(data);
     
-        return facts;
-//    return data;
+    return facts;
+    //    return data;
 }
 
 vector<vector<string>> Helper:: vectorCondense(vector<vector<vector<string>>> v)
@@ -516,12 +516,12 @@ vector<tuple<int,int,int,int>> Helper:: paramCorr(vector<vector<string>> paramDa
                 string b = paramData[i+1][j]; // used for testing
                 if (paramData[i][param].compare(paramData[i+1][j]) == 0) // checks to see if param match
                 {
-//                    paramCheck.push_back(true);
+                    //                    paramCheck.push_back(true);
                     paramCord.push_back(make_tuple(i,param,i+1,j)); // records index of the leftmost rule target and its param and the compared rule target index and its param
                 }
                 
             }
-
+    
     return paramCord;
 }
 
@@ -584,106 +584,104 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             factData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
         }
     }
-
+    
     
     
     vector<vector<string>> temp;
     
-//    
-        auto tempTup = retrieveRule(keyParams, parseKey(rule[0]));
+    auto tempTup = retrieveRule(keyParams, parseKey(rule[0]));
     
-        //this variable pulls the facts for the first rule target only; the preceding rule target may used the first rule target which will be handeled later
+    //this variable pulls the facts for the first rule target only; the preceding rule target may used the first rule target which will be handeled later
+    
+    
+    // grabs data from Fact based on parameters
+    if (paramCheck.size() != paramData[0].size()) // checks to see if all parameters match, if they dont proceed
+    {
+        // this holds the corelation fact data from the rule target based on parameters
+        vector<vector<vector<string>>> relationalData;
+        vector<vector<string>> match;
         
-    
-        // grabs data from Fact based on parameters
-        if (paramCheck.size() != paramData[0].size()) // checks to see if all parameters match, if they dont proceed
+        for (int i=0; i<factData.size(); i++)
         {
-            // this holds the corelation fact data from the rule target based on parameters
-            vector<vector<vector<string>>> relationalData;
-            vector<vector<string>> match;
+            vector<string> param;
+            param.push_back(paramData[0][0]);
+            param.push_back(paramData[0][1]);
             
-            for (int i=0; i<factData.size(); i++)
+            tempTup = retrieveRule(keyParams, parseKey(rule[1]));
+            if((temp = get<3>(tempTup)).size() == 0) // if rule is not defined
             {
-                vector<string> param;
-                param.push_back(paramData[0][0]);
-                param.push_back(paramData[0][1]);
-                
-                tempTup = retrieveRule(keyParams, parseKey(rule[1]));
-                if((temp = get<3>(tempTup)).size() == 0) // if rule is not defined
-                {
-                    // there should only be one vector contained so use index 0 to pull index to vector that has data
-                    // this pulls the data based on the correlation between rule targetfrom fact from each individual query in rule ie. Grandmother():- Mother() Mother()
-                    relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], paramData[1][1]));
-                }
-                else // if rule is defined
-                {
-//                    relationalData = op(get<0>(tempTup), get<1>(tempTup), get<2>(tempTup), get<3>(tempTup), factData);
-                    break;
-                }
+                // there should only be one vector contained so use index 0 to pull index to vector that has data
+                // this pulls the data based on the correlation between rule targetfrom fact from each individual query in rule ie. Grandmother():- Mother() Mother()
+                relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], paramData[1][1]));
             }
-            
-            //        cout << endl << key << " Inference: ";
-            
-            // this is where the logical operator logic happens
-            for(int i=0; i < relationalData.size(); i++) // iterates through data that has been returned from correlations of rule target
-            { // used to iterate through relationalData and factData; there size is ALWAYS going to be equal
-                if(relationalData[i].size() != 0) // if empty break
+            else // if rule is defined
+            {
+                //                    relationalData = op(get<0>(tempTup), get<1>(tempTup), get<2>(tempTup), get<3>(tempTup), factData);
+                break;
+            }
+        }
+        
+        //        cout << endl << key << " Inference: ";
+        
+        // this is where the logical operator logic happens
+        for(int i=0; i < relationalData.size(); i++) // iterates through data that has been returned from correlations of rule target
+        { // used to iterate through relationalData and factData; there size is ALWAYS going to be equal
+            if(relationalData[i].size() != 0) // if empty break
+            {
+                vector<string> matchTemp; // temporary holds matches of current iterated vector
+                vector<string>inferDataTemp; // temporary holds inference data of current iterated vector
+                
+                // loop through vectors one by one finding if theres a match if theres not then that means thats the data we want
+                for(int k = 0; k < relationalData[i].size(); k++)  // iterates through vectors inside of relationalData (vector<vector<string>)
                 {
-                    vector<string> matchTemp; // temporary holds matches of current iterated vector
-                    vector<string>inferDataTemp; // temporary holds inference data of current iterated vector
-                    
-                    // loop through vectors one by one finding if theres a match if theres not then that means thats the data we want
-                    for(int k = 0; k < relationalData[i].size(); k++)  // iterates through vectors inside of relationalData (vector<vector<string>)
-                    {
-                        for(int j=0; j < relationalData[i][k].size(); j++) // iterates through vector's data inside of relationalData vector (string)
-                        { // factData is the only variable using j index
-                            for(int param = 0; param < paramData[j].size(); param++) // iterate through parameters (string)
-                                //                        for(int k=0; k < paramData[i].size(); k++) // iterate through inferData
+                    for(int j=0; j < relationalData[i][k].size(); j++) // iterates through vector's data inside of relationalData vector (string)
+                    { // factData is the only variable using j index
+                        for(int param = 0; param < paramData[j].size(); param++) // iterate through parameters (string)
+                            //                        for(int k=0; k < paramData[i].size(); k++) // iterate through inferData
+                        {
+                            // this code looks at parameter at a time comparing it to the results of inferData
+                            // if the current parameter matches inferData then we dont want it ie. GrandMother($X,$Y):- Mother($X,$Z) Mother($Z,$Y)
+                            // we dont want the $Z parameter so this code will leave you with $X, $Y
+                            // the data only prints for now; and needs to be made more generic ie. nothing hard coded
+                            if (factData[i][j].compare(relationalData[i][k][param]) == 0)
                             {
-                                // this code looks at parameter at a time comparing it to the results of inferData
-                                // if the current parameter matches inferData then we dont want it ie. GrandMother($X,$Y):- Mother($X,$Z) Mother($Z,$Y)
-                                // we dont want the $Z parameter so this code will leave you with $X, $Y
-                                // the data only prints for now; and needs to be made more generic ie. nothing hard coded
-                                if (factData[i][j].compare(relationalData[i][k][param]) == 0)
-                                {
-                                    matchTemp.push_back(relationalData[i][k][param]);
-                                    break;
-                                }
-                                if (param == relationalData[i][k].size()-1)
-                                {
-                                    //                                cout << factData[i][j] << " ";
-                                    inferDataTemp.push_back(factData[i][j]);
-                                }
-                            }// end for
+                                matchTemp.push_back(relationalData[i][k][param]);
+                                break;
+                            }
+                            if (param == relationalData[i][k].size()-1)
+                            {
+                                //                                cout << factData[i][j] << " ";
+                                inferDataTemp.push_back(factData[i][j]);
+                            }
                         }// end for
-                        
-                        match.push_back(matchTemp);
-                        inferData.push_back(inferDataTemp);
-                        matchTemp.clear();
-                        inferDataTemp.clear();
                     }// end for
                     
-                } // end if
-            }// end for
-            // at the end of for loop match will have all the matching data to be eliminated from saved vector to be returned
-            
-            // looks for duplicates and only output the correlated data
-            for(auto v: relationalData) // loops through outer vector: v is the actual vector
-                for(int i=0; i<v.size(); i++)  // loops through inner vector: vv is the actual vector
-                    for(int k=0; k < match[i].size(); k++) // iterates through match's inner vector
-                        for(int j=0; j<v[i].size(); j++) // loops through data in relationalData
-                        { // doing it this way eliminate v[x][i]; just another way of looping
-                            if (match[i][k].compare(v[i][j]) != 0)
-                            {
-                                //                            cout << v[i][j] << " ";
-                                inferData[i].push_back(v[i][j]);
-                                
-                            }
+                    match.push_back(matchTemp);
+                    inferData.push_back(inferDataTemp);
+                    matchTemp.clear();
+                    inferDataTemp.clear();
+                }// end for
+                
+            } // end if
+        }// end for
+        // at the end of for loop match will have all the matching data to be eliminated from saved vector to be returned
+        
+        // looks for duplicates and only output the correlated data
+        for(auto v: relationalData) // loops through outer vector: v is the actual vector
+            for(int i=0; i<v.size(); i++)  // loops through inner vector: vv is the actual vector
+                for(int k=0; k < match[i].size(); k++) // iterates through match's inner vector
+                    for(int j=0; j<v[i].size(); j++) // loops through data in relationalData
+                    { // doing it this way eliminate v[x][i]; just another way of looping
+                        if (match[i][k].compare(v[i][j]) != 0)
+                        {
+                            //                            cout << v[i][j] << " ";
+                            inferData[i].push_back(v[i][j]);
+                            
                         }
-            
-            
-        }// end if
-        cout << endl << endl;
+                    }        
+        
+    }// end if
+    cout << endl << endl;
     
     return inferData;
     
@@ -1079,7 +1077,7 @@ void Helper:: DumpHelp(string path)
     vector<tuple<string,vector<string>>>& Rulebase = tCommands->getRule();
     try
     {
-       // cout << "In the dump function" << endl;
+        // cout << "In the dump function" << endl;
         // open/create file
         file.open (f, ios::out);
         cout <<"Saving in to the file: " << f << endl;
@@ -1118,19 +1116,19 @@ void Helper:: DumpHelp(string path)
                      {
                          string temp = "RULE ";
                          temp.append(get<0>(it));
-                         //cout << temp << endl; //this prints out the when the user dumps 
+                         //cout << temp << endl; //this prints out the when the user dumps
                          temp.append("($X,$Y):- ");
                          //cout << temp << endl;
                          for(int i=0; i < get<1>(it).size(); i++)
                          {
                              if (i==0){
-                             //   cout << "This is the logical operator " << get<1>(it)[i] << endl;
+                                 //   cout << "This is the logical operator " << get<1>(it)[i] << endl;
                                  logicalOperater = get<1>(it)[i]; // holds the operator
                                  temp.append(logicalOperater + " ");
                              } else if (i <= get<1>(it).size()-1){
                                  //cout << "What is this? " << get<1>(it)[i] << ", ";
                                  temp.append(get<1>(it)[i] + " ");
-                             //    cout << temp << endl;
+                                 //    cout << temp << endl;
                              }
                          }
                          
@@ -1155,7 +1153,7 @@ void Helper:: DumpHelp(string path)
 
 void Helper:: LoadHelp(string path)
 {
-   // cout << "in Load Help" << endl;
+    // cout << "in Load Help" << endl;
     const char* f = path.c_str();
     fstream file;
     // line
@@ -1166,18 +1164,18 @@ void Helper:: LoadHelp(string path)
     string drop_string = "DROP";
     string dump_string = "DUMP";
     file.exceptions ( fstream::badbit );
-   // cout << "How do you make this project in a week and a half?" << endl;
+    // cout << "How do you make this project in a week and a half?" << endl;
     
     try
     {
         // open file
         file.open (f, ios::in);
-     //   cout << "Trying to open file" << endl;
+        //   cout << "Trying to open file" << endl;
         
         while ( getline(file, l) )
         {
-       //     cout << "right before string altering" << endl;
-       //     cout << "this is l before alteration: " << l << endl;
+            //     cout << "right before string altering" << endl;
+            //     cout << "this is l before alteration: " << l << endl;
             
             //this process is the same as ParseCommand; Later we will use the method instead.
             string delimeter = " ";
@@ -1196,8 +1194,8 @@ void Helper:: LoadHelp(string path)
                 string key = ""; // holds the key or fact name
                 pos2 = l.find(delimiter); //set pos2 to the index where the ( is located in the string.
                 key = parseKey(l); // saves the relaton part of the string as key, so it can be passed to storeBase later.
-           //     cout << "this is l: " << l << endl;
-           //     cout << "this is the key: " << key << endl;
+                //     cout << "this is l: " << l << endl;
+                //     cout << "this is the key: " << key << endl;
                 
                 vector<string> parameters;
                 
@@ -1226,9 +1224,9 @@ void Helper:: LoadHelp(string path)
                 string key = ""; // holds the key or fact name
                 pos2 = l.find(delimiter); //set pos2 to the index where the ( is located in the string.
                 key = parseKey(l); // saves the relaton part of the string as key, so it can be passed to storeBase later.
-              //  cout << "this is l: " << l << endl;
-             //   cout << "this is the key: " << key << endl;
-             
+                //  cout << "this is l: " << l << endl;
+                //   cout << "this is the key: " << key << endl;
+                
                 vector<string> params2 = parseRule(l);
                 
                 storeBase(tCommands->getRule(), params2, key);
@@ -1324,7 +1322,7 @@ void Helper:: ParseQuery(string rest)
 {
     vector<vector<string>> tempFacts;
     string key;
-  //  cout << "in Parse Query" << endl;
+    //  cout << "in Parse Query" << endl;
     string empty_string = "";
     string temp = "";
     size_t ch = rest.find(")"); // find the location of the space in our string
@@ -1333,14 +1331,14 @@ void Helper:: ParseQuery(string rest)
     ch++;
     rest.erase(0, ch);
     vector<string> parameters;
-  //  cout << "This is rest after the erase " << endl;
+    //  cout << "This is rest after the erase " << endl;
     if (rest.compare(empty_string) == 0)
     {
         //call the inference part where we only need to print
         parameters = parseParams(temp);
-  //      cout << "This is the basic inference case" << endl;
+        //      cout << "This is the basic inference case" << endl;
         key = parseKey(temp);
-   //     cout << "this is the key: " << key << endl;
+        //     cout << "this is the key: " << key << endl;
         auto opParams = retrieveRule(parameters,key);
         vector<vector<string>> rule = get<3>(opParams);
         
@@ -1349,21 +1347,21 @@ void Helper:: ParseQuery(string rest)
         else
         {
             vector<vector<string>> factData;
-//            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            //            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
             tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
         }
     }
     else
     {
-    //    cout << "This is the other inference case" << endl;
+        //    cout << "This is the other inference case" << endl;
         //there is an extra part of the string for inference.
         string key2 = parseKey(temp); //parses our full string saved in temp to get key2 as Grandmother.
         parameters = parseParams(temp);
         size_t space = rest.find(" ");
         space++;
         key = rest.substr (space); //Obtain the acronym (GF) as our key and save it for when we store the results in the fact vector.
-    //    cout << "This is the key" << endl;
-    //    cout << key << endl;
+        //    cout << "This is the key" << endl;
+        //    cout << key << endl;
         
         auto opParams = retrieveRule(parameters,key2);
         vector<vector<string>> rule = get<3>(opParams);
@@ -1373,7 +1371,7 @@ void Helper:: ParseQuery(string rest)
         else
         {
             vector<vector<string>> factData;
-//            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            //            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
             tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
         }
     }
@@ -1386,7 +1384,7 @@ void Helper:: ParseQuery(string rest)
         
         vector<string> fact = singleVecCondense(tempFacts);
         storeBase(tCommands->getFact(), fact, key);
-  
+        
         cout << endl << key << " Inference: ";
         for(auto b: fact)
             cout << b << " ";
