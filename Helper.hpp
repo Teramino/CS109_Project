@@ -30,6 +30,7 @@ public:
     vector<vector<string>> op(string,string,vector<string>,vector<vector<string>>,vector<vector<string>>);
     vector<vector<string>> andOperator(string,vector<string>,vector<string>,vector<vector<string>>);
     vector<vector<string>> orOperator(string,vector<string>,vector<string>);
+    vector<vector<string>> orOperator2(string,vector<string>,vector<string>, vector<vector<string>>);
     vector<vector<string>> vectorCondense(vector<vector<vector<string>>>);
     vector<string> singleVecCondense(vector<vector<string>>);
     void parseCommand(string);

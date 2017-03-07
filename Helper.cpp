@@ -451,7 +451,7 @@ vector<vector<string>> Helper:: op(string logicalOp, string key,vector<string> k
         if(logicalOp=="AND")
             data.push_back(andOperator(key, keyParams, rule[i], fact));
         else if (logicalOp=="OR")
-            data.push_back(orOperator(key, keyParams, rule[i]));
+            data.push_back(orOperator2(key, keyParams, rule[i], fact));
         //            orOperator(key, keyParams, rule[i]);
     }
     
@@ -697,6 +697,72 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 //
 //
 // ===================================================================================
+vector<vector<string>> Helper:: orOperator2(string key, vector<string> keyParams, vector<string> rule, vector<vector<string>> facts)
+{
+    vector<vector<string>> paramData; // holds parameters from each individual querey ie. Mother($x,$z) Mother($z,$y)
+    vector<bool> paramCheck;
+    vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
+    vector<vector<string>> inferData; // holds the data to be returned
+    vector<vector<string>> factData;
+    
+    for(int i=0; i < rule.size(); i++)
+        paramData.push_back(parseParams(rule[i]));
+    
+    
+    paramIndex = paramCorr(paramData);
+    
+    bool isGeneric = true;
+    // check to see if params are specific or not
+    for(int i=0; i<keyParams.size(); i++)
+    {
+        if (keyParams[i][0] != '$')
+        {
+            isGeneric = false;
+            break;
+        }
+    }
+    
+    // get facts of first defined rule target
+    if (isGeneric) // params are generic Father($x,$y)
+    {
+        // check if rule target has a defined rule
+        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
+        // get<3> holds defined rule
+        auto tempRule = get<3>(tempTuple);
+        
+        if(tempRule.size() == 0) // theres no defined rule
+        {
+            factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+        }
+        else
+        {
+            factData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
+        }
+    }
+    else // params are specific Father(John,$y)
+    {
+        // check if rule target has a defined rule
+        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
+        // get<3> holds defined rule
+        auto tempRule = get<3>(tempTuple);
+        
+        if(tempRule.size() == 0) // theres no defined rule
+        {
+            factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+        }
+        else
+        {
+            factData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
+        }
+    }
+    
+    
+    
+    
+    
+}
+
+
 vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams, vector<string> query)
 {
     // cout << "KEY = " << key << endl;
