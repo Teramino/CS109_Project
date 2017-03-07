@@ -281,11 +281,14 @@ void Helper:: storeBase(vector< tuple< string,vector<string> > > &base, vector<s
 // ===================================================================================
 vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string &param2)
 {
+//    cout<< "In retrieve fact" << endl;
+//    cout << "This is the params " << param1 << param2 <<endl;
     vector<string> params;
     vector<vector<string>> relationalData;
     cout << key << " Fact: ";
     char a;
     char b;
+    string empty = "";
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
              {
@@ -355,6 +358,10 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                  }
              });
     cout << endl;
+//    for (int i = 0; relationalData [0][i+1].compare(empty)!= 0; i++){
+//        cout << relationalData [0][i] << " This is a name in tempResult" << endl;
+   // }
+
     
     return relationalData;
 }
@@ -762,22 +769,17 @@ vector<vector<string>> Helper:: orOperator2(string key, vector<string> keyParams
 
 vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams, vector<string> query)
 {
-    // cout << "KEY = " << key << endl;
-    
-    // for( int i = 0 ; i < keyParams.size(); i++)
-    // {
-    // 	cout << "KEYPARAMS = " << keyParams[i] << endl;
-    // }
-    
-    // for( int i = 0 ; i < query.size(); i++)
-    // {
-    // 	cout << "Query = " << query[i] << endl;
-    // }
+   //keyParams holds the perameters of the key in the first two indexes ($X and $Y).   While the next two indexes hold the arguments being considered by the logical operator.
     
     vector<vector<string>> paramData; // holds parameters from each individual querey ie. Mother($x,$z) Mother($z,$y)
     vector<bool> paramCheck;
     vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
     vector<vector<string>> result;
+    vector<vector<string>> temp;
+    string empty = "";
+//    cout << "This is the key for this specific call: " << key << endl;
+//    cout << "Contents of keyParams@@@@@@@@@@@: " << keyParams[0] << endl;
+//    cout << "Should give an error: " << keyParams[3] << endl;
     
     vector<vector<vector<string>>> relationalData;
     for(int i=0; i < query.size(); i++)
@@ -785,14 +787,6 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         paramData.push_back(parseParams(query[i]));
         relationalData.push_back(retrieveFact(parseKey(query[i]),paramData[i][0],paramData[i][1])); // holds data from fact from each individual query in rule ie.
         
-        
-        //        if (paramData[i][0] == keyParams[0] && paramData[i][1] == keyParams[1]) // both parameters are generic
-        //            relationalData.push_back(retrieveFact(parseKey(query[i]),paramData[i][0],paramData[i][1])); // holds data from fact from each individual query in rule ie. Parent():- Father() Mother()
-        //        else  if (paramData[i][0] != keyParams[0] && paramData[i][1] == keyParams[1]) // the left parameter is specific
-        //            relationalData.push_back(retrieveFact(parseKey(query[i]),keyParams[0],paramData[i][1])); // holds data from fact from each individual query in rule ie. GParent():- Father() Mother()
-        //        else  if (paramData[i][0] == keyParams[0] && paramData[i][1] != keyParams[1]) // the right paremeter is specific
-        //            relationalData.push_back(retrieveFact(parseKey(query[i]),paramData[i][0],keyParams[1])); // holds data from fact from each individual query in rule ie. Parent():- Father() Mother()
-        //
         
     }
     
@@ -827,16 +821,49 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         // loop through each query
         for(int i=0; i < query.size(); i++)
         {
-            
-            tempResult.push_back(retrieveFact(parseKey(query[i]), keyParams[1], keyParams[1]));
-            
+            cout << "Should print each argument of the defined rule: " << query[i] << endl;
+            if (retrieveFact(parseKey(query[i]), keyParams[0], keyParams[1]).empty()) //enters this conditional only if one of the arguments of the query is a rule.  Example being if one of the arguments is patent.
+            {
+                cout << "\nHEREEEEEEEEEEEEE\n";
+                tuple<string,string,vector<string>,vector<vector<string>>> rule;
+//                cout << "this is the recursive reason? " <<  query[i] << endl;
+//                cout << "Contents of the parent rule: " << keyParams[0] << keyParams[1] << endl;
+                rule = retrieveRule(keyParams, parseKey(query[i])); //the key of the rule will be returned
+                vector<vector<string>> rulebase = get<3>(rule);
+                vector<string> rulething;
+                string s;
+                //Splits up the rule (Parent) into its defined parts and place it in rulething to be recursively called.
+                for(int k = 0; k < rulebase.size(); k++)
+                {
+                    cout << "ayy" << endl;
+                    for(int j = 0; j < rulebase[k].size(); j++)
+                    {
+                        cout << "bayy" << endl;
+                        s = (rulebase[k][j]);
+                        cout << s << endl;
+                        rulething.push_back(s); //rule thing should have both arguments of Parent; Mother and father
+                    }
+                }
+               // cout << rulething[0] << "AHHHHHHHHHHH" << endl;
+                temp = orOperator(parseKey(query[i]), keyParams, rulething); //recursive call for breaking up a rule.
+                //This is where we need to check for duplicates.
+//                for (int i = 0; tempResult [0][0][i].compare(empty)!= 0; i++){
+//                    cout << tempResult [0][0][0] << " This is a name in tempResult" << endl;
+//                }
+                tempResult.push_back(temp);
+            }
+            tempResult.push_back(retrieveFact(parseKey(query[i]), keyParams[0], keyParams[1])); //pushes back the facts of the defined key in our temp
+//            for (int i = 0; tempResult [0][0][i].compare(empty)!= 0; i++){
+//                cout << tempResult [0][0][i] << " This is a name in tempResult" << endl;
+           // }
+
             // example code of how to use the new return type of retrieveRule
             // get<3>(opParams) is the return type vector<vector<string>
             //                auto opParams = retrieveRule(parameters,key);
             //                op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams));
             
             
-            match.push_back(retrieveFact(parseKey(query[i]),keyParams[0],keyParams[1]));
+            //match.push_back(retrieveFact(parseKey(query[i]),keyParams[0],keyParams[1]));
         }
         
         //cout << "RESULTS " << endl;
@@ -969,35 +996,35 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     //    }
     
     // grabs data from Fact based on parameters
-    if (paramCheck.size() != paramData[0].size()) // checks to see if all parameters match, if they dont proceed
-    {
-        // this is where the logical operator logic happens
-        vector<vector<vector<string>>> match;
-        
-        // loop through each query
-        for(int i=0; i < query.size(); i++)
-        {
-            match.push_back(retrieveFact(parseKey(query[i]),keyParams[0],keyParams[1]));
-        }
-        
-        //cout << "RESULTS " << endl;
-        for(int i = 0; i < match.size(); i++)
-        {
-            //                	for(int param = 0; param < match[i].size(); param++)
-            //                	{
-            //                		for(int j=0; j < paramData[i].size(); j++)
-            //                		{
-            //                			result.push_back(match[i][param][j]);
-            //                		}
-            //                	}
-            
-            for(int param = 0; param < match[i].size(); param++)
-            {
-                result.push_back(match[i][param]);
-            }
-        }
-    }
-    return result;
+//    if (paramCheck.size() != paramData[0].size()) // checks to see if all parameters match, if they dont proceed
+//    {
+//        // this is where the logical operator logic happens
+//        vector<vector<vector<string>>> match;
+//        
+//        // loop through each query
+//        for(int i=0; i < query.size(); i++)
+//        {
+//            match.push_back(retrieveFact(parseKey(query[i]),keyParams[0],keyParams[1]));
+//        }
+//        
+//        //cout << "RESULTS " << endl;
+//        for(int i = 0; i < match.size(); i++)
+//        {
+//            //                	for(int param = 0; param < match[i].size(); param++)
+//            //                	{
+//            //                		for(int j=0; j < paramData[i].size(); j++)
+//            //                		{
+//            //                			result.push_back(match[i][param][j]);
+//            //                		}
+//            //                	}
+//            
+//            for(int param = 0; param < match[i].size(); param++)
+//            {
+//                result.push_back(match[i][param]);
+//            }
+//        }
+//    }
+//    return result;
     //    vector<vector<string>> paramData; // holds parameters from each individual querey ie. Mother($x,$z) Mother($z,$y)
     //    vector<bool> paramCheck;
     //    vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
@@ -1447,11 +1474,38 @@ void Helper:: ParseQuery(string rest)
         
         vector<string> fact = singleVecCondense(tempFacts);
         storeBase(tCommands->getFact(), fact, key);
+//        vector<string> final_fact;
+        vector<string> result = dropDuplicates(fact);
         
-        cout << endl << key << " Inference: ";
-        for(auto b: fact)
-            cout << b << " ";
-        cout << endl;
+        
+//        cout << endl << key << " Inference: " << endl;
+//        for(int i=0; i<fact.size(); i++){
+//            cout << fact[i] << " ";
+//            //to makes this more general, define a variable that represents the amount of arguments per Fact and mod that
+//            if(i%2 !=0){
+//                fact[i-1].append(" ");
+//                fact[i-1].append(fact[i]);
+//                cout << "pairs: " << fact[i-1] << endl;
+//                final_fact.push_back(fact[i-1]);
+//            }
+//        }
+//        for (int j = 0; j < final_fact.size(); j++){
+//            bool check = true;
+//            for (int k = j+1; k < final_fact.size(); k++){
+//                cout << final_fact[j]  << " and " << final_fact [k] << endl;
+//                if ( final_fact[j].compare(final_fact[k]) == 0){
+//                    //cout << "these should be equal: " << final_fact[j] << final_fact[k] << endl;
+//                    cout << "YAAAAAAA" << endl;
+//                    check = false;
+//                }
+//            }
+//            if (check){
+//                result.push_back(final_fact[j]);
+//            }
+//        }
+//        for(int i=0; i < result.size(); i++){
+//            cout << "No duplicates pair: " << result[i] << endl;
+//        }
     }
     else
     {
@@ -1461,6 +1515,51 @@ void Helper:: ParseQuery(string rest)
 
 
 
+// ===================================================================================
+// DropDuplicates
+// ===================================================================================
+//
+//
+//
+//
+//
+//
+// ===================================================================================
 
+vector<string> Helper::dropDuplicates (vector<string> fact){
+    cout << endl << "YOU ARE IN dropDuplicates FUNCTION!!!" << endl << endl;
+    vector<string> result; //holds the final vector with no duplicates
+    vector<string> final_fact; //used to concatinate strings
+    
+    for(int i=0; i<fact.size(); i++){
+        cout << fact[i] << " ";
+        //to makes this more general, define a variable that represents the amount of arguments per Fact and mod that
+        if(i%2 !=0){ //using mod so that concatinate every 2 strings together
+            fact[i-1].append(" "); //put the space between two strings
+            fact[i-1].append(fact[i]); //append both names together
+            cout << "pairs: " << fact[i-1] << endl; //print out the pairs so we know it is good
+            final_fact.push_back(fact[i-1]);
+        }
+    }
+    for (int j = 0; j < final_fact.size(); j++){
+        bool check = true; //set defualt value of the duplicate check to true until we find a duplicate.
+        for (int k = j+1; k < final_fact.size(); k++){
+            cout << final_fact[j]  << " and " << final_fact [k] << endl; //print all comparisons to show them and see which ones match
+            if ( final_fact[j].compare(final_fact[k]) == 0){
+                //cout << "these should be equal: " << final_fact[j] << final_fact[k] << endl;
+                cout << "DUPLICATE FOUND!!!" << endl;
+                check = false; //set the boolean to false so that we know that there is a duplicate present.
+            }
+        }
+        if (check){ //if the string is unique in our vector we push it into the final vector.
+            result.push_back(final_fact[j]);
+        }
+    }
+    for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
+        cout << "No duplicates pair: " << result[i] << endl;
+    }
+    
+    return result; //returns the vector that was just printed.
+}
 
 
