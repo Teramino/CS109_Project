@@ -493,21 +493,51 @@ vector<string> Helper:: singleVecCondense(vector<vector<string>> v)
 //
 // ===================================================================================
 
+vector<tuple<int,int,int,int>> Helper:: paramCorr(vector<vector<string>> paramData)
+{
+    vector<tuple<int,int,int,int>> paramCord; // coordinates start from the left then applied to the rule vector immediately to the right
+    // i.e Father($X,$Z) Mother($Z,$Y) Foo($X,$Y)
+    // the first 2 rule targets proccessed is Father lookin for correlations in Mother
+    // then moves to Mother then looks for correlations in Foo
+    
+    // check parameters for correlation between rule targets
+    for(int i=0; i < paramData.size()-1; i++) // controls the leftmost rule target  Mother($x,$z)<-leftmost Mother($z,$y)
+        for(int param = 0; param < paramData[i].size(); param++) // iterates the leftmost rule target parameters
+            for(int j=0; j < paramData[i+1].size(); j++) // iterates rule target paremeters to the right of leftmost
+            {
+                string a = paramData[i][param]; // used for testing
+                string b = paramData[i+1][j]; // used for testing
+                if (paramData[i][param].compare(paramData[i+1][j]) == 0) // checks to see if param match
+                {
+//                    paramCheck.push_back(true);
+                    paramCord.push_back(make_tuple(i,param,i+1,j)); // records index of the leftmost rule target and its param and the compared rule target index and its param
+                }
+                
+            }
+
+    return paramCord;
+}
+
+
 vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams, vector<string> rule, vector<vector<string>> facts)
 {
     vector<vector<string>> paramData; // holds parameters from each individual querey ie. Mother($x,$z) Mother($z,$y)
     vector<bool> paramCheck;
     vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
     vector<vector<string>> inferData; // holds the data to be returned
+    vector<vector<string>> factData;
     
     for(int i=0; i < rule.size(); i++)
         paramData.push_back(parseParams(rule[i]));
     
-    vector<vector<string>> temp;
-    vector<vector<string>> factData;
     
-    if(facts.size() == 0)
-    {
+    paramIndex = paramCorr(paramData);
+
+    
+    
+    vector<vector<string>> temp;
+    
+    
         auto tempTup = retrieveRule(keyParams, parseKey(rule[0]));
         if((temp = get<3>(tempTup)).size() == 0) // if rule is not defined
         {
@@ -561,21 +591,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
         
         //this variable pulls the facts for the first rule target only; the preceding rule target may used the first rule target which will be handeled later
         
-        // check parameters for correlation between rule targets
-        for(int i=0; i < paramData.size()-1; i++) // controls the leftmost rule target  Mother($x,$z)<-leftmost Mother($z,$y)
-            for(int param = 0; param < paramData[i].size(); param++) // iterates the leftmost rule target parameters
-                for(int j=0; j < paramData[i+1].size(); j++) // iterates rule target paremeters to the right of leftmost
-                {
-                    string a = paramData[i][param]; // used for testing
-                    string b = paramData[i+1][j]; // used for testing
-                    if (paramData[i][param].compare(paramData[i+1][j]) == 0) // checks to see if param match
-                    {
-                        paramCheck.push_back(true);
-                        paramIndex.push_back(make_tuple(i,param,i+1,j)); // records index of the leftmost rule target and its param and the compared rule target index and its param
-                    }
-                    
-                }
-        
+    
         // grabs data from Fact based on parameters
         if (paramCheck.size() != paramData[0].size()) // checks to see if all parameters match, if they dont proceed
         {
@@ -665,7 +681,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             
         }// end if
         cout << endl << endl;
-    }
+    
     return inferData;
     
 }
