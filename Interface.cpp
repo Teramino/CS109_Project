@@ -523,13 +523,13 @@
     Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
             Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
             Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
-//    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
     //    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y) GF");
 //            Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)");
     //        Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
     //            Helper::instance()->parseCommand("INFERENCE Mother($X,$Y)");
-             Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
-//    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
+//             Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
+    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
     //      Helper::instance()->parseCommand("DUMP output2.txt");
     
 }
