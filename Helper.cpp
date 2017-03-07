@@ -376,7 +376,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
     vector<string> ruleTemp;
     string logicalOp;
     
-    cout << key << " Rule" << ": ";
+    cout << key << " Rule: ";
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getRule().begin(), tCommands->getRule().end(),[&](decltype(*tCommands->getRule().begin()) it) -> void // iterates through vector
              {
@@ -1387,10 +1387,10 @@ void Helper:: ParseQuery(string rest)
         vector<string> fact = singleVecCondense(tempFacts);
         storeBase(tCommands->getFact(), fact, key);
   
-        cout << endl << key << " Inference: ";
+        cout << endl << key << " Inference: "<<endl;
         for(auto b: fact)
-            cout << b << " ";
-        cout << endl;
+            cout << "    -"<<b << endl;
+        cout<<endl;
     }
     else
     {
