@@ -281,14 +281,11 @@ void Helper:: storeBase(vector< tuple< string,vector<string> > > &base, vector<s
 // ===================================================================================
 vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string &param2)
 {
-//    cout<< "In retrieve fact" << endl;
-//    cout << "This is the params " << param1 << param2 <<endl;
     vector<string> params;
     vector<vector<string>> relationalData;
     cout << key << " Fact: ";
     char a;
     char b;
-    string empty = "";
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
              {
@@ -358,10 +355,6 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                  }
              });
     cout << endl;
-//    for (int i = 0; relationalData [0][i+1].compare(empty)!= 0; i++){
-//        cout << relationalData [0][i] << " This is a name in tempResult" << endl;
-   // }
-
     
     return relationalData;
 }
@@ -383,7 +376,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
     vector<string> ruleTemp;
     string logicalOp;
     
-    cout << key << " Rule" << ": ";
+    cout << key << " Rule: ";
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getRule().begin(), tCommands->getRule().end(),[&](decltype(*tCommands->getRule().begin()) it) -> void // iterates through vector
              {
@@ -452,7 +445,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
 vector<vector<vector<string>>> Helper:: op(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
-//    vector<vector<string>> facts;
+    //    vector<vector<string>> facts;
     for(int i=0; i < rule.size(); i++)
     {
         if(logicalOp=="AND")
@@ -463,10 +456,10 @@ vector<vector<vector<string>>> Helper:: op(string logicalOp, string key,vector<s
         //            orOperator(key, keyParams, rule[i]);
     }
     
-//    facts = vectorCondense(data);
+    //    facts = vectorCondense(data);
     
-//    return facts;
-        return data;
+    //    return facts;
+    return data;
 }
 
 vector<vector<string>> Helper:: vectorCondense(vector<vector<vector<string>>> v)
@@ -527,6 +520,10 @@ vector<tuple<int,int,int,int>> Helper:: paramCorr(vector<vector<string>> paramDa
                     //                    paramCheck.push_back(true);
                     paramCord.push_back(make_tuple(i,param,i+1,j)); // records index of the leftmost rule target and its param and the compared rule target index and its param
                 }
+//                else
+//                {
+//                    paramCord.push_back(make_tuple(-1,-1,-1,-1)); // -1 represents no correlation
+//                }
                 
             }
     
@@ -563,7 +560,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     if (isGeneric) // params are generic Father($x,$y)
     {
         // check if rule target has a defined rule
-//        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
+        //        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
         // get<3> holds defined rule
         auto tempRule = get<3>(tempTuple);
         
@@ -579,7 +576,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     else // params are specific Father(John,$y)
     {
         // check if rule target has a defined rule
-//        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
+        //        auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
         // get<3> holds defined rule
         auto tempRule = get<3>(tempTuple);
         
@@ -607,20 +604,51 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     vector<vector<vector<string>>> relationalData;
     vector<vector<string>> match;
     
+    // retrive facts based based on if theres correlations or not between rule targets
+    // only works for 2 params
     for (int i=0; i<factData.size(); i++)
     {
- 
         
         tempTuple = retrieveRule(keyParams, parseKey(rule[1]));
         auto tempRule = get<3>(tempTuple);
+        string generic = "$";
+        
         if( tempRule.size() == 0) // if rule is not defined
         {
             // there should only be one vector contained so use index 0 to pull index to vector that has data
             // this pulls the data based on the correlation between rule targetfrom fact from each individual query in rule ie. Grandmother():- Mother() Mother()
-            relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], paramData[1][1]));
+            
+            // need paramCorr to be able to be generic as far as one parmeter may not have a correlation but another does. The code isnt setup to handle that
+            // may have solved this issue; needs testing
+            
+            // paramIndex<vectorIndex,param,vector2Index,param2>
+//            if (i == get<0>(paramIndex[0])) // match current iterator with vectorIndex
+//            {
+//                if (get<1>(paramIndex[0]) != -1) // means theres a specific param to be passed
+//                    // potential issues
+//                    // what if both params match
+//                    // determining which param is to suppose to go where
+//                    
+//                    if(get<1>(paramIndex[0]) == 0) // means the first param in the first vector is being used for second vector
+//                    {
+//                        if(get<3>(paramIndex[0]) == 0) // place param in the first parm of second vector
+//                            relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], generic));
+//                        else // place param in the second parm of second vector
+//                            relationalData.push_back(retrieveFact(parseKey(rule[1]),generic,factData[i][get<1>(paramIndex[0])]));
+//                    }
+//            }
+//            else if (get<0>(paramIndex[0]) == -1) // means theres no correlation
+//            {
+//                // paramData doesnt matter which one u use, its just passing a generic variable
+//                relationalData.push_back(retrieveFact(parseKey(rule[1]),generic, generic));
+//            }
+            
+            // ===============================================================================================================
+                        relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], paramData[1][1]));
         }
         else // if rule is defined
         {
+//            op(string logicalOp, string key, vector<string> keyParams, vector<vector<string> > rule, vector<vector<string> > fact)
             relationalData = op(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
             break;
         }
@@ -787,6 +815,14 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         paramData.push_back(parseParams(query[i]));
         relationalData.push_back(retrieveFact(parseKey(query[i]),paramData[i][0],paramData[i][1])); // holds data from fact from each individual query in rule ie.
         
+        
+        //        if (paramData[i][0] == keyParams[0] && paramData[i][1] == keyParams[1]) // both parameters are generic
+        //            relationalData.push_back(retrieveFact(parseKey(query[i]),paramData[i][0],paramData[i][1])); // holds data from fact from each individual query in rule ie. Parent():- Father() Mother()
+        //        else  if (paramData[i][0] != keyParams[0] && paramData[i][1] == keyParams[1]) // the left parameter is specific
+        //            relationalData.push_back(retrieveFact(parseKey(query[i]),keyParams[0],paramData[i][1])); // holds data from fact from each individual query in rule ie. GParent():- Father() Mother()
+        //        else  if (paramData[i][0] == keyParams[0] && paramData[i][1] != keyParams[1]) // the right paremeter is specific
+        //            relationalData.push_back(retrieveFact(parseKey(query[i]),paramData[i][0],keyParams[1])); // holds data from fact from each individual query in rule ie. Parent():- Father() Mother()
+        //
         
     }
     
@@ -1437,8 +1473,8 @@ void Helper:: ParseQuery(string rest)
         else
         {
             vector<vector<string>> factData;
-                        tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
-//            tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
+            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            //            tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
         }
     }
     else
@@ -1461,8 +1497,8 @@ void Helper:: ParseQuery(string rest)
         else
         {
             vector<vector<string>> factData;
-                        tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
-//            tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
+            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            //            tempFacts = op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData);
         }
     }
     //cout << ch << " This is the position of the space"

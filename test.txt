@@ -1,15 +1,7 @@
-FACT Father(Roger,John)
-FACT Mother(Marry,John)
-FACT Father(Roger,Albert)
-FACT Mother(Marry,Albert)
-FACT Father(Allen,Margret)
-FACT Mother(Margret,Robert)
+FACT Father(Hi,Bro)
+FACT Father(Hey,Man)
+FACT Father(Sup,Dude)
+FACT Mother(Nancy,Margret)
 FACT Mother(Margret,Bob)
-RULE Parent($X,$Y) :- OR Father($X,$Y) Mother($X,$Y)
-RULE GrandFather($X,$Y) :- AND Father($X,$Z) Parent($Z,$Y)
-RULE GrandMother($X,$Y) :- AND Mother($X,$Z) Mother($Z,$Y)
-RULE GrandMother($X,$Y) :- AND Mother($X,$Z) Father($Z,$Y)
-INFERENCE GrandFather($X,$Y)
-DROP Father
-DROP Mother
-DUMP updated_family_relation.txt
+
+RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y) 
