@@ -679,10 +679,10 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 }
                 else if (get<1>(paramIndex[0]) == 1) // means the second param in the first vector is being used for second vector
                 {
-                        if(get<3>(paramIndex[0]) == 0) // place second param in the (first parm of second vector)
-                            relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], generic));
-                        else // place second param in the (second parm of second vector)
-                            relationalData.push_back(retrieveFact(parseKey(rule[1]),generic,factData[i][get<1>(paramIndex[0])]));
+                    if(get<3>(paramIndex[0]) == 0) // place second param in the (first parm of second vector)
+                        relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], generic));
+                    else // place second param in the (second parm of second vector)
+                        relationalData.push_back(retrieveFact(parseKey(rule[1]),generic,factData[i][get<1>(paramIndex[0])]));
                 }
                 
                 // need else cases for  different locations of param
@@ -743,30 +743,44 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 {
                     for(int j=0; j < relationalData[i][k].size(); j++) // iterates through vector's data inside of relationalData vector (string)
                     { // factData is the only variable using j index
-                        for(int param = 0; param < paramData[j].size(); param++) // iterate through parameters (string)
-                            //                        for(int k=0; k < paramData[i].size(); k++) // iterate through inferData
+                        //                        for(int param = 0; param < paramData[j].size(); param++) // iterate through parameters (string)
+                        //                            //                        for(int k=0; k < paramData[i].size(); k++) // iterate through inferData
+                        //                        {
+                        // this code looks at parameter at a time comparing it to the results of inferData
+                        // if the current parameter matches inferData then we dont want it ie. GrandMother($X,$Y):- Mother($X,$Z) Mother($Z,$Y)
+                        // we dont want the $Z parameter so this code will leave you with $X, $Y
+                        // the data only prints for now; and needs to be made more generic ie. nothing hard coded
+                        //                            if (factData[i][j].compare(relationalData[i][k][param]) == 0)
+                        //                            {
+                        //                                matchTemp.push_back(relationalData[i][k][param]);
+                        //                                break;
+                        //                            }
+                        //                            if (param == relationalData[i][k].size()-1)
+                        //                            {
+                        //                                //                                cout << factData[i][j] << " ";
+                        //                                inferDataTemp.push_back(factData[i][j]);
+                        //                            }
+                        
+                        // using the paremeter Index matcher to only save the data that didnt match in the paremeters
+                        if(j != get<1>(paramIndex[0]))
                         {
-                            // this code looks at parameter at a time comparing it to the results of inferData
-                            // if the current parameter matches inferData then we dont want it ie. GrandMother($X,$Y):- Mother($X,$Z) Mother($Z,$Y)
-                            // we dont want the $Z parameter so this code will leave you with $X, $Y
-                            // the data only prints for now; and needs to be made more generic ie. nothing hard coded
-                            if (factData[i][j].compare(relationalData[i][k][param]) == 0)
-                            {
-                                matchTemp.push_back(relationalData[i][k][param]);
-                                break;
-                            }
-                            if (param == relationalData[i][k].size()-1)
-                            {
-                                //                                cout << factData[i][j] << " ";
-                                inferDataTemp.push_back(factData[i][j]);
-                            }
-                        }// end for
+                            inferDataTemp.push_back(factData[i][j]);
+                        }
+                        
+                        if(j != get<3>(paramIndex[0]))
+                        {
+                            inferDataTemp.push_back(relationalData[i][k][j]);
+                        }
+                        
+                        
+                        
+                        //                    }// end for
                     }// end for
                     
-                    match.push_back(matchTemp);
-                    inferData.push_back(inferDataTemp);
-                    matchTemp.clear();
-                    inferDataTemp.clear();
+                    //                match.push_back(matchTemp);
+                                    inferData.push_back(inferDataTemp);
+                    //                matchTemp.clear();
+                                    inferDataTemp.clear();
                 }// end for
             }// end if
         }
@@ -787,7 +801,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                             {
                                 inferDataTemp.push_back(factData[j][0]);
                                 inferDataTemp.push_back(relationalData[i][k][1]);
-//                                break;
+                                //                                break;
                             }
                             
                             //                            }
@@ -808,18 +822,18 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     if(!recursion)
     {
         // only output the correlated data
-        for(auto v: relationalData) // loops through outer vector: v is the actual vector
-            for(int i=0; i<v.size(); i++)  // loops through inner vector: vv is the actual vector
-                for(int k=0; k < match[i].size(); k++) // iterates through match's inner vector
-                    for(int j=0; j<v[i].size(); j++) // loops through data in relationalData
-                    { // doing it this way eliminate v[x][i]; just another way of looping
-                        if (match[i][k].compare(v[i][j]) != 0)
-                        {
-                            //                            cout << v[i][j] << " ";
-                            inferData[i].push_back(v[i][j]);
-                            
-                        }
-                    }
+//        for(auto v: relationalData) // loops through outer vector: v is the actual vector
+//            for(int i=0; i<v.size(); i++)  // loops through inner vector: vv is the actual vector
+//                for(int k=0; k < match[i].size(); k++) // iterates through match's inner vector
+//                    for(int j=0; j<v[i].size(); j++) // loops through data in relationalData
+//                    { // doing it this way eliminate v[x][i]; just another way of looping
+//                        if (match[i][k].compare(v[i][j]) != 0)
+//                        {
+//                            //                            cout << v[i][j] << " ";
+//                            inferData[i].push_back(v[i][j]);
+//                            
+//                        }
+//                    }
     }
     
     cout << endl << endl;
@@ -903,21 +917,21 @@ vector<vector<string>> Helper:: orOperator2(string key, vector<string> keyParams
         {
             if(!isGeneric)
             {
-            for (int i=0; i<facts.size(); i++)
-            {
-                // under the assumption if recursion happens the second param in facts is always the value that we are looking to inference with specificly
-                // Mother($X,[$Z]) Parent([$Z],$Y) the $Z comes from the second param of the first rule target that is used in the second rule target's first param
-                tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
-                
-            }
-            
-            // condense vector to fit factData and also rids and empty vector
-            for(int i=0; i < tempRelData.size(); i++)
-                for(int j=0; j < tempRelData[i].size(); j++)
+                for (int i=0; i<facts.size(); i++)
                 {
-                    //                    if(tempRelData[i][j].size() != 0)
-                    factData.push_back(tempRelData[i][j]);
+                    // under the assumption if recursion happens the second param in facts is always the value that we are looking to inference with specificly
+                    // Mother($X,[$Z]) Parent([$Z],$Y) the $Z comes from the second param of the first rule target that is used in the second rule target's first param
+                    tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
+                    
                 }
+                
+                // condense vector to fit factData and also rids and empty vector
+                for(int i=0; i < tempRelData.size(); i++)
+                    for(int j=0; j < tempRelData[i].size(); j++)
+                    {
+                        //                    if(tempRelData[i][j].size() != 0)
+                        factData.push_back(tempRelData[i][j]);
+                    }
             }
             else
             {
@@ -962,7 +976,7 @@ vector<vector<string>> Helper:: orOperator2(string key, vector<string> keyParams
             
             relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
             //                }
-
+            
         }
         else // if rule is defined
         {
@@ -979,10 +993,10 @@ vector<vector<string>> Helper:: orOperator2(string key, vector<string> keyParams
         for (int i=0; i<facts.size(); i++)
         {
             if(!isGeneric)
-            tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
+                tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
             else
                 relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
-                
+            
         }
     }
     
