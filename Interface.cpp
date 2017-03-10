@@ -559,7 +559,8 @@
     //        Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
     //            Helper::instance()->parseCommand("INFERENCE Mother($X,$Y)");
 //             Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
-                  Helper::instance()->parseCommand("INFERENCE GrandMother(Marry,$Y)");
+//                  Helper::instance()->parseCommand("INFERENCE GrandMother(Marry,$Y)");
+                       Helper::instance()->parseCommand("INFERENCE GrandMother($X,Marry)");
 //                  Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
 //    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
     //      Helper::instance()->parseCommand("DUMP output2.txt");
