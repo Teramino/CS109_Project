@@ -123,7 +123,6 @@ void Helper:: parseDefinition(char function, string def)
 // ===================================================================================
 void Helper:: ParseQuery(string rest)
 {
-    cout << "We here" << endl;
     vector<vector<string>> tempFacts;
     string key;
     string empty_string = "";
@@ -228,9 +227,7 @@ void Helper:: ParseQuery(string rest)
         {
             cout << "Whoops! Inference is not defined\n\n";
         }
-    }
-    cout << "END OF ParseQuery\n";
-    
+    }    
 }
 
 // ===================================================================================
@@ -393,90 +390,85 @@ void Helper:: storeBase(vector<tuple<string,vector<string>,vector<string>>> &bas
 // ===================================================================================
 vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string &param2)
 {
-    cout << "retrieveFact start stuff = \n" << param1 << endl;//<< key << " " ;//<< param1 << " " << param2 << endl;
     vector<string> params;
     vector<vector<string>> relationalData;
-    cout << "stuff = " << key << " " << param1 << " " << param2 << endl;
     //    cout << key << " Fact [ ";
     // if the parameters are the same
-    if ( param1 == param2 )
-    {
-        // & in [] of lambda functions allows lambda function to acess local variables
-        for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
-                 {
-                     cout << "beginning\n";
-                     if (get<0>(it) == key) // checks tuple if key matches
-                     {
-                         if (param1[0] == '$' && param2[0] == '$') // if query is generic
-                         {
-                             for(int i=0; i < get<1>(it).size(); i+=2) // iterates through vector inside tuple
-                             {
-                                 if ( get<1>(it)[i] == get<1>(it)[i+1] )
-                                 {
-                                     params.push_back(get<1>(it)[i]);
-                                     params.push_back(get<1>(it)[i+1]);
-                                 }
-                                 // if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                                 // {
-                                 //     params.push_back(get<1>(it)[i]);
-                                 //     //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                                 // }
-                                 // else
-                                 // {
-                                 //     params.push_back(get<1>(it)[i]);
-                                 //     //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                                 // }
-                             }
-                             relationalData.push_back(params);
-                             params.clear();
-                             
-                         }
-                         // else if (param1[0] != '$' && param2[0] == '$') // if the first parameter is specific
-                         // {
-                         
-                         //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-                         //     {
-                         //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                         //         {
-                         //             params.push_back(get<1>(it)[i]);
-                         //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                         //         }
-                         //         else
-                         //         {
-                         //             params.push_back(get<1>(it)[i]);
-                         //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                         //         }
-                         //     }
-                         //     if(param1.compare(params[0]) == 0)
-                         //         relationalData.push_back(params);
-                         //     params.clear();
-                         // }
-                         // else if (param1[0] == '$' && param2[0] != '$') // if the second parameters is specific
-                         // {
-                         //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-                         //     {
-                         //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                         //         {
-                         //             params.push_back(get<1>(it)[i]);
-                         //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                         //         }
-                         //         else
-                         //         {
-                         //             params.push_back(get<1>(it)[i]);
-                         //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                         //         }
-                         //     }
-                         //     if(param2.compare(params[1]) == 0)
-                         //         relationalData.push_back(params);
-                         //     params.clear();
-                         // }
-                     }
-                     cout << "end\n";
-                 });
-        //    cout << " ]" << endl << endl;
-        cout << "retrieveFact end \n";
-        return relationalData;
-    }
+//    if ( param1 == param2 )
+//    {
+//        // & in [] of lambda functions allows lambda function to acess local variables
+//        for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
+//                 {
+//                     if (get<0>(it) == key) // checks tuple if key matches
+//                     {
+//                         if (param1[0] == '$' && param2[0] == '$') // if query is generic
+//                         {
+//                             for(int i=0; i < get<1>(it).size(); i+=2) // iterates through vector inside tuple
+//                             {
+//                                 if ( get<1>(it)[i] == get<1>(it)[i+1] )
+//                                 {
+//                                     params.push_back(get<1>(it)[i]);
+//                                     params.push_back(get<1>(it)[i+1]);
+//                                 }
+//                                 // if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                                 // {
+//                                 //     params.push_back(get<1>(it)[i]);
+//                                 //     //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+//                                 // }
+//                                 // else
+//                                 // {
+//                                 //     params.push_back(get<1>(it)[i]);
+//                                 //     //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+//                                 // }
+//                             }
+//                             relationalData.push_back(params);
+//                             params.clear();
+//                             
+//                         }
+//                         // else if (param1[0] != '$' && param2[0] == '$') // if the first parameter is specific
+//                         // {
+//                         
+//                         //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
+//                         //     {
+//                         //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                         //         {
+//                         //             params.push_back(get<1>(it)[i]);
+//                         //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+//                         //         }
+//                         //         else
+//                         //         {
+//                         //             params.push_back(get<1>(it)[i]);
+//                         //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+//                         //         }
+//                         //     }
+//                         //     if(param1.compare(params[0]) == 0)
+//                         //         relationalData.push_back(params);
+//                         //     params.clear();
+//                         // }
+//                         // else if (param1[0] == '$' && param2[0] != '$') // if the second parameters is specific
+//                         // {
+//                         //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
+//                         //     {
+//                         //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                         //         {
+//                         //             params.push_back(get<1>(it)[i]);
+//                         //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+//                         //         }
+//                         //         else
+//                         //         {
+//                         //             params.push_back(get<1>(it)[i]);
+//                         //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+//                         //         }
+//                         //     }
+//                         //     if(param2.compare(params[1]) == 0)
+//                         //         relationalData.push_back(params);
+//                         //     params.clear();
+//                         // }
+//                     }
+//                 });
+//        //    cout << " ]" << endl << endl;
+//        return relationalData;
+//    }
     
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
@@ -560,7 +552,6 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
 tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule(vector<string> params, string key)
 {
     // PARAMS is only passed to be passed to another function, Isn't used
-    cout << "retrieveRULE" << endl;
     vector<vector<string>> rule;
     vector<string> ruleTemp;
     string logicalOp;
@@ -569,7 +560,6 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getRule().begin(), tCommands->getRule().end(),[&](decltype(*tCommands->getRule().begin()) it) -> void // iterates through vector
              {
-                 cout << "RAWR\n"   ;
                  if (get<0>(it) == key)
                  {
                      for(int i=0; i < get<1>(it).size(); i++)
@@ -598,7 +588,6 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
                      }
                  }
              });
-    cout << "Ended retrieveRule\n";
     return make_tuple(logicalOp, key, params,rule);
 }
 
@@ -909,11 +898,17 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 
                 // need else cases for  different locations of param
                 // code would need to be more generic b/c we cant make conditional for an infinite amount
+                
+                else if (get<0>(paramIndex[0]) == -1) // means theres no correlation
+                {
+                    // paramData doesnt matter which one u use, its just passing a generic variable
+                    relationalData.push_back(retrieveFact(parseKey(rule[1]),generic, generic));
+                }
             }
-            else if (get<0>(paramIndex[0]) == -1) // means theres no correlation
+            else // need to push empty vector to be able to index properly
             {
-                // paramData doesnt matter which one u use, its just passing a generic variable
-                relationalData.push_back(retrieveFact(parseKey(rule[1]),generic, generic));
+                vector<vector<string>> empty;
+                relationalData.push_back(empty);
             }
         }
         else // rule defined // RECURSIVE CALL
@@ -951,38 +946,44 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
         {
             if(relationalData[i].size() != 0) // if empty break
             {
-                // loop through vectors one by one finding if theres a match if theres not then that means thats the data we want
-                for(int k = 0; k < relationalData[i].size(); k++)  // iterates through vectors inside of relationalData (vector<vector<string>)
+                if (factData[i].size() != 0)
                 {
-                    for(int j=0; j < relationalData[i][k].size(); j++) // iterates through vector's data inside of relationalData vector (string)
-                    { // factData is the only variable using j index
-                        // using the paremeter Index matcher to only save the data that didnt match in the paremeters
-                        if(j != get<1>(paramIndex[0]))
-                        {
-                            inferDataTemp.push_back(factData[i][j]);
-                        }
-                        
-                        if(j != get<3>(paramIndex[0]))
-                        {
-                            inferDataTemp.push_back(relationalData[i][k][j]);
-                        }
-                    }// end for
-                    if(sameParam)
+                    // loop through vectors one by one finding if theres a match if theres not then that means thats the data we want
+                    for(int k = 0; k < relationalData[i].size(); k++)  // iterates through vectors inside of relationalData (vector<vector<string>)
                     {
-                        if(inferDataTemp[0]==inferDataTemp[1])
+                        
+                        for(int j=0; j < relationalData[i][k].size(); j++) // iterates through vector's data inside of relationalData vector (string)
+                        { // factData is the only variable using j index
+                            // using the paremeter Index matcher to only save the data that didnt match in the paremeters
+                            
+                            if(j != get<1>(paramIndex[0]))
+                            {
+                                inferDataTemp.push_back(factData[i][j]);
+                            }
+                            
+                            if(j != get<3>(paramIndex[0]))
+                            {
+                                inferDataTemp.push_back(relationalData[i][k][j]);
+                            }
+                        }// end for
+                        if(sameParam)
+                        {
+                            if(inferDataTemp[0]==inferDataTemp[1])
+                            {
+                                inferData.push_back(inferDataTemp);
+                                inferDataTemp.clear();
+                            }
+                        }
+                        else
                         {
                             inferData.push_back(inferDataTemp);
                             inferDataTemp.clear();
                         }
-                    }
-                    else
-                    {
-                        inferData.push_back(inferDataTemp);
-                        inferDataTemp.clear();
-                    }
-                }// end for
-            }// end if
-        }
+                        
+                    }// end for
+                }// end if
+            }// end for
+        }// end if
         else
         {
             if(relationalData[i].size() != 0) // if empty break
@@ -1061,7 +1062,6 @@ vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,
 // ===================================================================================
 vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams, vector<string> rule, vector<vector<string>> facts)
 {
-    cout << "WE HERE" << endl;
     vector<vector<string>> paramData; // holds parameters from each individual querey ie. Mother($x,$z) Mother($z,$y)
     vector<bool> paramCheck;
     vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
@@ -1073,33 +1073,27 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     
     for(int i=0; i < rule.size(); i++)
     {
-        cout << "This is working" << endl;
         paramData.push_back(parseParams(rule[i]));
     }
     // finds correlations in rule target
     paramIndex = paramCorr(paramData);
     if (paramIndex.size() == keyParams.size()) // if every param matches then theres no correlation
     {
-        cout << "THis is also working" << endl;
         paramIndex.clear();
     }
     else
     {
         // if code gets in here one of the parameters doesnt match
-        cout << "This else is working" << endl;
         if(keyParams[0] == paramData[0][0] && keyParams[1] ==  paramData[0][1])
         {
-            cout << "if" <<endl;
             ruleLeft = true;
         }
         else if(keyParams[0] == paramData[1][0] && keyParams[1] ==  paramData[1][1])
         {
-            cout << "elif" << endl;
             ruleRight = true;
         }
         else
         {
-            cout << "else" <<endl;
             return factData; // all params should match else its not and OR Inference //ASSUMED
         }
     }
@@ -1111,10 +1105,8 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     // check to see if params are specific or not
     for(int i=0; i<keyParams.size(); i++)
     {
-        cout << "rawr" <<endl;
         if (keyParams[i][0] != '$')
         {
-            cout << "generic?" <<endl;
             isGeneric = false;
             break;
         }

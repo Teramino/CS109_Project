@@ -76,8 +76,7 @@ void Transactional_Commands:: dumpCommand(string path) //vector<tuple<string,vec
 
 
 void Transactional_Commands:: inferenceCommand(string command)
-{
- 	cout << "Transactional_Commands" << endl;   
+{  
 	Helper:: instance()->ParseQuery(command);
    //Helper:: instance()->parseDefinition('i',command);
 //    if () // saves inference
