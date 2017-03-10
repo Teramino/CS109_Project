@@ -123,6 +123,7 @@ void Helper:: parseDefinition(char function, string def)
 // ===================================================================================
 void Helper:: ParseQuery(string rest)
 {
+    cout << "We here" << endl;
     vector<vector<string>> tempFacts;
     string key;
     string empty_string = "";
@@ -176,6 +177,7 @@ void Helper:: ParseQuery(string rest)
     }
     else
     {
+        cout << "else\n";
         //there is an extra part of the string for inference.
         key = parseKey(temp); //parses our full string saved in temp to get key2 as Grandmother.
         
@@ -227,6 +229,7 @@ void Helper:: ParseQuery(string rest)
             cout << "Whoops! Inference is not defined\n\n";
         }
     }
+    cout << "END OF ParseQuery\n";
     
 }
 
@@ -390,8 +393,10 @@ void Helper:: storeBase(vector<tuple<string,vector<string>,vector<string>>> &bas
 // ===================================================================================
 vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string &param2)
 {
+    cout << "retrieveFact start stuff = \n" << param1 << endl;//<< key << " " ;//<< param1 << " " << param2 << endl;
     vector<string> params;
     vector<vector<string>> relationalData;
+    cout << "stuff = " << key << " " << param1 << " " << param2 << endl;
     //    cout << key << " Fact [ ";
     // if the parameters are the same
     if ( param1 == param2 )
@@ -399,6 +404,7 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
         // & in [] of lambda functions allows lambda function to acess local variables
         for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
         {
+            cout << "beginning\n";
             if (get<0>(it) == key) // checks tuple if key matches
             {
              if (param1[0] == '$' && param2[0] == '$') // if query is generic
@@ -423,6 +429,7 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                  }
                  relationalData.push_back(params);
                  params.clear();
+
              }
                      // else if (param1[0] != '$' && param2[0] == '$') // if the first parameter is specific
                      // {
@@ -464,9 +471,10 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      //     params.clear();
                      // }
                  }
+                 cout << "end\n";
              });
     //    cout << " ]" << endl << endl;
-    
+    cout << "retrieveFact end \n";
     return relationalData;
     }
     
@@ -552,7 +560,7 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
 tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule(vector<string> params, string key)
 {
     // PARAMS is only passed to be passed to another function, Isn't used
-    
+    cout << "retrieveRULE" << endl;
     vector<vector<string>> rule;
     vector<string> ruleTemp;
     string logicalOp;
@@ -561,7 +569,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getRule().begin(), tCommands->getRule().end(),[&](decltype(*tCommands->getRule().begin()) it) -> void // iterates through vector
              {
-                 
+                cout << "RAWR\n"   ;
                  if (get<0>(it) == key)
                  {
                      for(int i=0; i < get<1>(it).size(); i++)
@@ -590,6 +598,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
                      }
                  }
              });
+    cout << "Ended retrieveRule\n";
     return make_tuple(logicalOp, key, params,rule);
 }
 
@@ -1020,6 +1029,7 @@ vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,
 // ===================================================================================
 vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams, vector<string> rule, vector<vector<string>> facts)
 {
+    cout << "WE HERE" << endl;
     vector<vector<string>> paramData; // holds parameters from each individual querey ie. Mother($x,$z) Mother($z,$y)
     vector<bool> paramCheck;
     vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
@@ -1029,22 +1039,36 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     bool ruleRight = false;
     
     for(int i=0; i < rule.size(); i++)
+    {
+        cout << "This is working" << endl;
         paramData.push_back(parseParams(rule[i]));
-    
+    }
     // finds correlations in rule target
     paramIndex = paramCorr(paramData);
     if (paramIndex.size() == keyParams.size()) // if every param matches then theres no correlation
+    {
+        cout << "THis is also working" << endl;
         paramIndex.clear();
+    }
     else
     {
         // if code gets in here one of the parameters doesnt match
-        
+        cout << "This else is working" << endl;
         if(keyParams[0] == paramData[0][0] && keyParams[1] ==  paramData[0][1])
+        {
+            cout << "if" <<endl;
             ruleLeft = true;
+        }
         else if(keyParams[0] == paramData[1][0] && keyParams[1] ==  paramData[1][1])
+        {
+            cout << "elif" << endl;
             ruleRight = true;
+        }
         else
+        {
+            cout << "else" <<endl;
             return factData; // all params should match else its not and OR Inference //ASSUMED
+        }
     }
     
     
@@ -1054,8 +1078,10 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     // check to see if params are specific or not
     for(int i=0; i<keyParams.size(); i++)
     {
+        cout << "rawr" <<endl;
         if (keyParams[i][0] != '$')
         {
+            cout << "generic?" <<endl;
             isGeneric = false;
             break;
         }
