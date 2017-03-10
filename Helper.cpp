@@ -95,7 +95,10 @@ void Helper:: parseDefinition(char function, string def)
     else if (function=='r') // if our tagged string is a rule
     {
         string key = parseKey(def); // parse the key part of def.  Example being Father.
-        vector<string> parameters = parseRule(def); // obtain the perameters of our string.  Example being (Roger, John).
+        
+        vector<string> keyParam = parseParams(def);
+        
+        vector<string> parameters = parseRuleParam(def); // obtain the perameters of our string.  Example being (Roger, John).
         
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
@@ -103,7 +106,7 @@ void Helper:: parseDefinition(char function, string def)
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
         
-        storeBase(tCommands->getRule(), parameters, key); // send the parameters and the key to be stored
+        storeBase(tCommands->getRule(), parameters, key, keyParam); // send the parameters and the key to be stored
         cout << "----------------------------------------" << endl << endl;
     }
 }
@@ -283,7 +286,8 @@ vector<string> Helper:: parseParams(string &input)
         //        cout << "Parameter(" << count++ << "): " << parameters[parameters.size()-1] << endl;
         pos++; // eats delimiter
         parsedInput = parsedInput.substr(pos, input.length());
-        
+        if (parsedInput[2] == ')')
+            break;
     }
     // if loop breaks theres always going to be one parameter left to store
     delimiter = ")";
@@ -305,7 +309,7 @@ vector<string> Helper:: parseParams(string &input)
 //
 //
 // ==================================================================================
-vector<string> Helper:: parseRule(string input)
+vector<string> Helper:: parseRuleParam(string input)
 {
     vector<string> param;
     string delimiter = ":-";
@@ -338,7 +342,7 @@ vector<string> Helper:: parseRule(string input)
 }
 
 // ===================================================================================
-// StoreBase
+// StoreBaseFact
 // ===================================================================================
 //
 //
@@ -353,6 +357,25 @@ void Helper:: storeBase(vector< tuple< string,vector<string> > > &base, vector<s
     get<0>(fact) = key;
     get<1>(fact) = params;
     base.push_back(fact);
+}
+
+// ===================================================================================
+// StoreBaseRule
+// ===================================================================================
+//
+//
+//
+//
+//
+//
+// ==================================================================================
+void Helper:: storeBase(vector<tuple<string,vector<string>,vector<string>>> &base, vector<string> &params, string key, vector<string> keyParam)
+{
+    tuple<string,vector<string>,vector<string>> rule; // tuple that has a key(fact) and vector holding relationship
+    get<0>(rule) = key;
+    get<1>(rule) = params;
+    get<2>(rule) = keyParam;
+    base.push_back(rule);
 }
 
 // ===================================================================================
@@ -920,6 +943,8 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
     vector<vector<string>> inferData; // holds the data to be returned
     vector<vector<string>> factData;
+    bool paramLeft = false;
+    bool paramRight = false;
     
     for(int i=0; i < rule.size(); i++)
         paramData.push_back(parseParams(rule[i]));
@@ -929,7 +954,14 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     if (paramIndex.size() == keyParams.size()) // if every param matches then theres no correlation
         paramIndex.clear();
     else
+    {
+        if(keyParams[0] == paramData[0][0] && keyParams[1] ==  paramData[0][1])
+            paramLeft = true;
+        else if(keyParams[0] == paramData[1][0] && keyParams[1] ==  paramData[1][1])
+            paramRight = true;
+        else
         return factData; // all params should match else its not and OR Inference //ASSUMED
+    }
     
     
     // this part of code doesnt do what I thought
@@ -960,7 +992,11 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         {
             // may need generic or non generic code here
             // wont need it for the test im working on now
+            
+            if(paramRight == false || paramLeft == true)
             factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+            else if(paramLeft)
+             factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
         }
         else
         {
@@ -1080,7 +1116,7 @@ void Helper:: DumpHelp(string path)
     fstream file;
     file.exceptions ( fstream::failbit | fstream::badbit );
     vector<tuple<string,vector<string>>> Factbase = tCommands->getFact();
-    vector<tuple<string,vector<string>>> Rulebase = tCommands->getRule();
+    vector<tuple<string,vector<string>,vector<string>>> Rulebase = tCommands->getRule();
     try
     {
         // open/create file
@@ -1106,7 +1142,8 @@ void Helper:: DumpHelp(string path)
                          }
                          file << temp <<endl;
                      });
-        } else
+        }
+        else
         {
             cout << "there are no facts to dump." << endl;
         }
@@ -1118,6 +1155,7 @@ void Helper:: DumpHelp(string path)
                          string temp = "RULE ";
                          temp.append(get<0>(it));
                          //cout << temp << endl; //this prints out the when the user dumps
+                         
                          temp.append("($X,$Y):- ");
                          //cout << temp << endl;
                          for(int i=0; i < get<1>(it).size(); i++)
@@ -1210,9 +1248,10 @@ void Helper:: LoadHelp(string path)
                 string key = ""; // holds the key or fact name
                 pos2 = l.find(delimiter); //set pos2 to the index where the ( is located in the string.
                 key = parseKey(l); // saves the relaton part of the string as key, so it can be passed to storeBase later.
+                vector<string> keyParam = parseParams(l);
+                vector<string> params = parseRuleParam(l);
                 
-                vector<string> params2 = parseRule(l);
-                storeBase(tCommands->getRule(), params2, key);
+                storeBase(tCommands->getRule(), params, key, keyParam);
             }
             else if (command.compare(inference_string) == 0)
             {
@@ -1285,7 +1324,7 @@ void Helper:: dropBase(string command)
     
     vector<int> ruleIndex;
     count = 0;
-    for(vector<tuple<string,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
+    for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
     {
         if ( command.compare(get<0>(*i)) == 0 )
         {

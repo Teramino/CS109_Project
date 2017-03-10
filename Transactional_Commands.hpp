@@ -17,7 +17,7 @@ private:
     map<string, command_operations> commandMap;
     //changed it back to a non static vector due to linker errors
     vector<tuple<string,vector<string>>> fact;
-    vector<tuple<string,vector<string>>> rule;
+    vector<tuple<string,vector<string>,vector<string>>> rule;
     
     
 public:
@@ -25,7 +25,7 @@ public:
     map<string,command_operations>& getMapCommand(); // getter
     //changed it back to a non static vector due to linker errors
     vector<tuple<string,vector<string>>>& getFact(); // getter
-    vector<tuple<string,vector<string>>>& getRule(); // getter
+    vector<tuple<string,vector<string>,vector<string>>>& getRule(); // getter
     
     static void loadCommand(string);
     static void dumpCommand(string);
