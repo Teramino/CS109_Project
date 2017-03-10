@@ -670,6 +670,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     vector<vector<string>> inferData; // holds the data to be returned
     vector<vector<string>> factData;
     bool recursion = false;
+    bool sameParam = false;
     
     for(int i=0; i < rule.size(); i++)
         paramData.push_back(parseParams(rule[i]));
@@ -690,6 +691,12 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             break;
         }
     }
+    
+    if(isGeneric)
+        if(keyParams[0][1] == keyParams[1][1])
+        {
+            sameParam = true;
+        }
     
     auto tempTuple = retrieveRule(keyParams, parseKey(rule[0])); // looks to see if the current rule is a rule or not.
     
@@ -872,8 +879,19 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                             inferDataTemp.push_back(relationalData[i][k][j]);
                         }
                     }// end for
-                    inferData.push_back(inferDataTemp);
-                    inferDataTemp.clear();
+                    if(sameParam)
+                    {
+                        if(inferDataTemp[0]==inferDataTemp[1])
+                        {
+                            inferData.push_back(inferDataTemp);
+                            inferDataTemp.clear();
+                        }
+                    }
+                    else
+                    {
+                        inferData.push_back(inferDataTemp);
+                        inferDataTemp.clear();
+                    }
                 }// end for
             }// end if
         }
@@ -897,8 +915,19 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                     }// end for
                     if(inferDataTemp.size() != 0)
                     {
-                        inferData.push_back(inferDataTemp);
-                        inferDataTemp.clear();
+                        if(sameParam)
+                        {
+                            if(inferDataTemp[0]==inferDataTemp[1])
+                            {
+                                inferData.push_back(inferDataTemp);
+                                inferDataTemp.clear();
+                            }
+                        }
+                        else
+                        {
+                            inferData.push_back(inferDataTemp);
+                            inferDataTemp.clear();
+                        }
                     }
                 }
                 
@@ -951,6 +980,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<vector<string>> factData;
     bool ruleLeft = false;
     bool ruleRight = false;
+    bool sameParam = false;
     
     for(int i=0; i < rule.size(); i++)
         paramData.push_back(parseParams(rule[i]));
@@ -984,6 +1014,12 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             break;
         }
     }
+    
+    if(isGeneric)
+        if(keyParams[0][1] == keyParams[1][1])
+        {
+            sameParam = true;
+        }
     
     vector<vector<vector<string>>> tempRelData; // used to hold data from each fact temporarily
     
@@ -1027,7 +1063,10 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                         
                         // need to look at all cases here!
                         
-                        tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
+                        if (keyParams[0][0] != '$')
+                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
+                        else if (keyParams[1][0] != '$')
+                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
                         
                     }
                     
