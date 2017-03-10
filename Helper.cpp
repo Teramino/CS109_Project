@@ -676,8 +676,9 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     
     // finds correlation in rule targets
     paramIndex = paramCorr(paramData);
+    
     if (paramIndex.size() == keyParams.size())
-        return factData; //  params should correlated else its not an AND Inference //ASSUMED
+        return factData; //  params should correlated else its not an AND Inference //ASSUMED //PUT IN READ ME!!!!!!!!!!
     
     bool isGeneric = true;
     // check to see if params are specific or not
@@ -690,20 +691,24 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
         }
     }
     
-    auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
+    auto tempTuple = retrieveRule(keyParams, parseKey(rule[0])); // looks to see if the current rule is a rule or not.
     
-    // get facts of first defined rule target
+    // ================================================================================================
+    // LOOKING AT FIRST RULE TARGET
+    // ================================================================================================
+    
+    // if fact is empty it for most indicates there hasn't been recursion yet
     if (facts.size()== 0)
     {
         // get<3> holds defined rule
         auto tempRule = get<3>(tempTuple);
         
-        // check if rule target has a defined rule
-        if(tempRule.size() == 0) // theres no defined rule
+         // check if rule target has a defined rule
+        if(tempRule.size() == 0) // theres no defined rule for target (EX: Father)
         {
             factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
         }
-        else
+        else // rule defined // RECURSIVE CALL (EX: Parent)
         {
             factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
@@ -722,7 +727,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             {
                 factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
             }
-            else
+            else // rule defined // RECURSIVE CALL
             {
                 factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
             }
@@ -744,19 +749,21 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 }
                 factData = vectorCondense(tempRelData);
             }
-            else // code being tested wont hit her just yet
+            else // rule defined // RECURSIVE CALL
             {
                 factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
                 recursion = true;
             }
         }
-        
     }
     
     //this variable pulls the facts for the first rule target only; the preceding rule target may used the first rule target which will be handeled later
     
     
-    // looks at 2nd rule target and on
+    // ================================================================================================
+    // LOOKING AT SECOND RULE TARGET
+    // ================================================================================================
+
     
     // this holds the corelation fact data from the rule target based on parameters
     vector<vector<vector<string>>> relationalData;
@@ -766,9 +773,9 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     // ONLY WORKS for 2 params
     for (int i=0; i<factData.size(); i++)
     {
-        
-        tempTuple = retrieveRule(keyParams, parseKey(rule[1]));
-        auto tempRule = get<3>(tempTuple);
+//        op(logicalOP, key, keyParams, rule, fact)
+        tempTuple = retrieveRule(keyParams, parseKey(rule[1])); // looking for defined rule target
+        auto tempRule = get<3>(tempTuple); // is the rule from above example
         string generic = "$";
         
         if( tempRule.size() == 0) // if rule is not defined
@@ -814,12 +821,12 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 relationalData.push_back(retrieveFact(parseKey(rule[1]),generic, generic));
             }
         }
-        else // if rule is defined
+        else // rule defined // RECURSIVE CALL
         {
             recursion = true;
             //            op(string logicalOp, string key, vector<string> keyParams, vector<vector<string> > rule, vector<vector<string> > fact)
             
-            if(get<0>(paramIndex[0]) != -1)
+            if(get<0>(paramIndex[0]) != -1) // always going to work if we stay with ASSUMED 2 Params
             {
                 if(get<3>(paramIndex[0]) == 0) // place first param in the (first parm of second vector)
                 {
@@ -833,6 +840,8 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                     relationalData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
                 }
             }
+            else // rule defined // RECURSIVE CALL
+                relationalData = op(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
             else
                 relationalData = opFunction(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
             
@@ -998,7 +1007,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             else if(paramLeft)
              factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
         }
-        else
+        else // rule defined // RECURSIVE CALL
         {
             factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
@@ -1011,12 +1020,15 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         // check if rule target has a defined rule
         if(tempRule.size() == 0) // theres no defined rule
         {
-            if(!isGeneric)
+            if(!isGeneric) // Parameters have a value
             {
                 for (int i=0; i<facts.size(); i++)
                 {
                     // under the assumption if recursion happens the second param in facts is always the value that we are looking to inference with specificly
                     // Mother($X,[$Z]) Parent([$Z],$Y) the $Z comes from the second param of the first rule target that is used in the second rule target's first param
+                    
+                    // need to look at all cases here!
+                    
                     tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
                     
                 }
@@ -1028,12 +1040,12 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                         factData.push_back(tempRelData[i][j]);
                     }
             }
-            else
+            else // Parameters doesnt have a value
             {
                 factData = retrieveFact(parseKey(rule[0]), keyParams[0], keyParams[1]);
             }
         }
-        else // code being tested wont hit her just yet
+        else // rule defined // RECURSIVE CALL
         {
             factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
@@ -1059,7 +1071,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         {
             relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
         }
-        else // if rule is defined
+        else // if rule is defined  // RECURSIVE CALL
         {
             //            op(string logicalOp, string key, vector<string> keyParams, vector<vector<string> > rule, vector<vector<string> > fact)
             tempRelData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
