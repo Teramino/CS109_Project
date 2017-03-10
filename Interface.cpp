@@ -251,8 +251,8 @@ bool Valid_DROP_Input(string drop_defenition, bool& user_mess_up)
 bool Valid_DUMP_Input(string dump_defenition, bool& user_mess_up)
 {
 
-//	size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
-	size_t looking_for_specific_file_ending = dump_defenition.find(".txt");
+	size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
+//	size_t looking_for_specific_file_ending = dump_defenition.find(".txt");
 
 	if (looking_for_specific_file_ending != dump_defenition.npos)
 	{
@@ -272,7 +272,7 @@ bool Valid_LOAD_Input(string fileName, bool& user_mess_up)
 	int count = 0;
 	bool syntax_correct = false;
     
-//    size_t looking_for_specific_file_ending = path.find(".sri");
+//    size_t looking_for_specific_file_ending = fileName.find(".sri");
     size_t looking_for_specific_file_ending = fileName.find(".txt");
     
     if (looking_for_specific_file_ending == fileName.npos)
@@ -407,7 +407,8 @@ void Interface::run()
 
 		cout << "Please enter one of the commands with their proper content=>" << endl << "	-FACT(store in a fact)"<< endl << "	-RULE(store in a rule)" 
 			<< endl << "	-LOAD(load in a file)" << endl << "	-INFERENCE(issue a query)" << endl 
-			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "Enter here: ";
+			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)" 
+			<< endl <<"Enter here: "; 
 		
 		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
 		//or the new line char is encountered
@@ -415,6 +416,12 @@ void Interface::run()
 		cout << endl;
 
 		string_version_UserInput = UserInput;
+
+		if(string_version_UserInput.compare("QUIT")==0 || string_version_UserInput.compare("Quit")==0 || string_version_UserInput.compare("quit") ==0)
+		{
+			cout << "Goodbye" << endl;
+			break;
+		}
 
 		string delimeter = " ";
 		size_t pos = 0;
