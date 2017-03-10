@@ -90,7 +90,7 @@ void Helper:: parseDefinition(char function, string def)
         }
         
         storeBase(tCommands->getFact(), parameters, key); // send the parameters and the key to be stored
-            cout << "----------------------------------------" << endl << endl;
+        cout << "----------------------------------------" << endl << endl;
     }
     else if (function=='r') // if our tagged string is a rule
     {
@@ -104,7 +104,7 @@ void Helper:: parseDefinition(char function, string def)
         }
         
         storeBase(tCommands->getRule(), parameters, key); // send the parameters and the key to be stored
-            cout << "----------------------------------------" << endl << endl;
+        cout << "----------------------------------------" << endl << endl;
     }
 }
 
@@ -144,13 +144,31 @@ void Helper:: ParseQuery(string rest)
         else
         {
             vector<vector<string>> factData;
-            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            tempFacts = vectorCondense(opFunction(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
         }
         
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
         {
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
+        }
+        
+        if (tempFacts.size() != 0)
+        {
+            vector<string> fact = singleVecCondense(tempFacts);
+            vector<string> result = dropDuplicates(fact);
+            
+            cout << endl;
+            cout << "=================FACTS=================\n";
+            for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
+                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+            }
+            cout << "=======================================\n";
+            cout << "----------------------------------------" << endl << endl;
+        }
+        else
+        {
+            cout << "Whoops! Inference is not defined\n\n";
         }
     }
     else
@@ -163,43 +181,50 @@ void Helper:: ParseQuery(string rest)
         space++;
         string inferKey = rest.substr (space); //Obtain the acronym (GF) as our key and save it for when we store the results in the fact vector.
         
-        auto opParams = retrieveRule(parameters,inferKey);
+        auto opParams = retrieveRule(parameters,key);
         vector<vector<string>> rule = get<3>(opParams);
         
-        if (rule.size() == 0)
-            tempFacts = retrieveFact(key, get<2>(opParams)[0], get<2>(opParams)[1]);
-        else
+        if (rule.size() == 0) // rule not defined
         {
+            cout << "Not defined!\n";
+            tempFacts = retrieveFact(key, get<2>(opParams)[0], get<2>(opParams)[1]);
+        }
+        else // rule defined
+        {
+            cout << "Defined!\n";
             vector<vector<string>> factData;
-            tempFacts = vectorCondense(op(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
+            tempFacts = vectorCondense(opFunction(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
         }
         
         cout << "Key: " << key << endl;
+        
         for(int i=0; i < parameters.size(); i++)
         {
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
-        cout << "Saved under: " << inferKey << endl;
-    }
-    if (tempFacts.size() != 0)
-    {
-        vector<string> fact = singleVecCondense(tempFacts);
-        storeBase(tCommands->getFact(), fact, key);
-        vector<string> result = dropDuplicates(fact);
         
-        cout << endl;
-        cout << "=================FACTS=================\n";
-        for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-            cout << setw(13) << "[ " << result[i] << " ]" << endl;
+        cout << "Saved under: " << inferKey << endl;
+        
+        if (tempFacts.size() != 0)
+        {
+            vector<string> fact = singleVecCondense(tempFacts);
+            storeBase(tCommands->getFact(), fact, inferKey);
+            vector<string> result = dropDuplicates(fact);
+            
+            cout << endl;
+            cout << "=================FACTS=================\n";
+            for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
+                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+            }
+            cout << "=======================================\n";
+            cout << "----------------------------------------" << endl << endl;
         }
-         cout << "=======================================\n";
-        cout << endl;
-        cout << "----------------------------------------" << endl << endl;
+        else
+        {
+            cout << "Whoops! Inference is not defined\n\n";
+        }
     }
-    else
-    {
-        cout << "Whoops! Inference is not defined\n\n";
-    }
+    
 }
 
 // ===================================================================================
@@ -247,7 +272,7 @@ vector<string> Helper:: parseParams(string &input)
     string temp = input.substr(0, pos);
     
     // Print key
-//    cout << "Key: " << input.substr(0, pos) << endl;
+    //    cout << "Key: " << input.substr(0, pos) << endl;
     pos++; // eats delimiter;
     
     string parsedInput = input.substr(pos, input.length());
@@ -255,7 +280,7 @@ vector<string> Helper:: parseParams(string &input)
     while ((pos = parsedInput.find(delimiter2)) != string::npos)  // will loop through as many parameters except the last one
     {
         parameters.push_back(parsedInput.substr(0, pos));
-//        cout << "Parameter(" << count++ << "): " << parameters[parameters.size()-1] << endl;
+        //        cout << "Parameter(" << count++ << "): " << parameters[parameters.size()-1] << endl;
         pos++; // eats delimiter
         parsedInput = parsedInput.substr(pos, input.length());
         
@@ -264,8 +289,8 @@ vector<string> Helper:: parseParams(string &input)
     delimiter = ")";
     pos = parsedInput.find(delimiter);
     parameters.push_back(parsedInput.substr(0, pos));
-//    cout << "Parameter(" << count << "): " << parameters[parameters.size()-1] << endl;
-//    cout <<"----------------------------------------"<<endl;
+    //    cout << "Parameter(" << count << "): " << parameters[parameters.size()-1] << endl;
+    //    cout <<"----------------------------------------"<<endl;
     
     return parameters;
 }
@@ -285,20 +310,20 @@ vector<string> Helper:: parseRule(string input)
     vector<string> param;
     string delimiter = ":-";
     size_t pos = input.find(delimiter);
-//    cout << "----------------------------------------" << endl;
-//    cout << "Key: " << input.substr(0, pos) << endl;
+    //    cout << "----------------------------------------" << endl;
+    //    cout << "Key: " << input.substr(0, pos) << endl;
     pos++; // eats up delimiter :
     pos++; // eats up delimiter -
     
     delimiter = " ";
     pos++; // eats up delimiter ' '(space)
-
+    
     string parsedInput = input.substr(pos, input.length());
     
     while ((pos = parsedInput.find(delimiter)) != string::npos)  // will loop through as many parameters except the last one
     {
         param.push_back(parsedInput.substr(0, pos));
-//        cout << "Parameter(" << count++ << "): " << param[param.size()-1] << endl;
+        //        cout << "Parameter(" << count++ << "): " << param[param.size()-1] << endl;
         pos++; // eats delimiter
         parsedInput = parsedInput.substr(pos, input.length());
     }
@@ -306,8 +331,8 @@ vector<string> Helper:: parseRule(string input)
     delimiter = "\n";
     pos = parsedInput.find(delimiter);
     param.push_back(parsedInput.substr(0, pos));
-//    cout << "Parameter(" << count << "): " << param[param.size()-1] << endl;
-//    cout <<"----------------------------------------"<<endl;
+    //    cout << "Parameter(" << count << "): " << param[param.size()-1] << endl;
+    //    cout <<"----------------------------------------"<<endl;
     
     return param;
 }
@@ -344,7 +369,7 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
 {
     vector<string> params;
     vector<vector<string>> relationalData;
-//    cout << key << " Fact [ ";
+    //    cout << key << " Fact [ ";
     
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
@@ -358,12 +383,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-//                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-//                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          relationalData.push_back(params);
@@ -377,12 +402,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-//                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-//                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          if(param1.compare(params[0]) == 0)
@@ -396,12 +421,12 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              if (i != get<1>(it).size()-1) // printing purpose: used to add commas
                              {
                                  params.push_back(get<1>(it)[i]);
-//                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
                              }
                              else
                              {
                                  params.push_back(get<1>(it)[i]);
-//                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
                              }
                          }
                          if(param2.compare(params[1]) == 0)
@@ -410,7 +435,7 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      }
                  }
              });
-//    cout << " ]" << endl << endl;
+    //    cout << " ]" << endl << endl;
     
     return relationalData;
 }
@@ -433,7 +458,7 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
     vector<string> ruleTemp;
     string logicalOp;
     
-//    cout << key << " Rule ";
+    //    cout << key << " Rule ";
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getRule().begin(), tCommands->getRule().end(),[&](decltype(*tCommands->getRule().begin()) it) -> void // iterates through vector
              {
@@ -650,14 +675,14 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
         // get<3> holds defined rule
         auto tempRule = get<3>(tempTuple);
         
-         // check if rule target has a defined rule
+        // check if rule target has a defined rule
         if(tempRule.size() == 0) // theres no defined rule
         {
             factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
         }
         else
         {
-            factData = vectorCondense(op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+            factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
     }
     else
@@ -669,14 +694,14 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             // get<3> holds defined rule
             auto tempRule = get<3>(tempTuple);
             
-               // check if rule target has a defined rule
+            // check if rule target has a defined rule
             if(tempRule.size() == 0) // theres no defined rule
             {
                 factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
             }
             else
             {
-                factData = vectorCondense(op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
             }
         }
         else // params are specific Father(John,$y)
@@ -698,7 +723,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             }
             else // code being tested wont hit her just yet
             {
-                factData = vectorCondense(op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
                 recursion = true;
             }
         }
@@ -777,16 +802,16 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 {
                     keyParams[0] = "X";
                     
-                    relationalData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
+                    relationalData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
                 }
                 else // place first param in the (second parm of second vector)
                 {
                     keyParams[1] = "X";
-                    relationalData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
+                    relationalData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
                 }
             }
             else
-                relationalData = op(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
+                relationalData = opFunction(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
             
             break;
         }
@@ -865,7 +890,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 //
 //
 // ===================================================================================
-vector<vector<vector<string>>> Helper:: op(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
+vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
     for(int i=0; i < rule.size(); i++)
@@ -939,7 +964,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         }
         else
         {
-            factData = vectorCondense(op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+            factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
     }
     else  // there may not be generic parameters if facts has a size greater than 0
@@ -974,7 +999,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         }
         else // code being tested wont hit her just yet
         {
-            factData = vectorCondense(op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+            factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
         }
     }
     
@@ -1001,7 +1026,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         else // if rule is defined
         {
             //            op(string logicalOp, string key, vector<string> keyParams, vector<vector<string> > rule, vector<vector<string> > fact)
-            tempRelData = op(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
+            tempRelData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
         }
     }
     else
@@ -1054,15 +1079,15 @@ void Helper:: DumpHelp(string path)
     const char* f = path.c_str();
     fstream file;
     file.exceptions ( fstream::failbit | fstream::badbit );
-    vector<tuple<string,vector<string>>>& Factbase = tCommands->getFact();
-    vector<tuple<string,vector<string>>>& Rulebase = tCommands->getRule();
+    vector<tuple<string,vector<string>>> Factbase = tCommands->getFact();
+    vector<tuple<string,vector<string>>> Rulebase = tCommands->getRule();
     try
     {
         // open/create file
         file.open (f, ios::out);
         cout <<"Saving in to the file: " << f << endl;
         if(Factbase.size() != 0){
-            for_each(Factbase.begin(), Factbase.end()-1,[&](decltype(*Factbase.begin()) it) -> void // iterates through vector
+            for_each(Factbase.begin(), Factbase.end(),[&](decltype(*Factbase.begin()) it) -> void // iterates through vector
                      {
                          string temp = "FACT ";
                          temp.append(get<0>(it));
