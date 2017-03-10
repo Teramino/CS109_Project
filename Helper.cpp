@@ -841,10 +841,8 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                 }
             }
             else // rule defined // RECURSIVE CALL
-                relationalData = op(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
-            else
                 relationalData = opFunction(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
-            
+                    
             break;
         }
     }
