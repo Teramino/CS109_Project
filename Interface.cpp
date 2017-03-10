@@ -194,7 +194,7 @@ bool Valid_INFERENCE_Input(string inference_defenition, bool& user_mess_up)
 			}
 			else
 			{
-				cout << "All INFERENCE parameters must ONE uppercase character, and also have a $ symbol" << endl;
+				cout << "All INFERENCE parameters must have a $ symbol followed by ONE uppercase character" << endl;
 				cout << "Example: GrandFather($X,$Y) or GrandFather($X,$Y) GF" << endl;
 				cout << "Proceeding to the quit option" << endl << endl;
 				user_mess_up = true;
@@ -251,7 +251,7 @@ bool Valid_DROP_Input(string drop_defenition, bool& user_mess_up)
 bool Valid_DUMP_Input(string dump_defenition, bool& user_mess_up)
 {
 
-	//size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
+//	size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
 	size_t looking_for_specific_file_ending = dump_defenition.find(".txt");
 
 	if (looking_for_specific_file_ending != dump_defenition.npos)
@@ -267,11 +267,24 @@ bool Valid_DUMP_Input(string dump_defenition, bool& user_mess_up)
 	}
 }
 
-bool Valid_LOAD_Input(string path, bool& user_mess_up)
+bool Valid_LOAD_Input(string fileName, bool& user_mess_up)
 {
 	int count = 0;
 	bool syntax_correct = false;
-	const char* f = path.c_str();
+    
+//    size_t looking_for_specific_file_ending = path.find(".sri");
+    size_t looking_for_specific_file_ending = fileName.find(".txt");
+    
+    if (looking_for_specific_file_ending == fileName.npos)
+    {
+        cout << "Name your file whatever you would like, however it must end with '.sri'" << endl;
+        cout << "Example 'Output_file.sri'" << endl;
+        user_mess_up = true;
+        return false;
+
+    }
+    
+    const char* f = fileName.c_str();
 	fstream file;
 	// line
 	string line;
@@ -289,6 +302,8 @@ bool Valid_LOAD_Input(string path, bool& user_mess_up)
 		while (getline(file, line))
 		{
 			++count;
+            
+//            cout << line << endl;
 
 			string delimeter = " ";
 			size_t pos = 0;
@@ -332,6 +347,7 @@ bool Valid_LOAD_Input(string path, bool& user_mess_up)
 		cerr << "Failed to load file\n" << endl;
 	}
 
+//    cout  << "Reach the end" << endl << endl;
 	return true;
 }
 
@@ -391,7 +407,7 @@ void Interface::run()
 
 		cout << "Please enter one of the commands with their proper content=>" << endl << "	-FACT(store in a fact)"<< endl << "	-RULE(store in a rule)" 
 			<< endl << "	-LOAD(load in a file)" << endl << "	-INFERENCE(issue a query)" << endl 
-			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "Enter here:";
+			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "Enter here: ";
 		
 		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
 		//or the new line char is encountered

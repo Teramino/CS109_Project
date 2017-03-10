@@ -628,6 +628,8 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     
     // finds correlation in rule targets
     paramIndex = paramCorr(paramData);
+    if (paramIndex.size() == keyParams.size())
+        return factData; //  params should correlated else its not an AND Inference //ASSUMED
     
     bool isGeneric = true;
     // check to see if params are specific or not
@@ -901,6 +903,8 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     paramIndex = paramCorr(paramData);
     if (paramIndex.size() == keyParams.size()) // if every param matches then theres no correlation
         paramIndex.clear();
+    else
+        return factData; // all params should match else its not and OR Inference //ASSUMED
     
     
     // this part of code doesnt do what I thought
