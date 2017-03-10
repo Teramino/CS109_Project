@@ -523,7 +523,7 @@ void Interface::run()
 
 		cin.ignore(1, '\n');
 	}
-//}
+}
 
 // void Interface:: run()
 // {
