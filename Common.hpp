@@ -15,6 +15,7 @@
 #include <fstream>		/* file IO */
 #include <tuple> 
 #include <stack>
+#include <iomanip>
 
 using namespace std;
 
