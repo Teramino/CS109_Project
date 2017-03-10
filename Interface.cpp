@@ -275,20 +275,6 @@
 
 //     size_t looking_for_specific_file_ending = fileName.find(".sri");
 // //    size_t looking_for_specific_file_ending = fileName.find(".txt");
-    // Danielle Testing GrandMother($X,$X)
-     Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
-     Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
-     Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
-     Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
-     Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
-     Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
-     Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
-     Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
-     Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
-     Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
-    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
-    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
-//    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
     
 //     if (looking_for_specific_file_ending == fileName.npos)
 //     {
@@ -543,6 +529,21 @@
 
 void Interface:: run()
 {
+    // Danielle Testing GrandMother($X,$X)
+//    Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
+//    Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
+//    Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
+//    Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
+//    Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
+//    Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
+//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
+//    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
+//    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
+    //    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
+    
 	Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
 	Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
 	Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
