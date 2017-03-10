@@ -272,6 +272,7 @@
 //	int count = 0;
 //	bool syntax_correct = false;
 //    
+//
 //    size_t looking_for_specific_file_ending = fileName.find(".sri");
 ////    size_t looking_for_specific_file_ending = fileName.find(".txt");
 //    
@@ -407,7 +408,8 @@
 //
 //		cout << "Please enter one of the commands with their proper content=>" << endl << "	-FACT(store in a fact)"<< endl << "	-RULE(store in a rule)" 
 //			<< endl << "	-LOAD(load in a file)" << endl << "	-INFERENCE(issue a query)" << endl 
-//			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "Enter here: ";
+//			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)" 
+//			<< endl <<"Enter here: "; 
 //		
 //		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
 //		//or the new line char is encountered
@@ -415,6 +417,12 @@
 //		cout << endl;
 //
 //		string_version_UserInput = UserInput;
+//
+//		if(string_version_UserInput.compare("QUIT")==0 || string_version_UserInput.compare("Quit")==0 || string_version_UserInput.compare("quit") ==0)
+//		{
+//			cout << "Goodbye" << endl;
+//			break;
+//		}
 //
 //		string delimeter = " ";
 //		size_t pos = 0;
@@ -512,48 +520,48 @@
 //}
 
  void Interface:: run()
-{
-//    
-//    
-      Helper::instance()->parseCommand("FACT Father(Roger,John)");
-      Helper::instance()->parseCommand("FACT Mother(Marry,John)");
-      Helper::instance()->parseCommand("FACT Mother(Marry,Bill)");
-      Helper::instance()->parseCommand("FACT Father(Albert,Marry)");
-      Helper::instance()->parseCommand("FACT Father(Albert,Roger)");
-//            Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
-//        Helper::instance()->parseCommand("FACT Mother(Marry,Albert)");
-//    //    Helper::instance()->parseCommand("FACT Mother(Margret,Robert)");
-//            Helper::instance()->parseCommand("FACT Mother(Nancy,Margret)");
-////            Helper::instance()->parseCommand("FACT Mother(Nancy,Roger)");
-//            Helper::instance()->parseCommand("FACT Mother(Margret,Bob)");
-//            Helper::instance()->parseCommand("FACT Mother(Margret,Allen)");
-//    
-//    
-//    //    Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
-//    //    Helper::instance()->parseCommand("FACT Father(Allen,Margret, Alliosn, Joe, Jim)");
-//    //Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
-//    //    Helper::instance()->parseCommand("LOAD output.txt");
-//    //    Helper::instance()->parseCommand("DUMP output2.txt");
-//    
-//    
+ {
+    
+    
+    Helper::instance()->parseCommand("FACT Father(Roger,John)");
+//    Helper::instance()->parseCommand("FACT Mother(Marry,John)");
+     Helper::instance()->parseCommand("FACT Mother(Marry,Bill)");
+    Helper::instance()->parseCommand("FACT Father(Albert,Marry)");
+    Helper::instance()->parseCommand("FACT Father(Albert,Roger)");
+            Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
+        Helper::instance()->parseCommand("FACT Mother(Marry,Albert)");
+    //    Helper::instance()->parseCommand("FACT Mother(Margret,Robert)");
+            Helper::instance()->parseCommand("FACT Mother(Nancy,Margret)");
+//            Helper::instance()->parseCommand("FACT Mother(Nancy,Roger)");
+            Helper::instance()->parseCommand("FACT Mother(Margret,Bob)");
+            Helper::instance()->parseCommand("FACT Mother(Margret,Allen)");
+    
+    
+    //    Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
+    //    Helper::instance()->parseCommand("FACT Father(Allen,Margret, Alliosn, Joe, Jim)");
+    //Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
+    //    Helper::instance()->parseCommand("LOAD output.txt");
+    //    Helper::instance()->parseCommand("DUMP output2.txt");
+    
+    
     Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
-////            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
-////            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)"); // works
-////    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
-////    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- OR Mother($X,$Y) Parent($X,$Y)"); // works
-////    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
-//            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
-    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
-//    //    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y) GF");
-////            Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)");
-////                 Helper::instance()->parseCommand("INFERENCE Parent($X,Marry)");
-////                 Helper::instance()->parseCommand("INFERENCE Parent(Albert,$Y)");
-//    //        Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
-//    //            Helper::instance()->parseCommand("INFERENCE Mother($X,$Y)");
-////             Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
-//                  Helper::instance()->parseCommand("INFERENCE GrandMother(Marry,$Y)");
-////                  Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
-    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
-//    //      Helper::instance()->parseCommand("DUMP output2.txt");
-//    
+//            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
+//            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)"); // works
+//    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- OR Mother($X,$Y) Parent($X,$Y)"); // works
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
+            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
+    //    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y) GF");
+//            Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)");
+//                 Helper::instance()->parseCommand("INFERENCE Parent($X,Marry)");
+//                 Helper::instance()->parseCommand("INFERENCE Parent(Albert,$Y)");
+    //        Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
+    //            Helper::instance()->parseCommand("INFERENCE Mother($X,$Y)");
+//             Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
+                  Helper::instance()->parseCommand("INFERENCE GrandMother(Marry,$Y)");
+//                  Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
+//    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
+    //      Helper::instance()->parseCommand("DUMP output2.txt");
+    
 }

@@ -123,7 +123,7 @@ map<string,command_operations>& Transactional_Commands:: getMapCommand(){ return
 
 vector<tuple<string,vector<string>>>& Transactional_Commands:: getFact(){ return fact; }
 
-vector<tuple<string,vector<string>>>& Transactional_Commands:: getRule(){ return rule; }
+vector<tuple<string,vector<string>,vector<string>>>& Transactional_Commands:: getRule(){ return rule; }
 
 /*
 void Transactional_Commands::print(){
