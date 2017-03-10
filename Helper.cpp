@@ -6,13 +6,13 @@ Helper* Helper:: h_instance = nullptr; // used to initialized pointer
 
 Helper:: Helper()
 {
-    
+    // new object
     tCommands = new Transactional_Commands;
 }
 
 Helper:: ~Helper()
 {
-    
+    // deallocation
     delete tCommands;
     delete h_instance;
 }
@@ -27,9 +27,9 @@ Helper:: ~Helper()
 //	else return the object
 //
 // ===================================================================================
+
 Helper* Helper:: instance()
 {
-    
     if(!h_instance) // same as if(h_instance == NULL)
         h_instance = new Helper; // create a new object
     return h_instance;
@@ -393,6 +393,82 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
     vector<string> params;
     vector<vector<string>> relationalData;
     //    cout << key << " Fact [ ";
+    // if the parameters are the same
+    if ( param1 == param2 )
+    {
+        // & in [] of lambda functions allows lambda function to acess local variables
+        for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
+        {
+            if (get<0>(it) == key) // checks tuple if key matches
+            {
+             if (param1[0] == '$' && param2[0] == '$') // if query is generic
+             {
+                 for(int i=0; i < get<1>(it).size(); i+=2) // iterates through vector inside tuple
+                 {
+                    if ( get<1>(it)[i] == get<1>(it)[i+1] )
+                    {
+                        params.push_back(get<1>(it)[i]);
+                        params.push_back(get<1>(it)[i+1]);
+                    }
+                     // if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                     // {
+                     //     params.push_back(get<1>(it)[i]);
+                     //     //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                     // }
+                     // else
+                     // {
+                     //     params.push_back(get<1>(it)[i]);
+                     //     //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                     // }
+                 }
+                 relationalData.push_back(params);
+                 params.clear();
+             }
+                     // else if (param1[0] != '$' && param2[0] == '$') // if the first parameter is specific
+                     // {
+                         
+                     //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
+                     //     {
+                     //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                     //         {
+                     //             params.push_back(get<1>(it)[i]);
+                     //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                     //         }
+                     //         else
+                     //         {
+                     //             params.push_back(get<1>(it)[i]);
+                     //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                     //         }
+                     //     }
+                     //     if(param1.compare(params[0]) == 0)
+                     //         relationalData.push_back(params);
+                     //     params.clear();
+                     // }
+                     // else if (param1[0] == '$' && param2[0] != '$') // if the second parameters is specific
+                     // {
+                     //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
+                     //     {
+                     //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                     //         {
+                     //             params.push_back(get<1>(it)[i]);
+                     //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                     //         }
+                     //         else
+                     //         {
+                     //             params.push_back(get<1>(it)[i]);
+                     //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                     //         }
+                     //     }
+                     //     if(param2.compare(params[1]) == 0)
+                     //         relationalData.push_back(params);
+                     //     params.clear();
+                     // }
+                 }
+             });
+    //    cout << " ]" << endl << endl;
+    
+    return relationalData;
+    }
     
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
