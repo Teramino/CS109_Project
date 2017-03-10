@@ -1168,9 +1168,9 @@ void Helper:: DumpHelp(string path)
                          string temp = "RULE ";
                          temp.append(get<0>(it));
                          //cout << temp << endl; //this prints out the when the user dumps
-                         temp.append("($");
+                         temp.append("(");
                          temp.append(get<2>(it)[0]);
-                         temp.append(",$");
+                         temp.append(",");
                          temp.append(get<2>(it)[1]);
                          temp.append("):- ");
                          //cout << temp << endl;
