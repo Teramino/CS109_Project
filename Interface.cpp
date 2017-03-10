@@ -251,8 +251,8 @@ bool Valid_DROP_Input(string drop_defenition, bool& user_mess_up)
 bool Valid_DUMP_Input(string dump_defenition, bool& user_mess_up)
 {
 
-//	size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
-	size_t looking_for_specific_file_ending = dump_defenition.find(".txt");
+	size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
+//	size_t looking_for_specific_file_ending = dump_defenition.find(".txt");
 
 	if (looking_for_specific_file_ending != dump_defenition.npos)
 	{
@@ -272,8 +272,8 @@ bool Valid_LOAD_Input(string fileName, bool& user_mess_up)
 	int count = 0;
 	bool syntax_correct = false;
     
-//    size_t looking_for_specific_file_ending = path.find(".sri");
-    size_t looking_for_specific_file_ending = fileName.find(".txt");
+    size_t looking_for_specific_file_ending = fileName.find(".sri");
+//    size_t looking_for_specific_file_ending = fileName.find(".txt");
     
     if (looking_for_specific_file_ending == fileName.npos)
     {
