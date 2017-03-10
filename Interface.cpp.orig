@@ -272,9 +272,13 @@ bool Valid_LOAD_Input(string fileName, bool& user_mess_up)
 	int count = 0;
 	bool syntax_correct = false;
     
-
+<<<<<<< HEAD
+//    size_t looking_for_specific_file_ending = fileName.find(".sri");
+    size_t looking_for_specific_file_ending = fileName.find(".txt");
+=======
     size_t looking_for_specific_file_ending = fileName.find(".sri");
 //    size_t looking_for_specific_file_ending = fileName.find(".txt");
+>>>>>>> 756575e41585d72325954451de15966c61286c59
     
     if (looking_for_specific_file_ending == fileName.npos)
     {

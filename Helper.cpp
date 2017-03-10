@@ -1222,7 +1222,8 @@ void Helper:: LoadHelp(string path)
         cerr << "Failed to load file\n";
     }
     
-    cout << endl;
+    cout << endl << setw(20) << "File Loaded\n";
+    cout << "----------------------------------------" << endl << endl;
     
 }
 
