@@ -302,6 +302,8 @@ bool Valid_LOAD_Input(string fileName, bool& user_mess_up)
 		}
 		while (getline(file, line))
 		{
+			if ( line == "")
+				break;
 			++count;
             
 //            cout << line << endl;
