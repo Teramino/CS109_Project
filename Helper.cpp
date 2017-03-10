@@ -842,7 +842,6 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             }
             else // rule defined // RECURSIVE CALL
                 relationalData = opFunction(get<0>(tempTuple), get<1>(tempTuple), get<2>(tempTuple), tempRule, factData);
-                    
             break;
         }
     }
@@ -888,7 +887,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                     {
                         if(keyParams[0][0] != '$')
                         {
-                            // assuming on 2 parameters per rule target
+                            // assuming on 2 parameters per rule target // ASSUMED // ADD TO README
                             if(factData[j][1].compare(relationalData[i][k][0]) == 0) // if the second param of first vector == first param of second vector
                             {
                                 inferDataTemp.push_back(factData[j][0]);
@@ -962,6 +961,8 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         paramIndex.clear();
     else
     {
+            // if code gets in here 
+    
         if(keyParams[0] == paramData[0][0] && keyParams[1] ==  paramData[0][1])
             paramLeft = true;
         else if(keyParams[0] == paramData[1][0] && keyParams[1] ==  paramData[1][1])
@@ -1000,9 +1001,9 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             // may need generic or non generic code here
             // wont need it for the test im working on now
             
-            if(paramRight == false || paramLeft == true)
+            if(paramRight == false && paramLeft == false) // proceed as normal
             factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
-            else if(paramLeft)
+            else if(paramLeft) // if first rule target matches
              factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
         }
         else // rule defined // RECURSIVE CALL
