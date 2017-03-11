@@ -394,81 +394,33 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
     vector<vector<string>> relationalData;
     //    cout << key << " Fact [ ";
     // if the parameters are the same
-//    if ( param1 == param2 )
-//    {
-//        // & in [] of lambda functions allows lambda function to acess local variables
-//        for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
-//                 {
-//                     if (get<0>(it) == key) // checks tuple if key matches
-//                     {
-//                         if (param1[0] == '$' && param2[0] == '$') // if query is generic
-//                         {
-//                             for(int i=0; i < get<1>(it).size(); i+=2) // iterates through vector inside tuple
-//                             {
-//                                 if ( get<1>(it)[i] == get<1>(it)[i+1] )
-//                                 {
-//                                     params.push_back(get<1>(it)[i]);
-//                                     params.push_back(get<1>(it)[i+1]);
-//                                 }
-//                                 // if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-//                                 // {
-//                                 //     params.push_back(get<1>(it)[i]);
-//                                 //     //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-//                                 // }
-//                                 // else
-//                                 // {
-//                                 //     params.push_back(get<1>(it)[i]);
-//                                 //     //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-//                                 // }
-//                             }
-//                             relationalData.push_back(params);
-//                             params.clear();
-//                             
-//                         }
-//                         // else if (param1[0] != '$' && param2[0] == '$') // if the first parameter is specific
-//                         // {
-//                         
-//                         //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-//                         //     {
-//                         //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-//                         //         {
-//                         //             params.push_back(get<1>(it)[i]);
-//                         //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-//                         //         }
-//                         //         else
-//                         //         {
-//                         //             params.push_back(get<1>(it)[i]);
-//                         //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-//                         //         }
-//                         //     }
-//                         //     if(param1.compare(params[0]) == 0)
-//                         //         relationalData.push_back(params);
-//                         //     params.clear();
-//                         // }
-//                         // else if (param1[0] == '$' && param2[0] != '$') // if the second parameters is specific
-//                         // {
-//                         //     for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-//                         //     {
-//                         //         if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-//                         //         {
-//                         //             params.push_back(get<1>(it)[i]);
-//                         //             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-//                         //         }
-//                         //         else
-//                         //         {
-//                         //             params.push_back(get<1>(it)[i]);
-//                         //             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-//                         //         }
-//                         //     }
-//                         //     if(param2.compare(params[1]) == 0)
-//                         //         relationalData.push_back(params);
-//                         //     params.clear();
-//                         // }
-//                     }
-//                 });
-//        //    cout << " ]" << endl << endl;
-//        return relationalData;
-//    }
+    if ( param1 == param2 )
+    {
+        // & in [] of lambda functions allows lambda function to acess local variables
+        for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
+                 {
+                     if (get<0>(it) == key) // checks tuple if key matches
+                     {
+                         if (param1[0] == '$' && param2[0] == '$') // if query is generic
+                         {
+                             for(int i=0; i < get<1>(it).size(); i+=2) // iterates through vector inside tuple
+                             {
+                                 if ( get<1>(it)[i] == get<1>(it)[i+1] )
+                                 {
+                                     params.push_back(get<1>(it)[i]);
+                                     params.push_back(get<1>(it)[i+1]);
+                                 }
+                             }
+                             relationalData.push_back(params);
+                             params.clear();
+                             
+                         }
+
+                     }
+                 });
+        //    cout << " ]" << endl << endl;
+        return relationalData;
+    }
     
     // & in [] of lambda functions allows lambda function to acess local variables
     for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
@@ -479,16 +431,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      {
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             {
+//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                             {
                                  params.push_back(get<1>(it)[i]);
                                  //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             }
-                             else
-                             {
-                                 params.push_back(get<1>(it)[i]);
+//                             }
+//                             else
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
                                  //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             }
+//                             }
                          }
                          relationalData.push_back(params);
                          params.clear();
@@ -498,16 +450,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                          
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             {
+//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                             {
                                  params.push_back(get<1>(it)[i]);
                                  //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             }
-                             else
-                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             }
+//                             }
+//                             else
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
+//                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+//                             }
                          }
                          if(param1.compare(params[0]) == 0)
                              relationalData.push_back(params);
@@ -517,16 +469,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      {
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             {
+//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                             {
                                  params.push_back(get<1>(it)[i]);
                                  //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             }
-                             else
-                             {
+//                             }
+//                             else
+//                             {
                                  params.push_back(get<1>(it)[i]);
                                  //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             }
+//                             }
                          }
                          if(param2.compare(params[1]) == 0)
                              relationalData.push_back(params);
@@ -744,7 +696,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     vector<vector<string>> inferData; // holds the data to be returned
     vector<vector<string>> factData;
     bool recursion = false;
-    bool sameParam = false;
+//    bool sameParam = false;
     
     for(int i=0; i < rule.size(); i++)
         paramData.push_back(parseParams(rule[i]));
@@ -766,11 +718,11 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
         }
     }
     
-    if(isGeneric)
-        if(keyParams[0][1] == keyParams[1][1])
-        {
-            sameParam = true;
-        }
+//    if(isGeneric)
+//        if(keyParams[0][1] == keyParams[1][1])
+//        {
+//            sameParam = true;
+//        }
     
     auto tempTuple = retrieveRule(keyParams, parseKey(rule[0])); // looks to see if the current rule is a rule or not.
     
@@ -966,19 +918,19 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                                 inferDataTemp.push_back(relationalData[i][k][j]);
                             }
                         }// end for
-                        if(sameParam)
-                        {
-                            if(inferDataTemp[0]==inferDataTemp[1])
-                            {
-                                inferData.push_back(inferDataTemp);
-                                inferDataTemp.clear();
-                            }
-                        }
-                        else
-                        {
+//                        if(sameParam)
+//                        {
+//                            if(inferDataTemp[0]==inferDataTemp[1])
+//                            {
+//                                inferData.push_back(inferDataTemp);
+//                                inferDataTemp.clear();
+//                            }
+//                        }
+//                        else
+//                        {
                             inferData.push_back(inferDataTemp);
                             inferDataTemp.clear();
-                        }
+//                        }
                         
                     }// end for
                 }// end if
@@ -1004,19 +956,19 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                     }// end for
                     if(inferDataTemp.size() != 0)
                     {
-                        if(sameParam)
-                        {
-                            if(inferDataTemp[0]==inferDataTemp[1])
-                            {
-                                inferData.push_back(inferDataTemp);
-                                inferDataTemp.clear();
-                            }
-                        }
-                        else
-                        {
+//                        if(sameParam)
+//                        {
+//                            if(inferDataTemp[0]==inferDataTemp[1])
+//                            {
+//                                inferData.push_back(inferDataTemp);
+//                                inferDataTemp.clear();
+//                            }
+//                        }
+//                        else
+//                        {
                             inferData.push_back(inferDataTemp);
                             inferDataTemp.clear();
-                        }
+//                        }
                     }
                 }
                 
@@ -1067,9 +1019,14 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<tuple<int,int,int,int>> paramIndex; // tuple<vectorIndex1,param,vectorIndex2,param>
     vector<vector<string>> inferData; // holds the data to be returned
     vector<vector<string>> factData;
-    bool ruleLeft = false;
-    bool ruleRight = false;
-    bool sameParam = false;
+    
+    vector<vector<vector<string>>> factDataT;
+    vector<future<vector<vector<vector<string>>>>> thread;
+//    int count = -1;
+    
+    bool ruleLeft = true;
+    bool ruleRight = true;
+//    bool sameParam = false;
     
     for(int i=0; i < rule.size(); i++)
     {
@@ -1084,13 +1041,13 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     else
     {
         // if code gets in here one of the parameters doesnt match
-        if(keyParams[0] == paramData[0][0] && keyParams[1] ==  paramData[0][1])
+        if(keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1])
         {
-            ruleLeft = true;
+            ruleLeft = false;
         }
-        else if(keyParams[0] == paramData[1][0] && keyParams[1] ==  paramData[1][1])
+        else if(keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1])
         {
-            ruleRight = true;
+            ruleRight = false;
         }
         else
         {
@@ -1112,18 +1069,18 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         }
     }
     
-    if(isGeneric)
-        if(keyParams[0][1] == keyParams[1][1])
-        {
-            sameParam = true;
-        }
+//    if(isGeneric)
+//        if(keyParams[0][1] == keyParams[1][1])
+//        {
+//            sameParam = true;
+//        }
     
     vector<vector<vector<string>>> tempRelData; // used to hold data from each fact temporarily
     
     // get facts of first defined rule target
     
     auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
-    if(!ruleLeft == false) // left rule is a valid rule target
+    if(ruleLeft == true) // left rule is a valid rule target
     {
         if (facts.size()== 0)
         {
@@ -1136,11 +1093,15 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 // may need generic or non generic code here
                 // wont need it for the test im working on now
                 
-                factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+//                factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+                factDataT.push_back(retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]));
+//                count++;
+//                thread.push_back(async(launch::async,retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]), count));
             }
             else // rule defined // RECURSIVE CALL
             {
-                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+//                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+                factDataT = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
             }
         }
         else  // there may not be generic parameters if facts has a size greater than 0
@@ -1161,27 +1122,30 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                         // need to look at all cases here!
                         
                         if (keyParams[0][0] != '$')
-                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
+//                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
+                            factDataT.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
                         else if (keyParams[1][0] != '$')
-                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
-                        
+//                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
+                        factDataT.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
                     }
                     
-                    // condense vector to fit factData and also rids and empty vector
-                    for(int i=0; i < tempRelData.size(); i++)
-                        for(int j=0; j < tempRelData[i].size(); j++)
-                        {
-                            factData.push_back(tempRelData[i][j]);
-                        }
+//                    // condense vector to fit factData and also rids and empty vector
+//                    for(int i=0; i < tempRelData.size(); i++)
+//                        for(int j=0; j < tempRelData[i].size(); j++)
+//                        {
+//                            factData.push_back(tempRelData[i][j]);
+//                        }
                 }
                 else // Parameters doesnt have a value
                 {
-                    factData = retrieveFact(parseKey(rule[0]), keyParams[0], keyParams[1]);
+//                    factData = retrieveFact(parseKey(rule[0]), keyParams[0], keyParams[1]);
+                    factDataT.push_back(retrieveFact(parseKey(rule[0]), keyParams[0], keyParams[1]));
                 }
             }
             else // rule defined // RECURSIVE CALL
             {
-                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+//                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+                factDataT = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
             }
         }
     }
@@ -1194,7 +1158,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<vector<string>> relationalData;
     
     // retrive facts based based on if theres correlations or not between rule targets
-    if (!ruleRight) // right rule is valid
+    if (ruleRight == true) // right rule is valid
     {
         // only works for 2 params
         if (facts.size() == 0)
@@ -1205,12 +1169,14 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             
             if( tempRule.size() == 0) // if rule is not defined
             {
-                relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
+//                relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
+                factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
             }
             else // if rule is defined  // RECURSIVE CALL
             {
                 //            op(string logicalOp, string key, vector<string> keyParams, vector<vector<string> > rule, vector<vector<string> > fact)
-                tempRelData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
+//                tempRelData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
+                factDataT.push_back(vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData)));
             }
         }
         else
@@ -1218,26 +1184,37 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             for (int i=0; i<facts.size(); i++)
             {
                 if(!isGeneric)
-                    tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
+//                    tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
+                    factDataT.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
                 else
-                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
+//                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
+                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
             }
         }
         
         //     condense vector to fit factData and also rids and empty vector
-        for(int i=0; i < tempRelData.size(); i++)
-            for(int j=0; j < tempRelData[i].size(); j++)
-            {
-                relationalData.push_back(tempRelData[i][j]);
-            }
+//        for(int i=0; i < tempRelData.size(); i++)
+//            for(int j=0; j < tempRelData[i].size(); j++)
+//            {
+//                relationalData.push_back(tempRelData[i][j]);
+//            }
     }
     
     // merge data
-    for(int i=0; i<factData.size(); i++)
-        inferData.push_back(factData[i]);
+//    for(int i=0; i<factData.size(); i++)
+//        inferData.push_back(factData[i]);
+//    
+//    for(int i=0; i<relationalData.size(); i++)
+//        inferData.push_back(relationalData[i]);
     
-    for(int i=0; i<relationalData.size(); i++)
-        inferData.push_back(relationalData[i]);
+    for(int i=0; i<factDataT.size(); i++)
+    {
+         for(int j=0; j<factDataT[i].size(); j++)
+         {
+             inferData.push_back(factDataT[i][j]);
+         }
+    }
+    
     
     return inferData;
 }
@@ -1468,7 +1445,7 @@ void Helper:: dropBase(string command)
         count++;
     }
     
-    for (int i = factIndex.size() - 1; i >= 0; --i)
+    for (int i = (int)factIndex.size() - 1; i >= 0; --i)
     {
         count = factIndex[i];
         tCommands->getFact().erase(tCommands->getFact().begin() + count);
@@ -1485,7 +1462,7 @@ void Helper:: dropBase(string command)
         count++;
     }
     
-    for(int i = ruleIndex.size()-1; i>=0; --i)
+    for(int i = (int)ruleIndex.size()-1; i>=0; --i)
     {
         count = ruleIndex[i];
         tCommands->getRule().erase(tCommands->getRule().begin() + count);
