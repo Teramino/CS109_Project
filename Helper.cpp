@@ -709,11 +709,11 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     if (paramIndex.size() == keyParams.size())
         return factData; //  params should correlated else its not an AND Inference //ASSUMED //PUT IN READ ME!!!!!!!!!!
     
-    if((keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1]) && (keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1]))
-    {
-        cout << "INPUTED Params doesnt match DEFINED\n";
-        return factData; // all params should match else its not and OR Inference //ASSUMED
-    }
+//    if((keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1]) && (keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1]))
+//    {
+//        cout << "INPUTED Params doesnt match DEFINED\n";
+//        return factData; // all params should match else its not and OR Inference //ASSUMED
+//    }
     
     bool isGeneric = true;
     // check to see if params are specific or not

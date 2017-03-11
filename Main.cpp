@@ -18,10 +18,10 @@ int main() {
     i.run();
     
     
-    vector<future<vector<vector<vector<string>>>>> thread;
+//    vector<future<vector<vector<vector<string>>>>> thread;
     
 //    thread.push_back(async(<#std::launch __policy#>, <#_Fp &&__f#>, <#_Args &&__args...#>)));
-    async(retrieveFact);
+//    async(retrieveFact);
 
     
     
