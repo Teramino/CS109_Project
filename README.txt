@@ -28,7 +28,10 @@
  this assumption because in the project pdf file (p.4) it specifies that
  the drop function takes the name of the fact or rule to be drop, but 
  does not mention or have any examples of being able to drop a specific 
- rule or fact.
+ rule or fact. We made the assumption that all AND operations should have
+ a correlation between its parameters and all OR operations should have 
+ matching parameters. These operations will be invalid and unable to find
+ a result, however, their syntax is correct so it will compute.
 
 ===========================================================================
  PROJECT DETAILS
