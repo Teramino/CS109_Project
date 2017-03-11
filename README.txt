@@ -79,4 +79,9 @@
 
  + Fortunately, we programmed our SRI engine with AND pipelining without
    the use of threads.
- 
+ + Whenever there is a rule target, there is a thread called on it within
+   OrOperator. We came to this conclusion the moment we noticed that 
+   whenever there is an OR inference the following parameters are 
+   independent of eachother. Therefore, we created a thread within 
+   OrOperator so that the rule targets can both run and extract information 
+   from the fact base without having to wait for the other to compute. 
