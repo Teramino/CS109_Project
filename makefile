@@ -1,5 +1,5 @@
 all: Main.o Helper.o Interface.o Transactional_Commands.o 
-	g++ -std=gnu++14 Main.o Helper.o Interface.o Transactional_Commands.o
+	g++ -std=gnu++14 Main.o Helper.o Interface.o Transactional_Commands.o -pthread
 
 Main.o: Main.cpp
 	g++ -std=gnu++14 -c Main.cpp
