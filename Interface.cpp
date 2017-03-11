@@ -530,25 +530,40 @@
 void Interface:: run()
 {
     // Danielle Testing GrandMother($X,$X)
-    Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
-    Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
-    Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
-    Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
-    Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
-    Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
-    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
-    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
-    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
-    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
-    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
-//    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
-//    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
-    
-//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($A,$B)"); // works
-//        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
+//    Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
+//    Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
+//    Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
+//    Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
+//    Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
+//    Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
+//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
+//    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
+////    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
+////    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
+//    
+////    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($A,$B)"); // works
+////        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
 //    Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)"); // this works under the ASSUMPTION the parameters defined are the same being entered // READ ME
     
-    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
+    
+    Helper::instance()->parseCommand("FACT FATHER(Jeff,Danielle)");
+    Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
+    Helper::instance()->parseCommand("FACT FATHER(Nick,Jeff)");
+    Helper::instance()->parseCommand("FACT MOTHER(Judy,Jeff)");
+    Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
+    Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
+    Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
+    Helper::instance()->parseCommand("RULE GF($X,$Z):- AND FATHER($X,$Y) MOTHER($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
+    
+    
+    Helper::instance()->parseCommand("INFERENCE GF($X,$Z)");
+    
+//    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
     
     //	Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
     //	Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
