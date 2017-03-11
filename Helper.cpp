@@ -10,6 +10,7 @@ Helper:: Helper()
     tCommands = new Transactional_Commands;
 }
 
+
 Helper:: ~Helper()
 {
     // deallocation
@@ -17,99 +18,116 @@ Helper:: ~Helper()
     delete h_instance;
 }
 
+
 // ===================================================================================
 // Instance
 // ===================================================================================
-// 	Used to access functionality of Helper class. Allows only one instance(object) to be
-//  created
+// Used to access functionality of Helper class. Allows only one instance (object) to 
+// be created. If there's not an object type, the Helper object is created. Otherwise
+// the object is returned.
 //
-//  if theres not an object type Helper created
-//	else return the object
+// h_instance [OUT] -- the Helper object
 //
 // ===================================================================================
 
 Helper* Helper:: instance()
 {
     if(!h_instance) // same as if(h_instance == NULL)
-        h_instance = new Helper; // create a new object
+    {   
+        // create a new object
+        h_instance = new Helper; 
+    }
+    // this allows only ONE object to be created of this class
     return h_instance;
-} // this allows only ONE object to be created of this class
+} 
+
 
 // ===================================================================================
 // Parse Command
 // ===================================================================================
-// 	Used to retrieve a Fact or Rule
+// This function takes the user input and parses the command out of the string. 
+// It calls the Transactional Command map and passes it the remaining string.
 //
-//
-//
-//
+// user_input [IN] -- the command inputed by the user
 //
 // ===================================================================================
+
 void Helper::parseCommand(string user_input)
 {
-    stringstream line(user_input);  //takes the contents of user_input and copies it to a string object
-    string rule_check = ":"; //creates a string with : to see if a rule is being inputted.
-    
-    string command = ""; //creating an empty string to hold the parsed out command
-    getline(line, command,' ');  //take the contects of the input before the space (the command) and assign it to the command string.
-    
-    size_t ch = user_input.find(" ");  // find the location of the space in our string
-    ch++; //increment size_t to account for the extra sapce.
-    string rest = user_input.substr (ch);
-    
+    // takes the contents of user_input and copies it to a string object
+    stringstream line(user_input);  
+    // creates a string with : to see if a rule is being inputted
+    string rule_check = ":"; 
+    // creating an empty string to hold the parsed out command
+    string command = ""; 
+    // take the contects of the input before the space (the command) and assign it to the command string
+    getline(line, command,' ');  
+    // find the location of the space in our string
+    size_t ch = user_input.find(" ");  
+    // increment size_t to account for the extra sapce
+    ch++; 
+    string rest = user_input.substr(ch);
+    // print to the interface the command
     cout << "----------------------------------------" << endl;
     cout << "Command: " << command << endl;
-    
-    tCommands->getMapCommand()[command](rest); //calls the proper function in transactional commands
+    // calls the proper function in transactional commands
+    tCommands->getMapCommand()[command](rest); 
 }
+
 
 // ===================================================================================
 // Parse Definition
 // ===================================================================================
+// This function will take the string definition and extract the target key and
+// parameters and send it, along with the currect fact or rule vector to the store
+// base method to store the data.
 //
+// function [IN] -- a char representing whether we are dealing with a rule or fact
 //
-//
-//
-//
+// def [IN] -- a string containing the definition of the rule or fact
 //
 // ==================================================================================
 
 void Helper:: parseDefinition(char function, string def)
 {
-    //char acts as a tag for our function so that def can go through the proper conditional branch.
-    // def represents the entire string without the command.  Example being Father(Roger, John)
-    if (function=='f') //
+    // char acts as a tag for our function so that def can go through the proper conditional branch
+    // def represents the entire string without the command, example being Father(Roger, John)
+    if (function=='f')
     {
-        string key = parseKey(def); // parse the key part of def.  Example being Father.
-        vector<string> parameters = parseParams(def); // obtain the perameters of our string.  Example being (Roger, John).
-        
+        // parse the key part of def, example being Father
+        string key = parseKey(def); 
+        // obtain the perameters of our string, example being (Roger, John)
+        vector<string> parameters = parseParams(def); 
+        // print information to the interface
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
         {
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
-        
-        storeBase(tCommands->getFact(), parameters, key); // send the parameters and the key to be stored
+        // send the parameters and the key to be stored
+        storeBase(tCommands->getFact(),parameters,key); 
         cout << "----------------------------------------" << endl << endl;
     }
-    else if (function=='r') // if our tagged string is a rule
+    // if our tagged string is a rule
+    else if (function=='r') 
     {
-        string key = parseKey(def); // parse the key part of def.  Example being Father.
-        
+        // parse the key part of def, example being Father
+        string key = parseKey(def); 
         vector<string> keyParam = parseParams(def);
-        
-        vector<string> parameters = parseRuleParam(def); // obtain the perameters of our string.  Example being (Roger, John).
-        
+        // obtain the perameters of our string, example being (Roger, John)
+        vector<string> parameters = parseRuleParam(def); 
+        // print information to the interface
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
         {
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
-        
-        storeBase(tCommands->getRule(), parameters, key, keyParam); // send the parameters and the key to be stored
+        // send the parameters and the key to be stored
+        storeBase(tCommands->getRule(), parameters, key, keyParam); 
         cout << "----------------------------------------" << endl << endl;
     }
 }
+
 
 // ===================================================================================
 // Parse Query
@@ -121,6 +139,7 @@ void Helper:: parseDefinition(char function, string def)
 //
 //
 // ===================================================================================
+
 void Helper:: ParseQuery(string rest)
 {
     vector<vector<string>> tempFacts;
