@@ -98,6 +98,12 @@ void Transactional_Commands:: inferenceCommand(string command)
 //    }
 }
 
+vector<vector<string>> Transactional_Commands:: retrieveFact(string key, string &param1, string &param2)
+{
+    vector<vector<string>> blah;
+    return blah;
+}
+
 void Transactional_Commands:: dropCommand(string command)
 {
     Helper:: instance()->dropBase(command);

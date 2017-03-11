@@ -4,11 +4,11 @@
 #include "Interface.hpp"
 
 
-void retrieveFact()
+ vector<vector<vector<string>>> retrieveFact()
 {
     vector<vector<vector<string>>> blah;
     
-    
+    return blah;
 }
 
 
@@ -20,7 +20,8 @@ int main() {
     
     vector<future<vector<vector<vector<string>>>>> thread;
     
-//    thread.push_back(async(launch::async,retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]), count));
+//    thread.push_back(async(<#std::launch __policy#>, <#_Fp &&__f#>, <#_Args &&__args...#>)));
+    async(retrieveFact);
 
     
     

@@ -33,6 +33,7 @@ public:
     static void dropCommand(string);
     static void factCommand(string);
     static void ruleCommand(string);
+    static vector<vector<string>> retrieveFact(string key, string &param1, string &param2);
 	//void print();
 };
 

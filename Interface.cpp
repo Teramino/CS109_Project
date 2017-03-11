@@ -536,7 +536,7 @@ void Interface:: run()
     Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
     Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
     Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
-//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
+    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
     Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
     Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
     Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
@@ -545,8 +545,10 @@ void Interface:: run()
 //    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
     
 //    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($A,$B)"); // works
-        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
-    Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)"); // this works under the ASSUMPTION the parameters defined are the same being entered // READ ME
+//        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
+//    Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)"); // this works under the ASSUMPTION the parameters defined are the same being entered // READ ME
+    
+    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
     
     //	Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
     //	Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");

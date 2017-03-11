@@ -142,6 +142,12 @@ void Helper:: ParseQuery(string rest)
         auto opParams = retrieveRule(parameters,key);
         vector<vector<string>> rule = get<3>(opParams);
         
+        cout << "Key: " << key << endl;
+        for(int i=0; i < parameters.size(); i++)
+        {
+            cout << "Parameter(" << i << "): " << parameters[i] << endl;
+        }
+        
         if (rule.size() == 0)
             tempFacts = retrieveFact(key, get<2>(opParams)[0], get<2>(opParams)[1]);
         else
@@ -150,11 +156,6 @@ void Helper:: ParseQuery(string rest)
             tempFacts = vectorCondense(opFunction(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
         }
         
-        cout << "Key: " << key << endl;
-        for(int i=0; i < parameters.size(); i++)
-        {
-            cout << "Parameter(" << i << "): " << parameters[i] << endl;
-        }
         
         if (tempFacts.size() != 0)
         {
@@ -188,6 +189,16 @@ void Helper:: ParseQuery(string rest)
         auto opParams = retrieveRule(parameters,key);
         vector<vector<string>> rule = get<3>(opParams);
         
+        cout << "Key: " << key << endl;
+        
+        for(int i=0; i < parameters.size(); i++)
+        {
+            cout << "Parameter(" << i << "): " << parameters[i] << endl;
+        }
+        
+        cout << "Saved under: " << inferKey << endl;
+
+        
         if (rule.size() == 0) // rule not defined
         {
             cout << "Not defined!\n";
@@ -199,15 +210,6 @@ void Helper:: ParseQuery(string rest)
             vector<vector<string>> factData;
             tempFacts = vectorCondense(opFunction(get<0>(opParams), get<1>(opParams), get<2>(opParams), get<3>(opParams),factData));
         }
-        
-        cout << "Key: " << key << endl;
-        
-        for(int i=0; i < parameters.size(); i++)
-        {
-            cout << "Parameter(" << i << "): " << parameters[i] << endl;
-        }
-        
-        cout << "Saved under: " << inferKey << endl;
         
         if (tempFacts.size() != 0)
         {
@@ -707,6 +709,12 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     if (paramIndex.size() == keyParams.size())
         return factData; //  params should correlated else its not an AND Inference //ASSUMED //PUT IN READ ME!!!!!!!!!!
     
+    if((keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1]) && (keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1]))
+    {
+        cout << "INPUTED Params doesnt match DEFINED\n";
+        return factData; // all params should match else its not and OR Inference //ASSUMED
+    }
+    
     bool isGeneric = true;
     // check to see if params are specific or not
     for(int i=0; i<keyParams.size(); i++)
@@ -1096,7 +1104,8 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
 //                factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
                 factDataT.push_back(retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]));
 //                count++;
-//                thread.push_back(async(launch::async,retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]), count));
+//                auto a = bind(retrieveFact,parseKey(rule[0]),keyParams[0],keyParams[1]));
+//                thread.push_back(async(launch::async,retrieveFact,parseKey(rule[0]),keyParams[0],keyParams[1]));
             }
             else // rule defined // RECURSIVE CALL
             {
