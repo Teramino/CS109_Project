@@ -8,6 +8,7 @@ Helper:: Helper()
 {
     // new object
     tCommands = new Transactional_Commands;
+    f = &Helper::retrieveFact;
 }
 
 
@@ -217,7 +218,7 @@ void Helper:: ParseQuery(string rest)
         }
         
         cout << "Saved under: " << inferKey << endl;
-
+        
         
         if (rule.size() == 0) // rule not defined
         {
@@ -249,7 +250,7 @@ void Helper:: ParseQuery(string rest)
         {
             cout << "Whoops! Inference is not defined\n\n";
         }
-    }    
+    }
 }
 
 
@@ -438,7 +439,7 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                              params.clear();
                              
                          }
-
+                         
                      }
                  });
         //    cout << " ]" << endl << endl;
@@ -454,16 +455,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      {
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-//                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-//                             }
-//                             else
-//                             {
-//                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-//                             }
+                             //                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                             //                             {
+                             params.push_back(get<1>(it)[i]);
+                             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                             //                             }
+                             //                             else
+                             //                             {
+                             //                                 params.push_back(get<1>(it)[i]);
+                             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                             //                             }
                          }
                          relationalData.push_back(params);
                          params.clear();
@@ -473,16 +474,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                          
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-//                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-//                             }
-//                             else
-//                             {
-//                                 params.push_back(get<1>(it)[i]);
-//                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-//                             }
+                             //                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                             //                             {
+                             params.push_back(get<1>(it)[i]);
+                             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                             //                             }
+                             //                             else
+                             //                             {
+                             //                                 params.push_back(get<1>(it)[i]);
+                             //                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                             //                             }
                          }
                          if(param1.compare(params[0]) == 0)
                              relationalData.push_back(params);
@@ -492,16 +493,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      {
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-//                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-//                             }
-//                             else
-//                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-//                             }
+                             //                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                             //                             {
+                             params.push_back(get<1>(it)[i]);
+                             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                             //                             }
+                             //                             else
+                             //                             {
+                             params.push_back(get<1>(it)[i]);
+                             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                             //                             }
                          }
                          if(param2.compare(params[1]) == 0)
                              relationalData.push_back(params);
@@ -719,7 +720,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     vector<vector<string>> inferData; // holds the data to be returned
     vector<vector<string>> factData;
     bool recursion = false;
-//    bool sameParam = false;
+    //    bool sameParam = false;
     
     for(int i=0; i < rule.size(); i++)
         paramData.push_back(parseParams(rule[i]));
@@ -730,11 +731,11 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
     if (paramIndex.size() == keyParams.size())
         return factData; //  params should correlated else its not an AND Inference //ASSUMED //PUT IN READ ME!!!!!!!!!!
     
-//    if((keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1]) && (keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1]))
-//    {
-//        cout << "INPUTED Params doesnt match DEFINED\n";
-//        return factData; // all params should match else its not and OR Inference //ASSUMED
-//    }
+    //    if((keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1]) && (keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1]))
+    //    {
+    //        cout << "INPUTED Params doesnt match DEFINED\n";
+    //        return factData; // all params should match else its not and OR Inference //ASSUMED
+    //    }
     
     bool isGeneric = true;
     // check to see if params are specific or not
@@ -747,11 +748,11 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
         }
     }
     
-//    if(isGeneric)
-//        if(keyParams[0][1] == keyParams[1][1])
-//        {
-//            sameParam = true;
-//        }
+    //    if(isGeneric)
+    //        if(keyParams[0][1] == keyParams[1][1])
+    //        {
+    //            sameParam = true;
+    //        }
     
     auto tempTuple = retrieveRule(keyParams, parseKey(rule[0])); // looks to see if the current rule is a rule or not.
     
@@ -947,19 +948,19 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                                 inferDataTemp.push_back(relationalData[i][k][j]);
                             }
                         }// end for
-//                        if(sameParam)
-//                        {
-//                            if(inferDataTemp[0]==inferDataTemp[1])
-//                            {
-//                                inferData.push_back(inferDataTemp);
-//                                inferDataTemp.clear();
-//                            }
-//                        }
-//                        else
-//                        {
-                            inferData.push_back(inferDataTemp);
-                            inferDataTemp.clear();
-//                        }
+                        //                        if(sameParam)
+                        //                        {
+                        //                            if(inferDataTemp[0]==inferDataTemp[1])
+                        //                            {
+                        //                                inferData.push_back(inferDataTemp);
+                        //                                inferDataTemp.clear();
+                        //                            }
+                        //                        }
+                        //                        else
+                        //                        {
+                        inferData.push_back(inferDataTemp);
+                        inferDataTemp.clear();
+                        //                        }
                         
                     }// end for
                 }// end if
@@ -985,19 +986,19 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                     }// end for
                     if(inferDataTemp.size() != 0)
                     {
-//                        if(sameParam)
-//                        {
-//                            if(inferDataTemp[0]==inferDataTemp[1])
-//                            {
-//                                inferData.push_back(inferDataTemp);
-//                                inferDataTemp.clear();
-//                            }
-//                        }
-//                        else
-//                        {
-                            inferData.push_back(inferDataTemp);
-                            inferDataTemp.clear();
-//                        }
+                        //                        if(sameParam)
+                        //                        {
+                        //                            if(inferDataTemp[0]==inferDataTemp[1])
+                        //                            {
+                        //                                inferData.push_back(inferDataTemp);
+                        //                                inferDataTemp.clear();
+                        //                            }
+                        //                        }
+                        //                        else
+                        //                        {
+                        inferData.push_back(inferDataTemp);
+                        inferDataTemp.clear();
+                        //                        }
                     }
                 }
                 
@@ -1050,12 +1051,12 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<vector<string>> factData;
     
     vector<vector<vector<string>>> factDataT;
-    vector<future<vector<vector<vector<string>>>>> thread;
-//    int count = -1;
+    vector<future<vector<vector<string>>>> futures;
+    int threadCount = 0;
     
     bool ruleLeft = true;
     bool ruleRight = true;
-//    bool sameParam = false;
+    //    bool sameParam = false;
     
     for(int i=0; i < rule.size(); i++)
     {
@@ -1098,11 +1099,11 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
         }
     }
     
-//    if(isGeneric)
-//        if(keyParams[0][1] == keyParams[1][1])
-//        {
-//            sameParam = true;
-//        }
+    //    if(isGeneric)
+    //        if(keyParams[0][1] == keyParams[1][1])
+    //        {
+    //            sameParam = true;
+    //        }
     
     vector<vector<vector<string>>> tempRelData; // used to hold data from each fact temporarily
     
@@ -1122,19 +1123,27 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 // may need generic or non generic code here
                 // wont need it for the test im working on now
                 
-//                factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
+                //                factData = retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]);
                 factDataT.push_back(retrieveFact(parseKey(rule[0]),keyParams[0],keyParams[1]));
-//                count++;
-//                auto a = bind(retrieveFact,parseKey(rule[0]),keyParams[0],keyParams[1]));
-//                thread.push_back(async(launch::async,retrieveFact,parseKey(rule[0]),keyParams[0],keyParams[1]));
+                //                count++;
+                //                auto a = bind(f,parseKey(rule[0]),keyParams[0],keyParams[1]);
+                
+                //                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[0]),keyParams[0],keyParams[1]);
+                //                futures.push_back(async(launch::async,func));
+                //                cout << "Thread " << threadCount++ << " started" << endl;
+                
+                
+                //                thread T1(f,parseKey(rule[0]),keyParams[0],keyParams[1]);
+                //                T1.join();
+                
             }
             else // rule defined // RECURSIVE CALL
             {
-//                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+                //                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
                 factDataT = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
             }
         }
-        else  // there may not be generic parameters if facts has a size greater than 0
+        else  // there may not be g eneric parameters if facts has a size greater than 0
         {
             // get<3> holds defined rule
             auto tempRule = get<3>(tempTuple);
@@ -1152,29 +1161,43 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                         // need to look at all cases here!
                         
                         if (keyParams[0][0] != '$')
-//                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
+                        {
+                            //                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
                             factDataT.push_back(retrieveFact(parseKey(rule[0]), facts[i][1], paramData[1][1]));
+                            
+                            //                            auto func = bind(&Helper::retrieveFact,this,parseKey(rule[0]),keyParams[0],keyParams[1]);
+                            //                            futures.push_back(async(launch::async,func));
+                            //                            cout << "Thread " << threadCount++ << " started" << endl;
+                        }
                         else if (keyParams[1][0] != '$')
-//                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
-                        factDataT.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
+                        {
+                            //                            tempRelData.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
+                            factDataT.push_back(retrieveFact(parseKey(rule[0]), paramData[1][0], facts[i][1]));
+                            //                            auto func = bind(&Helper::retrieveFact,this,parseKey(rule[0]),keyParams[0],keyParams[1]);
+                            //                            futures.push_back(async(launch::async,func));
+                            //                            cout << "Thread " << threadCount++ << " started" << endl;
+                        }
                     }
                     
-//                    // condense vector to fit factData and also rids and empty vector
-//                    for(int i=0; i < tempRelData.size(); i++)
-//                        for(int j=0; j < tempRelData[i].size(); j++)
-//                        {
-//                            factData.push_back(tempRelData[i][j]);
-//                        }
+                    //                    // condense vector to fit factData and also rids and empty vector
+                    //                    for(int i=0; i < tempRelData.size(); i++)
+                    //                        for(int j=0; j < tempRelData[i].size(); j++)
+                    //                        {
+                    //                            factData.push_back(tempRelData[i][j]);
+                    //                        }
                 }
                 else // Parameters doesnt have a value
                 {
-//                    factData = retrieveFact(parseKey(rule[0]), keyParams[0], keyParams[1]);
+                    //                    factData = retrieveFact(parseKey(rule[0]), keyParams[0], keyParams[1]);
                     factDataT.push_back(retrieveFact(parseKey(rule[0]), keyParams[0], keyParams[1]));
+                    //                    auto func = bind(&Helper::retrieveFact,this,parseKey(rule[0]),keyParams[0],keyParams[1]);
+                    //                    futures.push_back(async(launch::async,func));
+                    //                    cout << "Thread " << threadCount++ << " started" << endl;
                 }
             }
             else // rule defined // RECURSIVE CALL
             {
-//                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
+                //                factData = vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts));
                 factDataT = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, facts);
             }
         }
@@ -1185,7 +1208,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     // looks at 2nd rule target and on
     
     // this holds the corelation fact data from the rule target based on parameters
-    vector<vector<string>> relationalData;
+    //    vector<vector<string>> relationalData;
     
     // retrive facts based based on if theres correlations or not between rule targets
     if (ruleRight == true) // right rule is valid
@@ -1199,13 +1222,17 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             
             if( tempRule.size() == 0) // if rule is not defined
             {
-//                relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
-                factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
+                //                relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
+                //                factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
+                
+                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
+                futures.push_back(async(launch::async,func));
+                cout << "Thread " << threadCount++ << " started" << endl;
             }
             else // if rule is defined  // RECURSIVE CALL
             {
                 //            op(string logicalOp, string key, vector<string> keyParams, vector<vector<string> > rule, vector<vector<string> > fact)
-//                tempRelData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
+                //                tempRelData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
                 factDataT.push_back(vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData)));
             }
         }
@@ -1214,37 +1241,68 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             for (int i=0; i<facts.size(); i++)
             {
                 if(!isGeneric)
-//                    tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
-                    factDataT.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
+                {
+                    //                    tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
+                    //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
+                    
+                    auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),facts[i][1],paramData[1][1]);
+                    futures.push_back(async(launch::async,func));
+                    cout << "Thread " << threadCount++ << " started" << endl;
+                }
                 else
-//                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
-                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
+                {
+                    //                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
+                    //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
+                    auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
+                    futures.push_back(async(launch::async,func));
+                    cout << "Thread " << threadCount++ << " started" << endl;
+                }
             }
         }
         
         //     condense vector to fit factData and also rids and empty vector
-//        for(int i=0; i < tempRelData.size(); i++)
-//            for(int j=0; j < tempRelData[i].size(); j++)
-//            {
-//                relationalData.push_back(tempRelData[i][j]);
-//            }
+        //        for(int i=0; i < tempRelData.size(); i++)
+        //            for(int j=0; j < tempRelData[i].size(); j++)
+        //            {
+        //                relationalData.push_back(tempRelData[i][j]);
+        //            }
     }
     
     // merge data
-//    for(int i=0; i<factData.size(); i++)
-//        inferData.push_back(factData[i]);
-//    
-//    for(int i=0; i<relationalData.size(); i++)
-//        inferData.push_back(relationalData[i]);
+    //    for(int i=0; i<factData.size(); i++)
+    //        inferData.push_back(factData[i]);
+    //
+    //    for(int i=0; i<relationalData.size(); i++)
+    //        inferData.push_back(relationalData[i]);
+    
+    //    for(int i=0; i<factDataT.size(); i++)
+    //    {
+    //         for(int j=0; j<factDataT[i].size(); j++)
+    //         {
+    //             inferData.push_back(factDataT[i][j]);
+    //         }
+    //    }
+    
+//    for(auto &f: futures)
+//    {
+//        f.get();
+//    }
+        for(int i=0; i< futures.size(); i++)
+        {
+            auto a = futures[i].get();
+            cout << "Thread " << i << "terminated\n";
+    //        for(int j=0; j< futures.size(); j++)
+    //        inferData.push_back(futures[i][j].get());
+            factDataT.push_back(a);
+        }
     
     for(int i=0; i<factDataT.size(); i++)
     {
-         for(int j=0; j<factDataT[i].size(); j++)
-         {
-             inferData.push_back(factDataT[i][j]);
-         }
+        for(int j=0; j<factDataT[i].size(); j++)
+        {
+            inferData.push_back(factDataT[i][j]);
+        }
     }
-    
     
     return inferData;
 }

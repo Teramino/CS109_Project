@@ -53,7 +53,7 @@
 // 	stack<char> Rule_syntax; //Gonna be pushing '(' and '$', and they only get popped when there is a closed parentheses or the
 // 	//proper rules for '$' were followed
 
-// 	bool is_token_and_proper_operator_there = false;
+// 	bool is_token_and_proper_operator_there = false;//look to see if the token is there, and the correct operator is there after the token
 
 // 	size_t looking_for_specific_char; //looks to see if the ":-" followed by the AND or OR logical operator is there
 
@@ -84,10 +84,10 @@
 // 	for (int j = 0; j < content_in_array; ++j)//goes through the array and pushes and pops the '(' and '$' char if certain criterias
 // 		//are meet
 // 	{
-// 		if (rule_defenition[j] == '(') Rule_syntax.push(rule_defenition[j]);
+// 		if (rule_defenition[j] == '(') Rule_syntax.push(rule_defenition[j]);//if open parantheses, push it onto the stack 
 // 		if (rule_defenition[j] == '$')
 // 		{
-// 			Rule_syntax.push(rule_defenition[j]);
+// 			Rule_syntax.push(rule_defenition[j]);//if it's a dollar sign, push it onto the stack
 // 			if (isupper(rule_defenition[j + 1]) != 0 && isalpha(rule_defenition[j + 1]) != 0)//if the next char after '$' is one
 // 				//alphabet and it is uppercase, it is a valid char to have after '$'
 // 			{
@@ -218,7 +218,7 @@
 // 	}
 
 
-// 	//If there's nothing in the stack, if the counter is zero and the token was properly typed, then the RULE sythax is passed
+// 	//If there's nothing in the stack, if the counter is zero, then the RULE sythax is passed
 // 	if (Rule_syntax.size() == 0 && check_if_next_char_valid == 0)
 // 	{
 // 		return true;
@@ -232,7 +232,7 @@
 
 // bool Valid_DROP_Input(string drop_defenition, bool& user_mess_up)
 // {
-// 	for(int i = 0;i< drop_defenition.length(); ++i) //loop through the string char by char, and only push when encoutering a parentheses
+// 	for(int i = 0;i< drop_defenition.length(); ++i) //loop through the string char by char, and only fails if there is a char that's not a letter
 // 	{
 
 // 		if (isalpha(drop_defenition[i]) == 0)
@@ -251,10 +251,9 @@
 // bool Valid_DUMP_Input(string dump_defenition, bool& user_mess_up)
 // {
 
-// 	size_t looking_for_specific_file_ending = dump_defenition.find(".sri");
-// //	size_t looking_for_specific_file_ending = dump_defenition.find(".txt");
+// 	size_t looking_for_specific_file_ending = dump_defenition.find(".sri");//look to see if the file name typed in ends with a ".sri"
 
-// 	if (looking_for_specific_file_ending != dump_defenition.npos)
+// 	if (looking_for_specific_file_ending != dump_defenition.npos)//if there is a ".sri", then the file is named properly 
 // 	{
 // 		return true;
 // 	}
@@ -269,12 +268,11 @@
 
 // bool Valid_LOAD_Input(string fileName, bool& user_mess_up)
 // {
-// 	int count = 0;
-// 	bool syntax_correct = false;
+// 	int count = 0;//used to count which line within the file we're at
+// 	bool syntax_correct = false; //a flag that indicates true if the syntax is correct, false if it's not
 
 
-//     size_t looking_for_specific_file_ending = fileName.find(".sri");
-// //    size_t looking_for_specific_file_ending = fileName.find(".txt");
+//     size_t looking_for_specific_file_ending = fileName.find(".sri");//check to see if the user tried to load a file that's not ".sri"
 
 //     if (looking_for_specific_file_ending == fileName.npos)
 //     {
@@ -294,21 +292,21 @@
 // 	{
 // 		// open file
 // 		file.open(f, ios::in);
-// 		if(!file)
+// 		if(!file)//If the file doesn't exist, stop the program
 // 		{
 // 			cout<<"The file doesn't exist"<<endl;
 // 			cout<<"Please type everything correctly for the file to be loaded"<<endl<<endl;
 // 			return false;
 // 		}
-// 		while (getline(file, line))
+// 		while (getline(file, line))//run while there is a line in the file
 // 		{
-// 			if ( line == "")
+// 			if ( line == "")//if the line is a blank line, means nothing is there, exit out of the loop. 
+// 				//Meant to pervent the while loop from going one more than it's suppose to
 // 				break;
 // 			++count;
 
-// //            cout << line << endl;
-
-// 			string delimeter = " ";
+// 			string delimeter = " ";//break the line into two parts, the first part is the command
+// 			//the rest is the content of the command
 // 			size_t pos = 0;
 // 			string command = " ";
 // 			pos = line.find(delimeter);
@@ -322,24 +320,16 @@
 
 // 			}
 
-// 			if (command == "FACT"){
+// 			if (command == "FACT"){//depending on if it's a rule or a fact, call the proper syntax 
 // 				syntax_correct = Valid_FACT_Input(rest, user_mess_up);
 // 			}
 // 			else if (command == "RULE"){
 // 				syntax_correct = Valid_RULE_Input(rest, user_mess_up);
 // 			}
-// 			else if (command == "DROP"){
-// 				syntax_correct = Valid_DROP_Input(rest, user_mess_up);
-// 			}
-// 			else if (command == "INFERENCE"){
-// 				syntax_correct = Valid_INFERENCE_Input(rest, user_mess_up);
-// 			}
-// 			else if (command == "DUMP"){
-// 				syntax_correct = Valid_DUMP_Input(rest, user_mess_up);
-// 			}
 //             else
 //             {
 //                 cout << "INVALID Command Syntax\n";
+//                 cout << "The file can only contain RULE and FACT, nothing else" << endl;
 //                 syntax_correct = false;
 //             }
 
@@ -356,8 +346,7 @@
 // 		cerr << "Failed to load file\n" << endl;
 // 	}
 
-// //    cout  << "Reach the end" << endl << endl;
-// 	return true;
+// 	return true;//returns true, indicating the file contains only FACT and RULE with proper syntax 
 // }
 
 // bool Quit_Session(char answer)//Ask the user if they want to end the program, if they say yes, ask if they have saved: Yes = Quit, No = DUMP, then quit
@@ -369,7 +358,7 @@
 
 // 	answer = toupper(answer); //Captilize the input incase they type a lowercase char
 
-// 	if (answer == 'N')//if they say yes, check to make sure they saved before they exit
+// 	if (answer == 'N')//if they say no, check to make sure they saved before they exit
 // 	{
 // 		cout << "Have you saved your session? Y for yes, N for no: ";
 
@@ -389,21 +378,22 @@
 // 		}
 // 	}
 
-// 	return false;
+// 	return false;//user indicates they want the program to continue running 
 // }
 
 // void Interface::run()
 // {
-// 	char UserInput[200];
-// 	string string_version_UserInput;
+// 	char UserInput[200];//Stores what the user inputs into the stream, can take spaces 
+// 	string string_version_UserInput;//convert what the user typed in the stream into a string to be able to work on it
 
 // 	string first_part_of_command = " ";//Stores the first part of the command, the type of command itself
-// 	string second_part_of_command;//Stores the second part of the command, the defenition of the command, can take in spaces
+// 	string second_part_of_command;//Stores the second part of the command, the defenition of the command
 // 	int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
 
-// 	char endsession = '\0'; //Takes in if they want to quit the session or
-// 	bool error_commited = false;
-// 	bool program_looping = true;
+// 	char endsession = '\0'; //Checks if the user wants to exit the program or not 
+// 	bool error_commited = false;//checks to see if an error is commited at all or not
+// 	bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
+
 // 	string all_commands[6] = { "FACT", "RULE", "DROP", "INFERENCE", "LOAD", "DUMP" };//All the commands the user can type in
 
 // 	cout << "Welcome to the Simple Rule-Base Inference Engine or SRI for short" << endl << endl;
@@ -414,9 +404,9 @@
 // 		bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
 // 		bool second_half_error_commited = false;//Has the user commited an error by having the wrong syntax
 
-// 		cout << "Please enter one of the commands with their proper content=>" << endl << "	-FACT(store in a fact)"<< endl << "	-RULE(store in a rule)"
-// 			<< endl << "	-LOAD(load in a file)" << endl << "	-INFERENCE(issue a query)" << endl
-// 			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)"
+// 		cout << "Please enter one of the six commands with their proper content=>" << endl << "	-(1)FACT(store in a fact)"<< endl << "	-(2)RULE(store in a rule)"
+// 			<< endl << "	-(3)LOAD(load in a file)" << endl << "	-(4)INFERENCE(issue a query)" << endl
+// 			<< "	-(5)DUMP(download all facts and rule into a file)" << endl <<"	-(6)DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)"
 // 			<< endl <<"Enter here: ";
 
 // 		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
@@ -424,15 +414,17 @@
 // 		cin.clear();
 // 		cout << endl;
 
-// 		string_version_UserInput = UserInput;
+// 		string_version_UserInput = UserInput;//convert what char the user typed in into a string 
 
+// 		//if the user indicates they want to quit, with three different variations of how they can type in quit, the program ends 
 // 		if(string_version_UserInput.compare("QUIT")==0 || string_version_UserInput.compare("Quit")==0 || string_version_UserInput.compare("quit") ==0)
 // 		{
 // 			cout << "Goodbye" << endl;
 // 			break;
 // 		}
 
-// 		string delimeter = " ";
+// 		string delimeter = " ";//break the line into two parts, the first part is the command
+// 			//the rest is the content of the command
 // 		size_t pos = 0;
 // 		pos = string_version_UserInput.find(delimeter);
 // 		first_part_of_command = string_version_UserInput.substr(0, pos);
@@ -446,7 +438,7 @@
 
 // 		for (int i = 0; i <= 6; ++i)//checks if the first word matches any command, if not, proceed to the quit menu
 // 		{
-// 			if (i == 6)//If you get to six, you are outside the size of the array
+// 			if (i == 6)//If you get to six, you are outside the size of the array, indicating you didn't type in one of the commands properly 
 // 			{
 // 				cout << "Error: You need to type in one of those six commands in all capital and proper spelling" << endl;
 // 				cout << "Proceeding to the quit option" << endl;
@@ -455,13 +447,13 @@
 // 				break;
 // 			}
 
-// 			if (first_part_of_command.compare(all_commands[i]) == 0)
+// 			if (first_part_of_command.compare(all_commands[i]) == 0)//if the user input for the first part matches the command, continue on
 // 			{
 // 				break;
 // 			}
 // 		}
 
-
+// 		//depending on which command is called, call the proper syntax check 
 // 		if (first_part_of_command == "FACT")
 // 		{
 // 			if (Valid_FACT_Input(second_part_of_command, error_commited) == false)
@@ -530,25 +522,40 @@
 void Interface:: run()
 {
     // Danielle Testing GrandMother($X,$X)
-    Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
-    Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
-    Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
-    Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
-    Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
-    Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
-    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
-    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
-    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
-    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
-    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
-//    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
-//    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
-    
-//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($A,$B)"); // works
-//        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
+//    Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
+//    Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
+//    Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
+//    Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
+//    Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
+//    Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
+//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
+//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
+//    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
+////    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
+////    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
+//    
+////    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($A,$B)"); // works
+////        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
 //    Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)"); // this works under the ASSUMPTION the parameters defined are the same being entered // READ ME
     
-    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
+    
+    Helper::instance()->parseCommand("FACT FATHER(Jeff,Danielle)");
+    Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
+    Helper::instance()->parseCommand("FACT FATHER(Nick,Jeff)");
+    Helper::instance()->parseCommand("FACT MOTHER(Judy,Jeff)");
+    Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
+    Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
+    Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
+    Helper::instance()->parseCommand("RULE GF($X,$Z):- AND FATHER($X,$Y) MOTHER($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
+    
+    
+    Helper::instance()->parseCommand("INFERENCE GF($X,$Z)");
+    
+//    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
     
     //	Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
     //	Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");

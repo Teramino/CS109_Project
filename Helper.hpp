@@ -11,11 +11,13 @@ class Transactional_Commands; // forward declaration
 class Helper
 {
     
+    typedef vector<vector<string>> (Helper::*func)(string,string&,string&);
 private:
     Helper(); // constructor is private to no instances of class can be created (Singleton)
     
     Transactional_Commands* tCommands;
     static Helper * h_instance;
+    func f;
     
 public:
     ~Helper();
