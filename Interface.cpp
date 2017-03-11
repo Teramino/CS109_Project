@@ -33,7 +33,7 @@
 // 	}
 
 
-// 	if (syntax_check.size() == 2 && syntax_check.top() == ')') //if the stack size is two, indiciating there are two parantheses, 
+// 	if (syntax_check.size() == 2 && syntax_check.top() == ')') //if the stack size is two, indiciating there are two parantheses,
 // 		//and the last thing to be pushed is the closing parentheses, that indicates the strings format was in the proper sythax
 // 	{
 // 		return true;
@@ -88,7 +88,7 @@
 // 		if (rule_defenition[j] == '$')
 // 		{
 // 			Rule_syntax.push(rule_defenition[j]);
-// 			if (isupper(rule_defenition[j + 1]) != 0 && isalpha(rule_defenition[j + 1]) != 0)//if the next char after '$' is one 
+// 			if (isupper(rule_defenition[j + 1]) != 0 && isalpha(rule_defenition[j + 1]) != 0)//if the next char after '$' is one
 // 				//alphabet and it is uppercase, it is a valid char to have after '$'
 // 			{
 // 				++check_if_next_char_valid;
@@ -104,15 +104,15 @@
 // 		}
 
 // 		if (check_if_next_char_valid != 0 && (rule_defenition[j + 2] == ',' || rule_defenition[j + 2] == ')'))
-// 			//if the char after '$' is valid, and the next NEXT char after that is a comma or a closing parentheses, that indicates 
+// 			//if the char after '$' is valid, and the next NEXT char after that is a comma or a closing parentheses, that indicates
 // 			//there is only one char after '$', that follows the proper criterias, so pop of the '$' and set the counter back to 0
 // 		{
 // 			--check_if_next_char_valid;
 // 			Rule_syntax.pop();
 // 		}
 
-// 		if (rule_defenition[j] == ')')//if you see a closing parentheses, indicates that it closing the open parentheses that came 
-// 			//before it, and the open parentheses is still in the stack, so pop it 
+// 		if (rule_defenition[j] == ')')//if you see a closing parentheses, indicates that it closing the open parentheses that came
+// 			//before it, and the open parentheses is still in the stack, so pop it
 // 		{
 // 			Rule_syntax.pop();
 // 		}
@@ -136,7 +136,7 @@
 // 	}
 
 
-// 	//If there's nothing in the stack, if the counter is zero and the token was properly typed, then the RULE sythax is passed 
+// 	//If there's nothing in the stack, if the counter is zero and the token was properly typed, then the RULE sythax is passed
 // 	if (Rule_syntax.size() == 0 && check_if_next_char_valid == 0 && is_token_and_proper_operator_there == true)
 // 	{
 // 		return true;
@@ -187,7 +187,7 @@
 // 		if (inference_defenition[j] == '$')
 // 		{
 // 			Rule_syntax.push(inference_defenition[j]);
-// 			if (isupper(inference_defenition[j + 1]) != 0 && isalpha(inference_defenition[j + 1]) != 0)//if the next char after '$' is one 
+// 			if (isupper(inference_defenition[j + 1]) != 0 && isalpha(inference_defenition[j + 1]) != 0)//if the next char after '$' is one
 // 				//alphabet and it is uppercase, it is a valid char to have after '$'
 // 			{
 // 				++check_if_next_char_valid;
@@ -203,22 +203,22 @@
 // 		}
 
 // 		if (check_if_next_char_valid != 0 && (inference_defenition[j + 2] == ',' || inference_defenition[j + 2] == ')'))
-// 			//if the char after '$' is valid, and the next NEXT char after that is a comma or a closing parentheses, that indicates 
+// 			//if the char after '$' is valid, and the next NEXT char after that is a comma or a closing parentheses, that indicates
 // 			//there is only one char after '$', that follows the proper criterias, so pop of the '$' and set the counter back to 0
 // 		{
 // 			--check_if_next_char_valid;
 // 			Rule_syntax.pop();
 // 		}
 
-// 		if (inference_defenition[j] == ')')//if you see a closing parentheses, indicates that it closing the open parentheses that came 
-// 			//before it, and the open parentheses is still in the stack, so pop it 
+// 		if (inference_defenition[j] == ')')//if you see a closing parentheses, indicates that it closing the open parentheses that came
+// 			//before it, and the open parentheses is still in the stack, so pop it
 // 		{
 // 			Rule_syntax.pop();
 // 		}
 // 	}
 
 
-// 	//If there's nothing in the stack, if the counter is zero and the token was properly typed, then the RULE sythax is passed 
+// 	//If there's nothing in the stack, if the counter is zero and the token was properly typed, then the RULE sythax is passed
 // 	if (Rule_syntax.size() == 0 && check_if_next_char_valid == 0)
 // 	{
 // 		return true;
@@ -234,7 +234,7 @@
 // {
 // 	for(int i = 0;i< drop_defenition.length(); ++i) //loop through the string char by char, and only push when encoutering a parentheses
 // 	{
-		
+
 // 		if (isalpha(drop_defenition[i]) == 0)
 // 		{
 // 			cout << "The DROP name must only be alphabets, no spaces or symbols before or after the name" << endl;
@@ -271,11 +271,11 @@
 // {
 // 	int count = 0;
 // 	bool syntax_correct = false;
-    
+
 
 //     size_t looking_for_specific_file_ending = fileName.find(".sri");
 // //    size_t looking_for_specific_file_ending = fileName.find(".txt");
-    
+
 //     if (looking_for_specific_file_ending == fileName.npos)
 //     {
 //         cout << "Name your file whatever you would like, however it must end with '.sri'" << endl;
@@ -284,7 +284,7 @@
 //         return false;
 
 //     }
-    
+
 //     const char* f = fileName.c_str();
 // 	fstream file;
 // 	// line
@@ -305,7 +305,7 @@
 // 			if ( line == "")
 // 				break;
 // 			++count;
-            
+
 // //            cout << line << endl;
 
 // 			string delimeter = " ";
@@ -344,7 +344,7 @@
 //             }
 
 
-		
+
 // 			if (syntax_correct == false){
 // 				cout << "One of the lines wasn't typed properly, please go back and fix that line in that file" << endl;
 // 				cout << "That line is :" << command + " " + rest << "at line: "<< count << endl << endl;
@@ -401,24 +401,24 @@
 // 	string second_part_of_command;//Stores the second part of the command, the defenition of the command, can take in spaces
 // 	int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
 
-// 	char endsession = '\0'; //Takes in if they want to quit the session or 
+// 	char endsession = '\0'; //Takes in if they want to quit the session or
 // 	bool error_commited = false;
 // 	bool program_looping = true;
 // 	string all_commands[6] = { "FACT", "RULE", "DROP", "INFERENCE", "LOAD", "DUMP" };//All the commands the user can type in
 
-// 	cout << "Welcome to the Simple Rule-Base Inference Engine or SRI for short" << endl << endl; 
+// 	cout << "Welcome to the Simple Rule-Base Inference Engine or SRI for short" << endl << endl;
 
 // 	while (program_looping == true)// This loop keeps the program running until the user indicates they want to exit out
 // 	{
 
-// 		bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command? 
+// 		bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
 // 		bool second_half_error_commited = false;//Has the user commited an error by having the wrong syntax
 
-// 		cout << "Please enter one of the commands with their proper content=>" << endl << "	-FACT(store in a fact)"<< endl << "	-RULE(store in a rule)" 
-// 			<< endl << "	-LOAD(load in a file)" << endl << "	-INFERENCE(issue a query)" << endl 
-// 			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)" 
-// 			<< endl <<"Enter here: "; 
-		
+// 		cout << "Please enter one of the commands with their proper content=>" << endl << "	-FACT(store in a fact)"<< endl << "	-RULE(store in a rule)"
+// 			<< endl << "	-LOAD(load in a file)" << endl << "	-INFERENCE(issue a query)" << endl
+// 			<< "	-DUMP(download all facts and rule into a file)" << endl <<"	-DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)"
+// 			<< endl <<"Enter here: ";
+
 // 		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
 // 		//or the new line char is encountered
 // 		cin.clear();
@@ -461,7 +461,7 @@
 // 			}
 // 		}
 
-		
+
 // 		if (first_part_of_command == "FACT")
 // 		{
 // 			if (Valid_FACT_Input(second_part_of_command, error_commited) == false)
@@ -504,7 +504,7 @@
 // 				second_half_error_commited = true;
 // 			}
 // 		}
-		
+
 // 		if (!first_half_error_commited && !second_half_error_commited)//If there are no errors in the input, pass it into the function
 // 		{
 // 			string total_command = first_part_of_command + " " + second_part_of_command;
@@ -530,75 +530,79 @@
 void Interface:: run()
 {
     // Danielle Testing GrandMother($X,$X)
-//    Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
-//    Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
-//    Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
-//    Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
-//    Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
-//    Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
+    Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
+    Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
+    Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
+    Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
+    Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
+    Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
 //    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
-//    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
-//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
-//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
-//    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
+    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
+    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
 //    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
-    //    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
+//    Helper::instance()->parseCommand("INFERENCE Mother($X,$X)");
     
-	Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
-	Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
-	Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
-	Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
-	Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
-	Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
-	Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
-	Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
-	Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
-	Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Father($X,$Z) Mother($Z,$Y)");
-	Helper::instance()->parseCommand("FACT Mother(Annie,Annie");
-	Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
-//    
-//    Helper::instance()->parseCommand("FACT Father(Roger,John)");
-//    //    Helper::instance()->parseCommand("FACT Mother(Marry,John)");
-//    Helper::instance()->parseCommand("FACT Mother(Marry,Bill)");
-//    Helper::instance()->parseCommand("FACT Father(Albert,Marry)");
-//    Helper::instance()->parseCommand("FACT Father(Albert,Roger)");
-//    Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
-//    Helper::instance()->parseCommand("FACT Mother(Marry,Albert)");
-//    //    Helper::instance()->parseCommand("FACT Mother(Margret,Robert)");
-//    Helper::instance()->parseCommand("FACT Mother(Nancy,Margret)");
-//    //            Helper::instance()->parseCommand("FACT Mother(Nancy,Roger)");
-//    Helper::instance()->parseCommand("FACT Mother(Margret,Bob)");
-//    Helper::instance()->parseCommand("FACT Mother(Margret,Allen)");
-//    Helper::instance()->parseCommand("FACT Mother(Margret,Marry)");
-//    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
-//    
-//    
-//    //    Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
-//    //    Helper::instance()->parseCommand("FACT Father(Allen,Margret, Alliosn, Joe, Jim)");
-//    //Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
-//    //    Helper::instance()->parseCommand("LOAD output.txt");
-//    //    Helper::instance()->parseCommand("DUMP output2.txt");
-//    
-//    
-//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
-//    //            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
-//                Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)"); // works
-//    //    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
-//    //    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- OR Mother($X,$Y) Parent($X,$Y)"); // works
-//    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
-//    //            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
-//    //    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
-//    //    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y) GF");
-//    //            Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)");
-////                     Helper::instance()->parseCommand("INFERENCE Parent($X,Marry)");
-//    //                 Helper::instance()->parseCommand("INFERENCE Parent(Albert,$Y)");
-//    //        Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
-//    //            Helper::instance()->parseCommand("INFERENCE Mother($X,$Y)");
-////                 Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
-//    //                  Helper::instance()->parseCommand("INFERENCE GrandMother(Marry,$Y)");
-//    Helper::instance()->parseCommand("INFERENCE GrandMother($X,Marry)");
-//    //                  Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
-//    //    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
-//    //      Helper::instance()->parseCommand("DUMP output2.txt");
+//    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($A,$B)"); // works
+        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
+    Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)"); // this works under the ASSUMPTION the parameters defined are the same being entered // READ ME
+    
+    //	Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
+    //	Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
+    //	Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
+    //	Helper::instance()->parseCommand("FACT Mother(Judy,Jeff)");
+    //	Helper::instance()->parseCommand("FACT Father(Paul,Sandy)");
+    //	Helper::instance()->parseCommand("FACT Mother(Lianne,Sandy)");
+    //	Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
+    //	Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)");
+    //	Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)");
+    //	Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Father($X,$Z) Mother($Z,$Y)");
+    //	Helper::instance()->parseCommand("FACT Mother(Annie,Annie");
+    //	Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
+    //
+    //    Helper::instance()->parseCommand("FACT Father(Roger,John)");
+    //    //    Helper::instance()->parseCommand("FACT Mother(Marry,John)");
+    //    Helper::instance()->parseCommand("FACT Mother(Marry,Bill)");
+    //    Helper::instance()->parseCommand("FACT Father(Albert,Marry)");
+    //    Helper::instance()->parseCommand("FACT Father(Albert,Roger)");
+    //    Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
+    //    Helper::instance()->parseCommand("FACT Mother(Marry,Albert)");
+    //    //    Helper::instance()->parseCommand("FACT Mother(Margret,Robert)");
+    //    Helper::instance()->parseCommand("FACT Mother(Nancy,Margret)");
+    //    //            Helper::instance()->parseCommand("FACT Mother(Nancy,Roger)");
+    //    Helper::instance()->parseCommand("FACT Mother(Margret,Bob)");
+    //    Helper::instance()->parseCommand("FACT Mother(Margret,Allen)");
+    //    Helper::instance()->parseCommand("FACT Mother(Margret,Marry)");
+    //    Helper::instance()->parseCommand("FACT Mother(Annie,Annie)");
+    //
+    //
+    //    //    Helper::instance()->parseCommand("FACT Father(Roger,Albert)");
+    //    //    Helper::instance()->parseCommand("FACT Father(Allen,Margret, Alliosn, Joe, Jim)");
+    //    //Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
+    //    //    Helper::instance()->parseCommand("LOAD output.txt");
+    //    //    Helper::instance()->parseCommand("DUMP output2.txt");
+    //
+    //
+    //    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($X,$Y)");
+    //    //            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
+    //                Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)"); // works
+    //    //    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
+    //    //    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- OR Mother($X,$Y) Parent($X,$Y)"); // works
+    //    Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Mother($Z,$Y)"); // works
+    //    //            Helper::instance()->parseCommand("RULE GrandMother($X,$Y):- AND Mother($X,$Z) Father($Z,$Y)");
+    //    //    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- AND Father($X,$Z) Parent($Z,$Y)"); // works
+    //    //    Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y) GF");
+    //    //            Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)");
+    ////                     Helper::instance()->parseCommand("INFERENCE Parent($X,Marry)");
+    //    //                 Helper::instance()->parseCommand("INFERENCE Parent(Albert,$Y)");
+    //    //        Helper::instance()->parseCommand("INFERENCE Father($X,$Y)");
+    //    //            Helper::instance()->parseCommand("INFERENCE Mother($X,$Y)");
+    ////                 Helper::instance()->parseCommand("INFERENCE GrandMother($X,$X)");
+    //    //                  Helper::instance()->parseCommand("INFERENCE GrandMother(Marry,$Y)");
+    //    Helper::instance()->parseCommand("INFERENCE GrandMother($X,Marry)");
+    //    //                  Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
+    //    //    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
+    //    //      Helper::instance()->parseCommand("DUMP output2.txt");
     
 }
