@@ -23,7 +23,7 @@ Helper:: ~Helper()
 // ===================================================================================
 // Instance
 // ===================================================================================
-// Used to access functionality of Helper class. Allows only one instance (object) to 
+// Used to access functionality of Helper class. Allows only one instance (object) to
 // be created. If there's not an object type, the Helper object is created. Otherwise
 // the object is returned.
 //
@@ -34,19 +34,19 @@ Helper:: ~Helper()
 Helper* Helper:: instance()
 {
     if(!h_instance) // same as if(h_instance == NULL)
-    {   
+    {
         // create a new object
-        h_instance = new Helper; 
+        h_instance = new Helper;
     }
     // this allows only ONE object to be created of this class
     return h_instance;
-} 
+}
 
 
 // ===================================================================================
 // Parse Command
 // ===================================================================================
-// This function takes the user input and parses the command out of the string. 
+// This function takes the user input and parses the command out of the string.
 // It calls the Transactional Command map and passes it the remaining string.
 //
 // user_input [IN] -- the command inputed by the user
@@ -56,23 +56,23 @@ Helper* Helper:: instance()
 void Helper::parseCommand(string user_input)
 {
     // takes the contents of user_input and copies it to a string object
-    stringstream line(user_input);  
+    stringstream line(user_input);
     // creates a string with : to see if a rule is being inputted
-    string rule_check = ":"; 
+    string rule_check = ":";
     // creating an empty string to hold the parsed out command
-    string command = ""; 
+    string command = "";
     // take the contects of the input before the space (the command) and assign it to the command string
-    getline(line, command,' ');  
+    getline(line, command,' ');
     // find the location of the space in our string
-    size_t ch = user_input.find(" ");  
+    size_t ch = user_input.find(" ");
     // increment size_t to account for the extra sapce
-    ch++; 
+    ch++;
     string rest = user_input.substr(ch);
     // print to the interface the command
     cout << "----------------------------------------" << endl;
     cout << "Command: " << command << endl;
     // calls the proper function in transactional commands
-    tCommands->getMapCommand()[command](rest); 
+    tCommands->getMapCommand()[command](rest);
 }
 
 
@@ -96,9 +96,9 @@ void Helper:: parseDefinition(char function, string def)
     if (function=='f')
     {
         // parse the key part of def, example being Father
-        string key = parseKey(def); 
+        string key = parseKey(def);
         // obtain the perameters of our string, example being (Roger, John)
-        vector<string> parameters = parseParams(def); 
+        vector<string> parameters = parseParams(def);
         // print information to the interface
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
@@ -106,17 +106,17 @@ void Helper:: parseDefinition(char function, string def)
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
         // send the parameters and the key to be stored
-        storeBase(tCommands->getFact(),parameters,key); 
+        storeBase(tCommands->getFact(),parameters,key);
         cout << "----------------------------------------" << endl << endl;
     }
     // if our tagged string is a rule
-    else if (function=='r') 
+    else if (function=='r')
     {
         // parse the key part of def, example being Father
-        string key = parseKey(def); 
+        string key = parseKey(def);
         vector<string> keyParam = parseParams(def);
         // obtain the perameters of our string, example being (Roger, John)
-        vector<string> parameters = parseRuleParam(def); 
+        vector<string> parameters = parseRuleParam(def);
         // print information to the interface
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
@@ -124,7 +124,7 @@ void Helper:: parseDefinition(char function, string def)
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
         // send the parameters and the key to be stored
-        storeBase(tCommands->getRule(), parameters, key, keyParam); 
+        storeBase(tCommands->getRule(), parameters, key, keyParam);
         cout << "----------------------------------------" << endl << endl;
     }
 }
@@ -133,7 +133,7 @@ void Helper:: parseDefinition(char function, string def)
 // ===================================================================================
 // Parse Query
 // ===================================================================================
-// 
+//
 //
 //
 //
@@ -148,7 +148,7 @@ void Helper:: ParseQuery(string rest)
     string empty_string = "";
     string temp = "";
     // find the location of the space in our string
-    size_t ch = rest.find(")"); 
+    size_t ch = rest.find(")");
     temp = rest;
     
     ch++;
@@ -455,16 +455,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      {
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-                             //                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             //                             {
-                             params.push_back(get<1>(it)[i]);
-                             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             //                             }
-                             //                             else
-                             //                             {
-                             //                                 params.push_back(get<1>(it)[i]);
-                             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             //                             }
+                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                             {
+                                 params.push_back(get<1>(it)[i]);
+                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                             }
+                             else
+                             {
+                                 params.push_back(get<1>(it)[i]);
+                                 //                                                              cout << get<1>(it)[i] << " | "; // prints an index in vector
+                             }
                          }
                          relationalData.push_back(params);
                          params.clear();
@@ -474,16 +474,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                          
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-                             //                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             //                             {
-                             params.push_back(get<1>(it)[i]);
-                             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             //                             }
-                             //                             else
-                             //                             {
-                             //                                 params.push_back(get<1>(it)[i]);
-                             //                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             //                             }
+                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                             {
+                                 params.push_back(get<1>(it)[i]);
+                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                             }
+                             else
+                             {
+                                 params.push_back(get<1>(it)[i]);
+                                 //                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                             }
                          }
                          if(param1.compare(params[0]) == 0)
                              relationalData.push_back(params);
@@ -493,16 +493,16 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
                      {
                          for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
                          {
-                             //                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             //                             {
-                             params.push_back(get<1>(it)[i]);
-                             //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             //                             }
-                             //                             else
-                             //                             {
-                             params.push_back(get<1>(it)[i]);
-                             //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             //                             }
+                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+                             {
+                                 params.push_back(get<1>(it)[i]);
+                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+                             }
+                             else
+                             {
+                                 params.push_back(get<1>(it)[i]);
+                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+                             }
                          }
                          if(param2.compare(params[1]) == 0)
                              relationalData.push_back(params);
@@ -1283,18 +1283,18 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     //         }
     //    }
     
-//    for(auto &f: futures)
-//    {
-//        f.get();
-//    }
-        for(int i=0; i< futures.size(); i++)
-        {
-            auto a = futures[i].get();
-            cout << "Thread " << i << "terminated\n";
-    //        for(int j=0; j< futures.size(); j++)
-    //        inferData.push_back(futures[i][j].get());
-            factDataT.push_back(a);
-        }
+    //    for(auto &f: futures)
+    //    {
+    //        f.get();
+    //    }
+    for(int i=0; i< futures.size(); i++)
+    {
+        auto a = futures[i].get();
+        cout << "Thread " << i << "terminated\n";
+        //        for(int j=0; j< futures.size(); j++)
+        //        inferData.push_back(futures[i][j].get());
+        factDataT.push_back(a);
+    }
     
     for(int i=0; i<factDataT.size(); i++)
     {
@@ -1313,17 +1313,17 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
 // ===================================================================================
 // Called from within the dump function of Transactional Commands.  Trying to handle
 // the dumping from within Transactional commands was not working; there would be an
-// error given you would try to call the fact vector from within dump function.  You 
-// cannot a nonstatic vector from within the static dump funcion.  Making the fact 
-// vector static and the getFact() function static would lead to having to create an 
-// object that would call getFact() function.  Running this code would produce no 
-// errors until link time, in which there would be a link error I would not entirely 
-// understand.  However, This fucntion writes the contents of the fact vector to a 
-// file. The format looks wrong on the file preview, but is correct when you open the 
+// error given you would try to call the fact vector from within dump function.  You
+// cannot a nonstatic vector from within the static dump funcion.  Making the fact
+// vector static and the getFact() function static would lead to having to create an
+// object that would call getFact() function.  Running this code would produce no
+// errors until link time, in which there would be a link error I would not entirely
+// understand.  However, This fucntion writes the contents of the fact vector to a
+// file. The format looks wrong on the file preview, but is correct when you open the
 // file all the way.
 //
 // path [IN] -- the string containing the file name to be opened
-// 
+//
 // ==================================================================================
 
 //Only works for facts as of now
@@ -1456,14 +1456,14 @@ void Helper:: LoadHelp(string path)
                 // our string is in the example format: FACT Father(Rodger,John)
                 // so we need to get the relation (Father) part of the string and set it to our key variable
                 // define space right after the relation (Father) ends
-                string delimiter = "("; 
-                size_t pos2 = l.find("("); 
+                string delimiter = "(";
+                size_t pos2 = l.find("(");
                 // holds the key or fact name
-                string key = ""; 
+                string key = "";
                 // set pos2 to the index where the '('' is located in the string
-                pos2 = l.find(delimiter); 
+                pos2 = l.find(delimiter);
                 // saves the relaton part of the string as key, so it can be passed to storeBase later
-                key = parseKey(l); 
+                key = parseKey(l);
                 // get params from the string
                 vector<string> parameters;
                 parameters = parseParams(l);
@@ -1474,15 +1474,15 @@ void Helper:: LoadHelp(string path)
             else if(command.compare(rule_string) == 0)
             {
                 // define space right after the relation (Father) ends
-                string delimiter = "("; 
+                string delimiter = "(";
                 // set the value of the '('
-                size_t pos2 = l.find("("); 
+                size_t pos2 = l.find("(");
                 // holds the key or fact name
-                string key = ""; 
+                string key = "";
                 // set pos2 to the index where the ( is located in the string
-                pos2 = l.find(delimiter); 
+                pos2 = l.find(delimiter);
                 // saves the relaton part of the string as key, so it can be passed to storeBase later
-                key = parseKey(l); 
+                key = parseKey(l);
                 vector<string> keyParam = parseParams(l);
                 vector<string> params = parseRuleParam(l);
                 
@@ -1533,7 +1533,7 @@ void Helper:: LoadHelp(string path)
 // ===================================================================================
 // Drop Base
 // ===================================================================================
-// This function handles the drop functionality. It searches for all instances of the 
+// This function handles the drop functionality. It searches for all instances of the
 // drop target and removes it from the KB and RB.
 //
 // command [IN] -- a string containing the target from the command
@@ -1544,7 +1544,7 @@ void Helper:: LoadHelp(string path)
 void Helper:: dropBase(string command)
 {
     // iterates through the for loops
-    int count = 0; 
+    int count = 0;
     // print to the interface drop information for user
     cout << "Dropping: " << command << endl;
     // vector that contains the index within the fact vector to remove from
