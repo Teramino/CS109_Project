@@ -9,15 +9,8 @@
 
 class Interface{
     
-private:
-    bool keepRunning;
-    string pathToFile;
-    
 public:
-    //Interface();
-    //~Interface();
-    void run();
-    
+    void run(); 
 };
 
 #endif /* Interface_hpp */
