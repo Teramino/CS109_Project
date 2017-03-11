@@ -11,6 +11,7 @@ Helper:: Helper()
     f = &Helper::retrieveFact;
 }
 
+
 Helper:: ~Helper()
 {
     // deallocation
@@ -18,117 +19,136 @@ Helper:: ~Helper()
     delete h_instance;
 }
 
+
 // ===================================================================================
 // Instance
 // ===================================================================================
-// 	Used to access functionality of Helper class. Allows only one instance(object) to be
-//  created
+// Used to access functionality of Helper class. Allows only one instance (object) to 
+// be created. If there's not an object type, the Helper object is created. Otherwise
+// the object is returned.
 //
-//  if theres not an object type Helper created
-//	else return the object
+// h_instance [OUT] -- the Helper object
 //
 // ===================================================================================
 
 Helper* Helper:: instance()
 {
     if(!h_instance) // same as if(h_instance == NULL)
-        h_instance = new Helper; // create a new object
+    {   
+        // create a new object
+        h_instance = new Helper; 
+    }
+    // this allows only ONE object to be created of this class
     return h_instance;
-} // this allows only ONE object to be created of this class
+} 
+
 
 // ===================================================================================
 // Parse Command
 // ===================================================================================
-// 	Used to retrieve a Fact or Rule
+// This function takes the user input and parses the command out of the string. 
+// It calls the Transactional Command map and passes it the remaining string.
 //
-//
-//
-//
+// user_input [IN] -- the command inputed by the user
 //
 // ===================================================================================
+
 void Helper::parseCommand(string user_input)
 {
-    stringstream line(user_input);  //takes the contents of user_input and copies it to a string object
-    string rule_check = ":"; //creates a string with : to see if a rule is being inputted.
-    
-    string command = ""; //creating an empty string to hold the parsed out command
-    getline(line, command,' ');  //take the contects of the input before the space (the command) and assign it to the command string.
-    
-    size_t ch = user_input.find(" ");  // find the location of the space in our string
-    ch++; //increment size_t to account for the extra sapce.
-    string rest = user_input.substr (ch);
-    
+    // takes the contents of user_input and copies it to a string object
+    stringstream line(user_input);  
+    // creates a string with : to see if a rule is being inputted
+    string rule_check = ":"; 
+    // creating an empty string to hold the parsed out command
+    string command = ""; 
+    // take the contects of the input before the space (the command) and assign it to the command string
+    getline(line, command,' ');  
+    // find the location of the space in our string
+    size_t ch = user_input.find(" ");  
+    // increment size_t to account for the extra sapce
+    ch++; 
+    string rest = user_input.substr(ch);
+    // print to the interface the command
     cout << "----------------------------------------" << endl;
     cout << "Command: " << command << endl;
-    
-    tCommands->getMapCommand()[command](rest); //calls the proper function in transactional commands
+    // calls the proper function in transactional commands
+    tCommands->getMapCommand()[command](rest); 
 }
+
 
 // ===================================================================================
 // Parse Definition
 // ===================================================================================
+// This function will take the string definition and extract the target key and
+// parameters and send it, along with the currect fact or rule vector to the store
+// base method to store the data.
 //
+// function [IN] -- a char representing whether we are dealing with a rule or fact
 //
-//
-//
-//
+// def [IN] -- a string containing the definition of the rule or fact
 //
 // ==================================================================================
 
 void Helper:: parseDefinition(char function, string def)
 {
-    //char acts as a tag for our function so that def can go through the proper conditional branch.
-    // def represents the entire string without the command.  Example being Father(Roger, John)
-    if (function=='f') //
+    // char acts as a tag for our function so that def can go through the proper conditional branch
+    // def represents the entire string without the command, example being Father(Roger, John)
+    if (function=='f')
     {
-        string key = parseKey(def); // parse the key part of def.  Example being Father.
-        vector<string> parameters = parseParams(def); // obtain the perameters of our string.  Example being (Roger, John).
-        
+        // parse the key part of def, example being Father
+        string key = parseKey(def); 
+        // obtain the perameters of our string, example being (Roger, John)
+        vector<string> parameters = parseParams(def); 
+        // print information to the interface
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
         {
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
-        
-        storeBase(tCommands->getFact(), parameters, key); // send the parameters and the key to be stored
+        // send the parameters and the key to be stored
+        storeBase(tCommands->getFact(),parameters,key); 
         cout << "----------------------------------------" << endl << endl;
     }
-    else if (function=='r') // if our tagged string is a rule
+    // if our tagged string is a rule
+    else if (function=='r') 
     {
-        string key = parseKey(def); // parse the key part of def.  Example being Father.
-        
+        // parse the key part of def, example being Father
+        string key = parseKey(def); 
         vector<string> keyParam = parseParams(def);
-        
-        vector<string> parameters = parseRuleParam(def); // obtain the perameters of our string.  Example being (Roger, John).
-        
+        // obtain the perameters of our string, example being (Roger, John)
+        vector<string> parameters = parseRuleParam(def); 
+        // print information to the interface
         cout << "Key: " << key << endl;
         for(int i=0; i < parameters.size(); i++)
         {
             cout << "Parameter(" << i << "): " << parameters[i] << endl;
         }
-        
-        storeBase(tCommands->getRule(), parameters, key, keyParam); // send the parameters and the key to be stored
+        // send the parameters and the key to be stored
+        storeBase(tCommands->getRule(), parameters, key, keyParam); 
         cout << "----------------------------------------" << endl << endl;
     }
 }
 
+
 // ===================================================================================
 // Parse Query
 // ===================================================================================
-//
+// 
 //
 //
 //
 //
 //
 // ===================================================================================
+
 void Helper:: ParseQuery(string rest)
 {
     vector<vector<string>> tempFacts;
     string key;
     string empty_string = "";
     string temp = "";
-    size_t ch = rest.find(")"); // find the location of the space in our string
+    // find the location of the space in our string
+    size_t ch = rest.find(")"); 
     temp = rest;
     
     ch++;
@@ -232,6 +252,7 @@ void Helper:: ParseQuery(string rest)
         }
     }
 }
+
 
 // ===================================================================================
 // Parse Key
@@ -1286,18 +1307,23 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     return inferData;
 }
 
+
 // ===================================================================================
 // DumpHelp
 // ===================================================================================
-// 	Called from within the dump function of Transactional Commands.  Trying to handle
-//  the dumping from within Transactional commands was not working; there would be an
-//  error given you would try to call the fact vector from within dump function.  You cannot
-//  a nonstatic vector from within the static dump funcion.  Making the fact vector static
-//  and the getFact() function static would lead to having to create an object that would call
-//  getFact() function.  Running this code would produce no errors until link time, in which
-//  there would be a link error I would not entirely understand.  However, This fucntion
-//  writes the contents of the fact vector to a file.  The format looks wrong on the file
-//  preview, but is correct when you open the file all the way.
+// Called from within the dump function of Transactional Commands.  Trying to handle
+// the dumping from within Transactional commands was not working; there would be an
+// error given you would try to call the fact vector from within dump function.  You 
+// cannot a nonstatic vector from within the static dump funcion.  Making the fact 
+// vector static and the getFact() function static would lead to having to create an 
+// object that would call getFact() function.  Running this code would produce no 
+// errors until link time, in which there would be a link error I would not entirely 
+// understand.  However, This fucntion writes the contents of the fact vector to a 
+// file. The format looks wrong on the file preview, but is correct when you open the 
+// file all the way.
+//
+// path [IN] -- the string containing the file name to be opened
+// 
 // ==================================================================================
 
 //Only works for facts as of now
@@ -1385,16 +1411,16 @@ void Helper:: DumpHelp(string path)
     cout << endl;
 }
 
+
 // ===================================================================================
 // Load Help
 // ===================================================================================
+// Opens the file the user wishes to load and computes the file commands in program.
 //
-//
-//
-//
-//
+// path [IN] -- the string containing the file name to be opened
 //
 // ===================================================================================
+
 void Helper:: LoadHelp(string path)
 {
     const char* f = path.c_str();
@@ -1412,62 +1438,78 @@ void Helper:: LoadHelp(string path)
     {
         // open file
         file.open (f, ios::in);
-        
+        // while we there are lines remaining in the file
         while ( getline(file, l) )
         {
-            //this process is the same as ParseCommand; Later we will use the method instead.
+            // parses the command into two strings, one for command and the other for the instruction
             string delimeter = " ";
             size_t pos = 0;
             string command = "";
             pos = l.find(delimeter);
+            // copies command to string
             command = l.substr(0, pos);
+            // erasing command from line
             l.erase(0, pos + delimeter.length());
-            
+            // if it is a fact
             if(command.compare(fact_string) == 0)
             {
-                //Our string is in the example format: FACT Father(Rodger,John).
-                //So we need to get the relation (Father) part of the string and set it to our key variable.
-                string delimiter = "("; //Define space right after the relation (Father) ends.
-                size_t pos2 = l.find("("); // Set the value of the
-                string key = ""; // holds the key or fact name
-                pos2 = l.find(delimiter); //set pos2 to the index where the ( is located in the string.
-                key = parseKey(l); // saves the relaton part of the string as key, so it can be passed to storeBase later.
-                
+                // our string is in the example format: FACT Father(Rodger,John)
+                // so we need to get the relation (Father) part of the string and set it to our key variable
+                // define space right after the relation (Father) ends
+                string delimiter = "("; 
+                size_t pos2 = l.find("("); 
+                // holds the key or fact name
+                string key = ""; 
+                // set pos2 to the index where the '('' is located in the string
+                pos2 = l.find(delimiter); 
+                // saves the relaton part of the string as key, so it can be passed to storeBase later
+                key = parseKey(l); 
+                // get params from the string
                 vector<string> parameters;
                 parameters = parseParams(l);
+                // store the fact
                 storeBase(tCommands->getFact(), parameters, key);
             }
-            else if (command.compare(rule_string) == 0)
+            // if command is a rule
+            else if(command.compare(rule_string) == 0)
             {
-                string delimiter = "("; //Define space right after the relation (Father) ends.
-                size_t pos2 = l.find("("); // Set the value of the
-                string key = ""; // holds the key or fact name
-                pos2 = l.find(delimiter); //set pos2 to the index where the ( is located in the string.
-                key = parseKey(l); // saves the relaton part of the string as key, so it can be passed to storeBase later.
+                // define space right after the relation (Father) ends
+                string delimiter = "("; 
+                // set the value of the '('
+                size_t pos2 = l.find("("); 
+                // holds the key or fact name
+                string key = ""; 
+                // set pos2 to the index where the ( is located in the string
+                pos2 = l.find(delimiter); 
+                // saves the relaton part of the string as key, so it can be passed to storeBase later
+                key = parseKey(l); 
                 vector<string> keyParam = parseParams(l);
                 vector<string> params = parseRuleParam(l);
                 
                 storeBase(tCommands->getRule(), params, key, keyParam);
             }
-            else if (command.compare(inference_string) == 0)
+            // if command is an inference
+            else if(command.compare(inference_string) == 0)
             {
-                //do the stuff for taking an inference out of a file.
+                // do the stuff for taking an inference out of a file
                 size_t ch = l.find(" ");
                 ch++;
                 string rest = l.substr (ch);
                 tCommands->getMapCommand()[command](rest);
             }
+            // if command is drop
             else if (command.compare(drop_string) == 0)
             {
-                //do the stuff for taking a drop out of the file.
+                // do the stuff for taking a drop out of the file.
                 size_t ch = l.find(" ");
                 ch++;
                 string rest = l.substr (ch);
                 tCommands->getMapCommand()[command](rest);
             }
+            // if command is dump
             else if (command.compare(dump_string) == 0)
             {
-                //do the stuff for taking a dump out of a file.
+                // do the stuff for taking a dump out of a file
                 size_t ch = l.find(" ");
                 ch++;
                 string rest = l.substr (ch);
@@ -1477,63 +1519,76 @@ void Helper:: LoadHelp(string path)
         // close file
         file.close();
     }
-    catch ( fstream::failure e )
+    // failure
+    catch (fstream::failure e)
     {
         cerr << "Failed to load file\n";
     }
-    
+    // print to the interface
     cout << endl << setw(20) << "File Loaded\n";
     cout << "----------------------------------------" << endl << endl;
-    
 }
+
 
 // ===================================================================================
 // Drop Base
 // ===================================================================================
+// This function handles the drop functionality. It searches for all instances of the 
+// drop target and removes it from the KB and RB.
 //
-//
-//
-//
+// command [IN] -- a string containing the target from the command
 //
 //
 // ===================================================================================
+
 void Helper:: dropBase(string command)
 {
-    int count = 0; // iterates through the for loops
-    cout << "Dropping: "<< command<<endl<<endl;
+    // iterates through the for loops
+    int count = 0; 
+    // print to the interface drop information for user
+    cout << "Dropping: " << command << endl;
+    // vector that contains the index within the fact vector to remove from
     vector<int> factIndex;
-    
-    for(vector<tuple<string,vector<string>>>::iterator i = tCommands->getFact().begin(); i != tCommands->getFact().end(); i++) // iterates through vector
+    // iterates through the facts in the KB searching for all instances of the target
+    for(vector<tuple<string,vector<string>>>::iterator i = tCommands->getFact().begin(); i != tCommands->getFact().end(); i++)
     {
-        if ( command.compare(get<0>(*i)) == 0 )
+        // found a match
+        if (command.compare(get<0>(*i)) == 0)
         {
+            // track the index
             factIndex.push_back(count);
         }
+        // next vector index
         count++;
     }
-    
+    // iterate backwards through the vector removing all instances at specified index
+    // backwards iteration because if we alter the vector from the beginning it causes errors in the index
     for (int i = (int)factIndex.size() - 1; i >= 0; --i)
     {
         count = factIndex[i];
         tCommands->getFact().erase(tCommands->getFact().begin() + count);
     }
-    
+    // apply the same logic to the RB
+    // iterates through the rules in the RB searching for all instances of the target
     vector<int> ruleIndex;
     count = 0;
     for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
     {
-        if ( command.compare(get<0>(*i)) == 0 )
+        // found a match
+        if (command.compare(get<0>(*i)) == 0)
         {
+            // track the index
             ruleIndex.push_back(count);
         }
+        // next vector index
         count++;
     }
-    
+    // iterate backwards through the vector removing all instances at specified index
+    // backwards iteration because if we alter the vector from the beginning it causes errors in the index
     for(int i = (int)ruleIndex.size()-1; i>=0; --i)
     {
         count = ruleIndex[i];
         tCommands->getRule().erase(tCommands->getRule().begin() + count);
     }
-    
 }
 

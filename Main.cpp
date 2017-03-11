@@ -4,26 +4,11 @@
 #include "Interface.hpp"
 
 
- vector<vector<vector<string>>> retrieveFact()
-{
-    vector<vector<vector<string>>> blah;
-    
-    return blah;
-}
-
-
+//the main function that will call upon the program to run. 
 int main() {
     
-    Interface i;
-    i.run();
-    
-    
-//    vector<future<vector<vector<vector<string>>>>> thread;
-    
-//    thread.push_back(async(<#std::launch __policy#>, <#_Fp &&__f#>, <#_Args &&__args...#>)));
-//    async(retrieveFact);
-
-    
+    Interface i;//create an object of interface, this will be the main hub the user will be interacting with the program
+    i.run();//call upon the run function, which will start up the display and let the user go through the program until they indicate they want to quit
     
     return 0;
     
