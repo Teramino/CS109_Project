@@ -10,5 +10,21 @@
 #define Parse_hpp
 
 #include <stdio.h>
+#include "Rule.hpp"
+#include "Fact.hpp"
+#include "Helper.hpp"
+
+
+class Parse
+{
+public:
+    Parse();
+    ~Parse();
+    void ParseQuery(string);
+    void parseCommand(string);
+    void parseDefinition(char,string);
+
+    
+};
 
 #endif /* Parse_hpp */
