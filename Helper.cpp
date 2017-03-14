@@ -95,36 +95,57 @@ void Helper:: parseDefinition(char function, string def)
     // def represents the entire string without the command, example being Father(Roger, John)
     if (function=='f')
     {
+        Fact *f = new Fact();
+        
+        f->parseKey(def); // Father
+        f->parseDefition(def); // (Roger, John)
+
+//        Fact *f = new Fact(parseKey(def),parseParams(def));
+        
         // parse the key part of def, example being Father
-        string key = parseKey(def);
-        // obtain the perameters of our string, example being (Roger, John)
-        vector<string> parameters = parseParams(def);
-        // print information to the interface
-        cout << "Key: " << key << endl;
-        for(int i=0; i < parameters.size(); i++)
+//        string key = parseKey(def);
+//        // obtain the perameters of our string, example being (Roger, John)
+//        vector<string> parameters = parseParams(def);
+//        // print information to the interface
+        
+        cout << "Key: " << f->getKey() << endl;
+        for(int i=0; i < f->getDefinition().size(); i++)
         {
-            cout << "Parameter(" << i << "): " << parameters[i] << endl;
+            cout << "Parameter(" << i << "): " << f->getDefinition()[i] << endl;
         }
         // send the parameters and the key to be stored
-        storeBase(tCommands->getFact(),parameters,key);
+//        storeBase(tCommands->getFact(),parameters,key);
+        
+        tCommands->getFacts().push_back(f);
         cout << "----------------------------------------" << endl << endl;
     }
     // if our tagged string is a rule
     else if (function=='r')
     {
+//         Rule *r = new Rule(parseKey(def),parseParams(def),parseRuleParam(def));
+        
+        Rule *r = new Rule();
+        
+        r->parseKey(def); // Parent
+        r->parseParams(def); // ($X,$Y)
+        r->parseDefition(def); // AND Father($X,$Y) Mother($X,$Y)
+        
         // parse the key part of def, example being Father
-        string key = parseKey(def);
-        vector<string> keyParam = parseParams(def);
-        // obtain the perameters of our string, example being (Roger, John)
-        vector<string> parameters = parseRuleParam(def);
+//        string key = parseKey(def);
+//        vector<string> keyParam = parseParams(def);
+//        // obtain the perameters of our string, example being (Roger, John)
+//        vector<string> parameters = parseRuleParam(def);
         // print information to the interface
-        cout << "Key: " << key << endl;
-        for(int i=0; i < parameters.size(); i++)
+        
+        cout << "Key: " << r->getKey() << endl;
+        for(int i=0; i < r->getDefinition().size(); i++)
         {
-            cout << "Parameter(" << i << "): " << parameters[i] << endl;
+            cout << "Parameter(" << i << "): " << r->getDefinition()[i] << endl;
         }
         // send the parameters and the key to be stored
-        storeBase(tCommands->getRule(), parameters, key, keyParam);
+//        storeBase(tCommands->getRule(), parameters, key, keyParam);
+        
+        tCommands->getRules().push_back(r);
         cout << "----------------------------------------" << endl << endl;
     }
 }
@@ -235,7 +256,7 @@ void Helper:: ParseQuery(string rest)
         if (tempFacts.size() != 0)
         {
             vector<string> fact = singleVecCondense(tempFacts);
-            storeBase(tCommands->getFact(), fact, inferKey);
+//            storeBase(tCommands->getFact(), fact, inferKey);
             vector<string> result = dropDuplicates(fact);
             
             cout << endl;
@@ -418,98 +439,98 @@ vector<vector<string>> Helper:: retrieveFact(string key, string &param1, string 
     vector<vector<string>> relationalData;
     //    cout << key << " Fact [ ";
     // if the parameters are the same
-    if ( param1 == param2 )
-    {
-        // & in [] of lambda functions allows lambda function to acess local variables
-        for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
-                 {
-                     if (get<0>(it) == key) // checks tuple if key matches
-                     {
-                         if (param1[0] == '$' && param2[0] == '$') // if query is generic
-                         {
-                             for(int i=0; i < get<1>(it).size(); i+=2) // iterates through vector inside tuple
-                             {
-                                 if ( get<1>(it)[i] == get<1>(it)[i+1] )
-                                 {
-                                     params.push_back(get<1>(it)[i]);
-                                     params.push_back(get<1>(it)[i+1]);
-                                 }
-                             }
-                             relationalData.push_back(params);
-                             params.clear();
-                             
-                         }
-                         
-                     }
-                 });
-        //    cout << " ]" << endl << endl;
-        return relationalData;
-    }
-    
-    // & in [] of lambda functions allows lambda function to acess local variables
-    for_each(tCommands->getFact().begin(), tCommands->getFact().end(),[&](decltype(*tCommands->getFact().begin()) it) -> void // iterates through vector
-             {
-                 if (get<0>(it) == key) // checks tuple if key matches
-                 {
-                     if (param1[0] == '$' && param2[0] == '$') // if query is generic
-                     {
-                         for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-                         {
-                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             }
-                             else
-                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                                              cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             }
-                         }
-                         relationalData.push_back(params);
-                         params.clear();
-                     }
-                     else if (param1[0] != '$' && param2[0] == '$') // if the first parameter is specific
-                     {
-                         
-                         for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-                         {
-                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             }
-                             else
-                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             }
-                         }
-                         if(param1.compare(params[0]) == 0)
-                             relationalData.push_back(params);
-                         params.clear();
-                     }
-                     else if (param1[0] == '$' && param2[0] != '$') // if the second parameters is specific
-                     {
-                         for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-                         {
-                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
-                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
-                             }
-                             else
-                             {
-                                 params.push_back(get<1>(it)[i]);
-                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
-                             }
-                         }
-                         if(param2.compare(params[1]) == 0)
-                             relationalData.push_back(params);
-                         params.clear();
-                     }
-                 }
-             });
+//    if ( param1 == param2 )
+//    {
+//        // & in [] of lambda functions allows lambda function to acess local variables
+//        for_each(tCommands->getFacts().begin(), tCommands->getFacts().end(),[&](decltype(*tCommands->getFacts().begin()) it) -> void // iterates through vector
+//                 {
+//                     if (get<0>(it) == key) // checks tuple if key matches
+//                     {
+//                         if (param1[0] == '$' && param2[0] == '$') // if query is generic
+//                         {
+//                             for(int i=0; i < get<1>(it).size(); i+=2) // iterates through vector inside tuple
+//                             {
+//                                 if ( get<1>(it)[i] == get<1>(it)[i+1] )
+//                                 {
+//                                     params.push_back(get<1>(it)[i]);
+//                                     params.push_back(get<1>(it)[i+1]);
+//                                 }
+//                             }
+//                             relationalData.push_back(params);
+//                             params.clear();
+//                             
+//                         }
+//                         
+//                     }
+//                 });
+//        //    cout << " ]" << endl << endl;
+//        return relationalData;
+//    }
+//    
+//    // & in [] of lambda functions allows lambda function to acess local variables
+//    for_each(tCommands->getFacts().begin(), tCommands->getFacts().end(),[&](decltype(*tCommands->getFacts().begin()) it) -> void // iterates through vector
+//             {
+//                 if (get<0>(it) == key) // checks tuple if key matches
+//                 {
+//                     if (param1[0] == '$' && param2[0] == '$') // if query is generic
+//                     {
+//                         for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
+//                         {
+//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
+//                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+//                             }
+//                             else
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
+//                                 //                                                              cout << get<1>(it)[i] << " | "; // prints an index in vector
+//                             }
+//                         }
+//                         relationalData.push_back(params);
+//                         params.clear();
+//                     }
+//                     else if (param1[0] != '$' && param2[0] == '$') // if the first parameter is specific
+//                     {
+//                         
+//                         for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
+//                         {
+//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
+//                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+//                             }
+//                             else
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
+//                                 //                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+//                             }
+//                         }
+//                         if(param1.compare(params[0]) == 0)
+//                             relationalData.push_back(params);
+//                         params.clear();
+//                     }
+//                     else if (param1[0] == '$' && param2[0] != '$') // if the second parameters is specific
+//                     {
+//                         for(int i=0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
+//                         {
+//                             if (i != get<1>(it).size()-1) // printing purpose: used to add commas
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
+//                                 //                                 cout << get<1>(it)[i] << ","; // prints an index in vector
+//                             }
+//                             else
+//                             {
+//                                 params.push_back(get<1>(it)[i]);
+//                                 //                                 cout << get<1>(it)[i] << " | "; // prints an index in vector
+//                             }
+//                         }
+//                         if(param2.compare(params[1]) == 0)
+//                             relationalData.push_back(params);
+//                         params.clear();
+//                     }
+//                 }
+//             });
     //    cout << " ]" << endl << endl;
     
     return relationalData;
@@ -534,36 +555,36 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
     
     //    cout << key << " Rule ";
     // & in [] of lambda functions allows lambda function to acess local variables
-    for_each(tCommands->getRule().begin(), tCommands->getRule().end(),[&](decltype(*tCommands->getRule().begin()) it) -> void // iterates through vector
-             {
-                 if (get<0>(it) == key)
-                 {
-                     for(int i=0; i < get<1>(it).size(); i++)
-                     {
-                         if (i==0)
-                         {
-                             //cout << get<1>(it)[i] << ", ";
-                             logicalOp = get<1>(it)[i]; // holds the operator
-                             
-                         }
-                         else if(i <= get<1>(it).size()-2)
-                         {
-                             decltype(get<1>(it)[i]) fact = get<1>(it)[i]; // variable holding a fact inside rule
-                             // need to parse fact name from params
-                             ruleTemp.push_back(fact);
-                         }
-                         else
-                         {
-                             decltype(get<1>(it)[i]) fact = get<1>(it)[i]; // variable holding a fact inside rule
-                             // need to parse fact name from params
-                             ruleTemp.push_back(fact);
-                             
-                             rule.push_back(ruleTemp);
-                             ruleTemp.clear();
-                         }
-                     }
-                 }
-             });
+//    for_each(tCommands->getRule().begin(), tCommands->getRule().end(),[&](decltype(*tCommands->getRule().begin()) it) -> void // iterates through vector
+//             {
+//                 if (get<0>(it) == key)
+//                 {
+//                     for(int i=0; i < get<1>(it).size(); i++)
+//                     {
+//                         if (i==0)
+//                         {
+//                             //cout << get<1>(it)[i] << ", ";
+//                             logicalOp = get<1>(it)[i]; // holds the operator
+//                             
+//                         }
+//                         else if(i <= get<1>(it).size()-2)
+//                         {
+//                             decltype(get<1>(it)[i]) fact = get<1>(it)[i]; // variable holding a fact inside rule
+//                             // need to parse fact name from params
+//                             ruleTemp.push_back(fact);
+//                         }
+//                         else
+//                         {
+//                             decltype(get<1>(it)[i]) fact = get<1>(it)[i]; // variable holding a fact inside rule
+//                             // need to parse fact name from params
+//                             ruleTemp.push_back(fact);
+//                             
+//                             rule.push_back(ruleTemp);
+//                             ruleTemp.clear();
+//                         }
+//                     }
+//                 }
+//             });
     return make_tuple(logicalOp, key, params,rule);
 }
 
@@ -1412,79 +1433,79 @@ void Helper:: DumpHelp(string path)
     const char* f = path.c_str();
     fstream file;
     file.exceptions ( fstream::failbit | fstream::badbit );
-    vector<tuple<string,vector<string>>> Factbase = tCommands->getFact();
-    vector<tuple<string,vector<string>,vector<string>>> Rulebase = tCommands->getRule();
-    try
-    {
-        // open/create file
-        file.open (f, ios::out);
-        cout <<"Saving in to the file: " << f << endl;
-        if(Factbase.size() != 0){
-            for_each(Factbase.begin(), Factbase.end(),[&](decltype(*Factbase.begin()) it) -> void // iterates through vector
-                     {
-                         string temp = "FACT ";
-                         temp.append(get<0>(it));
-                         temp.append("(");
-                         for(int i=0; i < get<1>(it).size(); i++)
-                         {
-                             if (i != get<1>(it).size()-1){
-                                 temp.append(get<1>(it)[i]);
-                                 temp.append(",");
-                             }
-                             else
-                             {
-                                 temp.append(get<1>(it)[i]);
-                                 temp.append(")");
-                             }
-                         }
-                         file << temp <<endl;
-                     });
-        }
-        else
-        {
-            cout << "there are no facts to dump." << endl;
-        }
-        if(Rulebase.size() != 0)
-        {
-            string logicalOperater;
-            for_each(Rulebase.begin(), Rulebase.end(),[&](decltype(*Rulebase.begin()) it) -> void
-                     {
-                         string temp = "RULE ";
-                         temp.append(get<0>(it));
-                         //cout << temp << endl; //this prints out the when the user dumps
-                         temp.append("(");
-                         temp.append(get<2>(it)[0]);
-                         temp.append(",");
-                         temp.append(get<2>(it)[1]);
-                         temp.append("):- ");
-                         //cout << temp << endl;
-                         for(int i=0; i < get<1>(it).size(); i++)
-                         {
-                             if (i==0)
-                             {
-                                 logicalOperater = get<1>(it)[i]; // holds the operator
-                                 temp.append(logicalOperater + " ");
-                             }
-                             else if (i <= get<1>(it).size()-1)
-                             {
-                                 temp.append(get<1>(it)[i] + " ");
-                             }
-                         }
-                         
-                         
-                         file << temp << endl;
-                     });
-        }
-        
-        
-        // open/create file
-        // close file
-        file.close();
-    }
-    catch (ifstream::failure e)
-    {
-        cerr << "Failed to dump file\n";
-    }
+////    vector<tuple<string,vector<string>>> Factbase = tCommands->getFact();
+////     vector<tuple<string,vector<string>,vector<string>>> Rulebase = tCommands->getRule();
+//    try
+//    {
+//        // open/create file
+//        file.open (f, ios::out);
+//        cout <<"Saving in to the file: " << f << endl;
+//        if(Factbase.size() != 0){
+//            for_each(Factbase.begin(), Factbase.end(),[&](decltype(*Factbase.begin()) it) -> void // iterates through vector
+//                     {
+//                         string temp = "FACT ";
+//                         temp.append(get<0>(it));
+//                         temp.append("(");
+//                         for(int i=0; i < get<1>(it).size(); i++)
+//                         {
+//                             if (i != get<1>(it).size()-1){
+//                                 temp.append(get<1>(it)[i]);
+//                                 temp.append(",");
+//                             }
+//                             else
+//                             {
+//                                 temp.append(get<1>(it)[i]);
+//                                 temp.append(")");
+//                             }
+//                         }
+//                         file << temp <<endl;
+//                     });
+//        }
+//        else
+//        {
+//            cout << "there are no facts to dump." << endl;
+//        }
+//        if(Rulebase.size() != 0)
+//        {
+//            string logicalOperater;
+//            for_each(Rulebase.begin(), Rulebase.end(),[&](decltype(*Rulebase.begin()) it) -> void
+//                     {
+//                         string temp = "RULE ";
+//                         temp.append(get<0>(it));
+//                         //cout << temp << endl; //this prints out the when the user dumps
+//                         temp.append("(");
+//                         temp.append(get<2>(it)[0]);
+//                         temp.append(",");
+//                         temp.append(get<2>(it)[1]);
+//                         temp.append("):- ");
+//                         //cout << temp << endl;
+//                         for(int i=0; i < get<1>(it).size(); i++)
+//                         {
+//                             if (i==0)
+//                             {
+//                                 logicalOperater = get<1>(it)[i]; // holds the operator
+//                                 temp.append(logicalOperater + " ");
+//                             }
+//                             else if (i <= get<1>(it).size()-1)
+//                             {
+//                                 temp.append(get<1>(it)[i] + " ");
+//                             }
+//                         }
+//                         
+//                         
+//                         file << temp << endl;
+//                     });
+//        }
+//        
+//        
+//        // open/create file
+//        // close file
+//        file.close();
+//    }
+//    catch (ifstream::failure e)
+//    {
+//        cerr << "Failed to dump file\n";
+//    }
     cout <<"File has been saved"<<endl;
     cout << endl;
 }
@@ -1512,96 +1533,96 @@ void Helper:: LoadHelp(string path)
     string dump_string = "DUMP";
     file.exceptions ( fstream::badbit );
     
-    try
-    {
-        // open file
-        file.open (f, ios::in);
-        // while we there are lines remaining in the file
-        while ( getline(file, l) )
-        {
-            // parses the command into two strings, one for command and the other for the instruction
-            string delimeter = " ";
-            size_t pos = 0;
-            string command = "";
-            pos = l.find(delimeter);
-            // copies command to string
-            command = l.substr(0, pos);
-            // erasing command from line
-            l.erase(0, pos + delimeter.length());
-            // if it is a fact
-            if(command.compare(fact_string) == 0)
-            {
-                // our string is in the example format: FACT Father(Rodger,John)
-                // so we need to get the relation (Father) part of the string and set it to our key variable
-                // define space right after the relation (Father) ends
-                string delimiter = "(";
-                size_t pos2 = l.find("(");
-                // holds the key or fact name
-                string key = "";
-                // set pos2 to the index where the '('' is located in the string
-                pos2 = l.find(delimiter);
-                // saves the relaton part of the string as key, so it can be passed to storeBase later
-                key = parseKey(l);
-                // get params from the string
-                vector<string> parameters;
-                parameters = parseParams(l);
-                // store the fact
-                storeBase(tCommands->getFact(), parameters, key);
-            }
-            // if command is a rule
-            else if(command.compare(rule_string) == 0)
-            {
-                // define space right after the relation (Father) ends
-                string delimiter = "(";
-                // set the value of the '('
-                size_t pos2 = l.find("(");
-                // holds the key or fact name
-                string key = "";
-                // set pos2 to the index where the ( is located in the string
-                pos2 = l.find(delimiter);
-                // saves the relaton part of the string as key, so it can be passed to storeBase later
-                key = parseKey(l);
-                vector<string> keyParam = parseParams(l);
-                vector<string> params = parseRuleParam(l);
-                
-                storeBase(tCommands->getRule(), params, key, keyParam);
-            }
-            // if command is an inference
-            else if(command.compare(inference_string) == 0)
-            {
-                // do the stuff for taking an inference out of a file
-                size_t ch = l.find(" ");
-                ch++;
-                string rest = l.substr (ch);
-                tCommands->getMapCommand()[command](rest);
-            }
-            // if command is drop
-            else if (command.compare(drop_string) == 0)
-            {
-                // do the stuff for taking a drop out of the file.
-                size_t ch = l.find(" ");
-                ch++;
-                string rest = l.substr (ch);
-                tCommands->getMapCommand()[command](rest);
-            }
-            // if command is dump
-            else if (command.compare(dump_string) == 0)
-            {
-                // do the stuff for taking a dump out of a file
-                size_t ch = l.find(" ");
-                ch++;
-                string rest = l.substr (ch);
-                tCommands->getMapCommand()[command](rest);
-            }
-        }
-        // close file
-        file.close();
-    }
-    // failure
-    catch (fstream::failure e)
-    {
-        cerr << "Failed to load file\n";
-    }
+//    try
+//    {
+//        // open file
+//        file.open (f, ios::in);
+//        // while we there are lines remaining in the file
+//        while ( getline(file, l) )
+//        {
+//            // parses the command into two strings, one for command and the other for the instruction
+//            string delimeter = " ";
+//            size_t pos = 0;
+//            string command = "";
+//            pos = l.find(delimeter);
+//            // copies command to string
+//            command = l.substr(0, pos);
+//            // erasing command from line
+//            l.erase(0, pos + delimeter.length());
+//            // if it is a fact
+//            if(command.compare(fact_string) == 0)
+//            {
+//                // our string is in the example format: FACT Father(Rodger,John)
+//                // so we need to get the relation (Father) part of the string and set it to our key variable
+//                // define space right after the relation (Father) ends
+//                string delimiter = "(";
+//                size_t pos2 = l.find("(");
+//                // holds the key or fact name
+//                string key = "";
+//                // set pos2 to the index where the '('' is located in the string
+//                pos2 = l.find(delimiter);
+//                // saves the relaton part of the string as key, so it can be passed to storeBase later
+//                key = parseKey(l);
+//                // get params from the string
+//                vector<string> parameters;
+//                parameters = parseParams(l);
+//                // store the fact
+//                storeBase(tCommands->getFact(), parameters, key);
+//            }
+//            // if command is a rule
+//            else if(command.compare(rule_string) == 0)
+//            {
+//                // define space right after the relation (Father) ends
+//                string delimiter = "(";
+//                // set the value of the '('
+//                size_t pos2 = l.find("(");
+//                // holds the key or fact name
+//                string key = "";
+//                // set pos2 to the index where the ( is located in the string
+//                pos2 = l.find(delimiter);
+//                // saves the relaton part of the string as key, so it can be passed to storeBase later
+//                key = parseKey(l);
+//                vector<string> keyParam = parseParams(l);
+//                vector<string> params = parseRuleParam(l);
+//                
+//                storeBase(tCommands->getRule(), params, key, keyParam);
+//            }
+//            // if command is an inference
+//            else if(command.compare(inference_string) == 0)
+//            {
+//                // do the stuff for taking an inference out of a file
+//                size_t ch = l.find(" ");
+//                ch++;
+//                string rest = l.substr (ch);
+//                tCommands->getMapCommand()[command](rest);
+//            }
+//            // if command is drop
+//            else if (command.compare(drop_string) == 0)
+//            {
+//                // do the stuff for taking a drop out of the file.
+//                size_t ch = l.find(" ");
+//                ch++;
+//                string rest = l.substr (ch);
+//                tCommands->getMapCommand()[command](rest);
+//            }
+//            // if command is dump
+//            else if (command.compare(dump_string) == 0)
+//            {
+//                // do the stuff for taking a dump out of a file
+//                size_t ch = l.find(" ");
+//                ch++;
+//                string rest = l.substr (ch);
+//                tCommands->getMapCommand()[command](rest);
+//            }
+//        }
+//        // close file
+//        file.close();
+//    }
+//    // failure
+//    catch (fstream::failure e)
+//    {
+//        cerr << "Failed to load file\n";
+//    }
     // print to the interface
     cout << endl << setw(20) << "File Loaded\n";
     cout << "----------------------------------------" << endl << endl;
@@ -1628,45 +1649,45 @@ void Helper:: dropBase(string command)
     // vector that contains the index within the fact vector to remove from
     vector<int> factIndex;
     // iterates through the facts in the KB searching for all instances of the target
-    for(vector<tuple<string,vector<string>>>::iterator i = tCommands->getFact().begin(); i != tCommands->getFact().end(); i++)
-    {
-        // found a match
-        if (command.compare(get<0>(*i)) == 0)
-        {
-            // track the index
-            factIndex.push_back(count);
-        }
-        // next vector index
-        count++;
-    }
-    // iterate backwards through the vector removing all instances at specified index
-    // backwards iteration because if we alter the vector from the beginning it causes errors in the index
-    for (int i = (int)factIndex.size() - 1; i >= 0; --i)
-    {
-        count = factIndex[i];
-        tCommands->getFact().erase(tCommands->getFact().begin() + count);
-    }
-    // apply the same logic to the RB
-    // iterates through the rules in the RB searching for all instances of the target
-    vector<int> ruleIndex;
-    count = 0;
-    for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
-    {
-        // found a match
-        if (command.compare(get<0>(*i)) == 0)
-        {
-            // track the index
-            ruleIndex.push_back(count);
-        }
-        // next vector index
-        count++;
-    }
-    // iterate backwards through the vector removing all instances at specified index
-    // backwards iteration because if we alter the vector from the beginning it causes errors in the index
-    for(int i = (int)ruleIndex.size()-1; i>=0; --i)
-    {
-        count = ruleIndex[i];
-        tCommands->getRule().erase(tCommands->getRule().begin() + count);
-    }
+//    for(vector<tuple<string,vector<string>>>::iterator i = tCommands->getFact().begin(); i != tCommands->getFact().end(); i++)
+//    {
+//        // found a match
+//        if (command.compare(get<0>(*i)) == 0)
+//        {
+//            // track the index
+//            factIndex.push_back(count);
+//        }
+//        // next vector index
+//        count++;
+//    }
+//    // iterate backwards through the vector removing all instances at specified index
+//    // backwards iteration because if we alter the vector from the beginning it causes errors in the index
+//    for (int i = (int)factIndex.size() - 1; i >= 0; --i)
+//    {
+//        count = factIndex[i];
+//        tCommands->getFact().erase(tCommands->getFact().begin() + count);
+//    }
+//    // apply the same logic to the RB
+//    // iterates through the rules in the RB searching for all instances of the target
+//    vector<int> ruleIndex;
+//    count = 0;
+//    for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
+//    {
+//        // found a match
+//        if (command.compare(get<0>(*i)) == 0)
+//        {
+//            // track the index
+//            ruleIndex.push_back(count);
+//        }
+//        // next vector index
+//        count++;
+//    }
+//    // iterate backwards through the vector removing all instances at specified index
+//    // backwards iteration because if we alter the vector from the beginning it causes errors in the index
+//    for(int i = (int)ruleIndex.size()-1; i>=0; --i)
+//    {
+//        count = ruleIndex[i];
+//        tCommands->getRule().erase(tCommands->getRule().begin() + count);
+//    }
 }
 

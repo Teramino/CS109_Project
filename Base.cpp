@@ -8,8 +8,18 @@
 
 #include "Base.hpp"
 
+Base:: Base()
+{
+    
+}
 
-string Base:: parseKey(string input)
+Base:: ~Base()
+{
+    
+}
+
+
+void Base:: parseKey(string input)
 {
     string delimiter = "(";
     size_t pos = 0; // position of delimiter
@@ -18,10 +28,10 @@ string Base:: parseKey(string input)
     pos = input.find(delimiter);
     key = input.substr(0, pos); // assings string from given input up to delimiter
     
-    return key;
+    this->key = key;
 }
 
-vector<string> Base:: parseParams(string input)
+void Base:: parseDefition(string input)
 {
     string delimiter = "(";
     string delimiter2 = ",";
@@ -50,14 +60,14 @@ vector<string> Base:: parseParams(string input)
     pos = parsedInput.find(delimiter);
     parameters.push_back(parsedInput.substr(0, pos));
     
-    return parameters;
+    def = parameters;
 }
 
-void Base:: storeBase(string k, vector<string> d)
-{
-    key = k;
-    def = d;
-}
+//void Base:: storeBase(string k, vector<string> d)
+//{
+//    key = k;
+//    def = d;
+//}
 
 void Base:: setKey(string k)
 {

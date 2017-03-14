@@ -18,6 +18,15 @@ Transactional_Commands:: Transactional_Commands(){
 
 }
 
+Transactional_Commands:: ~Transactional_Commands()
+{
+    for(int i=0; i<facts.size(); i++)
+        delete facts[i];
+    
+    for(int i=0; i<rules.size(); i++)
+        delete rules[i];
+}
+
 // ===================================================================================
 // 	LOAD
 // ===================================================================================
@@ -72,6 +81,6 @@ void Transactional_Commands:: ruleCommand(string rule)
 typedef void (*command_operations)(string);
 map<string,command_operations>& Transactional_Commands:: getMapCommand(){ return commandMap; }
 
-vector<tuple<string,vector<string>>>& Transactional_Commands:: getFact(){ return fact; }
+vector<Fact*>& Transactional_Commands:: getFacts(){ return facts; }
 
-vector<tuple<string,vector<string>,vector<string>>>& Transactional_Commands:: getRule(){ return rule; }
+vector<Rule*>& Transactional_Commands:: getRules(){ return rules; }

@@ -22,9 +22,9 @@ public:
     ~Base();
     
     
-    virtual string parseKey(string);
-    virtual vector<string> parseParams(string input);
-    virtual void storeBase(string k, vector<string> def);
+    virtual void parseKey(string);
+    virtual void parseDefition(string input);
+//    virtual void storeBase(string k, vector<string> def);
 //    virtual void dropBase(string command)=0;
     
     void setKey(string);

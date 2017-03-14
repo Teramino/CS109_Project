@@ -4,6 +4,8 @@
 #define Helper_hpp
 
 #include "Common.hpp"
+#include "Rule.hpp"
+#include "Fact.hpp"
 
 class Transactional_Commands; // forward declaration
 

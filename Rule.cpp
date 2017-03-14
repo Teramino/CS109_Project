@@ -8,15 +8,61 @@
 
 #include "Rule.hpp"
 
+Rule:: Rule()
+{
+    
+}
 
-vector<string> Rule:: parseParams(string input)
+Rule:: Rule(string k, vector<string> d, vector<string> kp)
+{
+    key = k;
+    def = d;
+    keyParam = kp;
+}
+
+Rule:: ~Rule()
+{
+    
+}
+
+void Rule:: parseParams(string input)
+{
+    string delimiter = "(";
+    string delimiter2 = ",";
+    size_t pos = 0; // position of delimiter
+    
+    vector<string> parameters; // holds each parameter
+    
+    pos = input.find(delimiter); // find the
+    string temp = input.substr(0, pos);
+    pos++; // eats delimiter;
+    
+    string parsedInput = input.substr(pos, input.length());
+    while ((pos = parsedInput.find(delimiter2)) != string::npos)  // will loop through as many parameters except the last one
+    {
+        parameters.push_back(parsedInput.substr(0, pos));
+        
+        pos++; // eats delimiter
+        
+        parsedInput = parsedInput.substr(pos, input.length());
+        if (parsedInput[2] == ')')
+            break;
+    }
+    
+    // if loop breaks theres always going to be one parameter left to store
+    delimiter = ")";
+    pos = parsedInput.find(delimiter);
+    parameters.push_back(parsedInput.substr(0, pos));
+    
+    def = parameters;
+}
+
+void Rule:: parseDefinition(string input)
 {
     
     vector<string> param;
     string delimiter = ":-";
     size_t pos = input.find(delimiter);
-    //    cout << "----------------------------------------" << endl;
-    //    cout << "Key: " << input.substr(0, pos) << endl;
     pos++; // eats up delimiter :
     pos++; // eats up delimiter -
     
@@ -24,11 +70,10 @@ vector<string> Rule:: parseParams(string input)
     pos++; // eats up delimiter ' '(space)
     
     string parsedInput = input.substr(pos, input.length());
-    
     while ((pos = parsedInput.find(delimiter)) != string::npos)  // will loop through as many parameters except the last one
     {
         param.push_back(parsedInput.substr(0, pos));
-        //        cout << "Parameter(" << count++ << "): " << param[param.size()-1] << endl;
+
         pos++; // eats delimiter
         parsedInput = parsedInput.substr(pos, input.length());
     }
@@ -36,10 +81,8 @@ vector<string> Rule:: parseParams(string input)
     delimiter = "\n";
     pos = parsedInput.find(delimiter);
     param.push_back(parsedInput.substr(0, pos));
-    //    cout << "Parameter(" << count << "): " << param[param.size()-1] << endl;
-    //    cout <<"----------------------------------------"<<endl;
-    
-    return param;
+
+    def = param;
 }
 
 void Rule:: storeBase(string k, vector<string> d, vector<string> kp)

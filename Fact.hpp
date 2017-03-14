@@ -16,6 +16,7 @@ class Fact: public Base
 {
 public:
     Fact();
+    Fact(string k, vector<string> d);
     ~Fact();
     
 };

@@ -7,3 +7,19 @@
 //
 
 #include "Fact.hpp"
+
+Fact:: Fact()
+{
+    
+}
+
+Fact:: Fact(string k, vector<string> d)
+{
+    key = k;
+    def = d;
+}
+
+Fact:: ~Fact()
+{
+    
+}

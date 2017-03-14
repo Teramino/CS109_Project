@@ -19,10 +19,11 @@ private:
     
 public:
     Rule();
-    ~Rule();
+    Rule(string k, vector<string> d, vector<string> kp);
+    ~Rule(); 
     
-    
-    virtual vector<string> parseParams(string input);
+    void parseParams(string);
+    virtual void parseDefinition(string);
     virtual void storeBase(string,vector<string>,vector<string>);
     
     
