@@ -21,8 +21,13 @@ public:
     Rule();
     ~Rule();
     
+    
+    virtual vector<string> parseParams(string input);
+    virtual void storeBase(string,vector<string>,vector<string>);
+    
+    
     void setParam(vector<string>);
-    vector<string> getParam();
+    vector<string> getKeyParam();
     
 };
 
