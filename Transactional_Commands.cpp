@@ -18,8 +18,6 @@ Transactional_Commands:: Transactional_Commands(){
 
 }
 
-
-
 // ===================================================================================
 // 	LOAD
 // ===================================================================================
@@ -30,30 +28,9 @@ Transactional_Commands:: Transactional_Commands(){
 //			command.
 //
 // ===================================================================================
-
 void Transactional_Commands:: loadCommand(string path){
-    //cout << "start of load function." << endl;
     Helper:: instance()->LoadHelp(path);
-   // cout << "end of load function." << endl;
-//    const char* f = path.c_str();
-//    fstream file;
-//    // line
-//    string l;
-//	file.exceptions ( fstream::badbit );
-//  	try 
-//  	{
-//  		// open file
-//	    file.open (f, ios::in);
-//	    while ( getline(file, l) )
-//    	{
-//    		cout << l << endl;
-//    	}
-//	    // close file
-//	    file.close();
-//  	}
-//  	catch ( fstream::failure e ) {
-//    	cerr << "Failed to load file\n";
-//  	}
+
 }
 
 // ===================================================================================
@@ -67,44 +44,15 @@ void Transactional_Commands:: loadCommand(string path){
 //			command.
 //
 // ===================================================================================
-
 void Transactional_Commands:: dumpCommand(string path) //vector<tuple<string,vector<string>>>& base)
 {
-    //cout << "start of dump function" << endl;
     Helper:: instance()->DumpHelp(path);
-   // cout << "end of dump function" << endl;
 }
-
-
 
 void Transactional_Commands:: inferenceCommand(string command)
 {  
 	Helper:: instance()->ParseQuery(command);
-   //Helper:: instance()->parseDefinition('i',command);
-//    if () // saves inference
-//    {
-//  
-//        vector<string> blah = retrieveRule(parameters,key);
-//        for(auto a: blah)
-//            cout << a << ;
-//        
-//        void storeBase(Helper:: t,vector<string>&,string);
-//
-//
-//    }
-//    else{ // just prints
-//        vector<string> blah = retrieveRule(parameters,key);
-//        for(auto a: blah)
-//            cout << a << ;
-//
-//    }
 }
-
-//vector<vector<string>> Transactional_Commands:: retrieveFact(string key, string &param1, string &param2)
-//{
-//    vector<vector<string>> blah;
-//    return blah;
-//}
 
 void Transactional_Commands:: dropCommand(string command)
 {
@@ -113,16 +61,11 @@ void Transactional_Commands:: dropCommand(string command)
 
 void Transactional_Commands:: factCommand(string fact)
 {
-//    cout << "Fact method called\n";
-//    cout <<"Fact is: " << fact << endl;
-    
     Helper:: instance()->parseDefinition('f',fact);
-    
 }
 
 void Transactional_Commands:: ruleCommand(string rule)
 {
-	// cout << "here?" << endl;
     Helper:: instance()->parseDefinition('r',rule);
 }
 
@@ -132,26 +75,3 @@ map<string,command_operations>& Transactional_Commands:: getMapCommand(){ return
 vector<tuple<string,vector<string>>>& Transactional_Commands:: getFact(){ return fact; }
 
 vector<tuple<string,vector<string>,vector<string>>>& Transactional_Commands:: getRule(){ return rule; }
-
-/*
-void Transactional_Commands::print(){
-	auto j = 0;
-	cout << "FACT" << endl;
-	for_each(fact.begin(), fact.end(), [&](decltype(*fact.begin()) it) -> void // iterates through vector
-	{
-
-		for (int i = 0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-		{
-			cout << j << "   " << get<0>(it) << "   " << get<1>(it)[i] << endl; // prints an index in vector
-		}
-		j++;
-	});    cout << "RULE" << endl;
-	for_each(rule.begin(), rule.end(), [&](decltype(*rule.begin()) it) -> void // iterates through vector
-	{
-		for (int i = 0; i < get<1>(it).size(); i++) // iterates through vector inside tuple
-		{
-			cout << get<0>(it) << "   " << get<1>(it)[i] << endl; // prints an index in vector
-		}
-	});
-}
-*/

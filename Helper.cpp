@@ -1064,25 +1064,59 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     }
     // finds correlations in rule target
     paramIndex = paramCorr(paramData);
+    
+    vector<vector<bool>> validTarget;
     if (paramIndex.size() == keyParams.size()) // if every param matches then theres no correlation
     {
         paramIndex.clear();
     }
     else
     {
+        
         // if code gets in here one of the parameters doesnt match
-        if(keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1])
+        //        if(keyParams[0][1] != paramData[0][0][1] && keyParams[1][1] !=  paramData[0][1][1])
+        //        {
+        //            ruleLeft = false;
+        //        }
+        //        else if(keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1])
+        //        {
+        //            ruleRight = false;
+        //        }
+        //        else // rule target doesnt match any of the keyParams
+        //        {
+        //            return factData; // all params should match else its not and OR Inference //ASSUMED
+        //        }
+        
+        for(int i=0; i< keyParams.size(); i++)
         {
-            ruleLeft = false;
+            vector<bool> valid;
+            for(int j=0; j< paramData.size(); j++)
+            {
+                for(int param = 0; param < paramData[j].size(); param++)
+                {
+                    // if code gets in here one of the parameters doesnt match
+                    if(keyParams[i][1] != paramData[j][param][1])
+                    {
+                        valid.push_back(false);
+                    }
+                }
+            }
+            validTarget.push_back(valid);
+            valid.clear();
         }
-        else if(keyParams[0][1] != paramData[1][0][1] && keyParams[1][1] !=  paramData[1][1][1])
+        // this only works cause I know there's only 2 params
+        for(int i=0; i<validTarget.size(); i++)
         {
-            ruleRight = false;
+            if(i == 0 && validTarget[i].size() == keyParams.size()*2)
+            {
+                ruleLeft = false;
+            }
+            else if(i == 1 && validTarget[i].size() == keyParams.size()*2)
+            {
+                ruleRight = false;
+            }
         }
-        else
-        {
-            return factData; // all params should match else its not and OR Inference //ASSUMED
-        }
+        
     }
     
     
@@ -1108,7 +1142,6 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<vector<vector<string>>> tempRelData; // used to hold data from each fact temporarily
     
     // get facts of first defined rule target
-    
     auto tempTuple = retrieveRule(keyParams, parseKey(rule[0]));
     if(ruleLeft == true) // left rule is a valid rule target
     {
@@ -1222,12 +1255,57 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             
             if( tempRule.size() == 0) // if rule is not defined
             {
+                //  no multi-threading
                 //                relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
                 //                factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
                 
-                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
-                futures.push_back(async(launch::async,func));
-                cout << "Thread " << threadCount++ << " started" << endl;
+//                if(get<0>(paramIndex[0]) != -1) // when code is able to take more than one parameter than the index will change from 0 to i
+//                {
+//                    for(int i=0; i < factDataT[0].size(); i++)
+//                    {
+//                        if(get<1>(paramIndex[0]) == 0) // means the first param in the first vector is being used for second vector
+//                        {
+//                            if(get<3>(paramIndex[0]) == 0) // place first param in the (first parm of second vector)
+//                            {
+//                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], generic));
+//                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),factDataT[0][i][get<1>(paramIndex[0])],keyParams[1]);
+//                                futures.push_back(async(launch::async,func));
+//                                cout << "Thread " << threadCount++ << " started" << endl;
+//                            }
+//                            else // place first param in the (second parm of second vector)
+//                            {
+//                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]),generic,factData[i][get<1>(paramIndex[0])]));
+//                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],factDataT[0][i][get<1>(paramIndex[0])]);
+//                                futures.push_back(async(launch::async,func));
+//                                cout << "Thread " << threadCount++ << " started" << endl;
+//                            }
+//                        }
+//                        else if (get<1>(paramIndex[0]) == 1) // means the second param in the first vector is being used for second vector
+//                        {
+//                            if(get<3>(paramIndex[0]) == 0) // place second param in the (first parm of second vector)
+//                            {
+//                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], generic));
+//                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),factDataT[0][i][get<1>(paramIndex[0])],keyParams[1]);
+//                                futures.push_back(async(launch::async,func));
+//                                cout << "Thread " << threadCount++ << " started" << endl;
+//                            }
+//                            else // place second param in the (second parm of second vector)
+//                            {
+//                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]),generic,factData[i][get<1>(paramIndex[0])]));
+//                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],factDataT[0][i][get<1>(paramIndex[0])]);
+//                                futures.push_back(async(launch::async,func));
+//                                cout << "Thread " << threadCount++ << " started" << endl;
+//                            }
+//                        }
+//                    }
+//                }
+//                else // there's no correlation between rule targets
+//                {
+                    // multi-threading
+                    auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
+                    futures.push_back(async(launch::async,func));
+                    cout << "Thread " << threadCount++ << " started" << endl;
+//                }
             }
             else // if rule is defined  // RECURSIVE CALL
             {
@@ -1290,7 +1368,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     for(int i=0; i< futures.size(); i++)
     {
         auto a = futures[i].get();
-        cout << "Thread " << i << "terminated\n";
+        cout << "Thread " << i << " terminated\n";
         //        for(int j=0; j< futures.size(); j++)
         //        inferData.push_back(futures[i][j].get());
         factDataT.push_back(a);

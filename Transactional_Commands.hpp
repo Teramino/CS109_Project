@@ -29,9 +29,7 @@ public:
     //changed it back to a non static vector due to linker errors
     vector<tuple<string,vector<string>>>& getFact(); // getter
     vector<tuple<string,vector<string>,vector<string>>>& getRule(); // getter
-   static Helper *help;
-//    void setHelp();
-//    Helper &getHelp();
+
     
     static void loadCommand(string);
     static void dumpCommand(string);

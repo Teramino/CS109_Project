@@ -18,7 +18,6 @@
 #include <iomanip>
 #include <thread>
 #include <future>
-//#include <boost/thread/thread.hpp>
 
 using namespace std;
 
