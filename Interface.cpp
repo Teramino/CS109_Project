@@ -554,7 +554,7 @@ void Interface:: run()
     
     
 //    Helper::instance()->parseCommand("INFERENCE GF($X,$Z)");
-//    Helper::instance()->parseCommand("INFERENCE PARENT($X,$Y)");
+    Helper::instance()->parseCommand("INFERENCE PARENT($X,$Y)");
     
 //    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
     
