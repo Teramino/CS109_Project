@@ -8,7 +8,7 @@ Helper:: Helper()
 {
     // new object
     tCommands = new Transactional_Commands;
-    f = &Helper::retrieveFact;
+    threadCount = 0;
 }
 
 
@@ -128,7 +128,7 @@ void Helper:: parseDefinition(char function, string def)
         
         r->parseKey(def); // Parent
         r->parseParams(def); // ($X,$Y)
-        r->parseDefition(def); // AND Father($X,$Y) Mother($X,$Y)
+        r->parseDefinition(def); // AND Father($X,$Y) Mother($X,$Y)
         
         // parse the key part of def, example being Father
         //        string key = parseKey(def);
@@ -1163,7 +1163,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 }
 
 // ===================================================================================
-// OP
+// OP Function
 // ===================================================================================
 //
 //
@@ -1175,13 +1175,39 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
+    vector<future<vector<vector<string>>>> futures;
+    int threadCount = 0;
     for(int i=0; i < rule.size(); i++)
     {
         if(logicalOp=="AND")
-            data.push_back(andOperator(key, keyParams, rule[i], fact));
+        {
+            auto func = bind(&Helper::andOperator,this,key, keyParams, rule[i], fact);
+            futures.push_back(async(launch::async,func));
+            cout << "Thread " << threadCount++ << " started\n";
+
+//            data.push_back(andOperator(key, keyParams, rule[i], fact));
+        }
         else if (logicalOp=="OR")
-            data.push_back(orOperator(key, keyParams, rule[i], fact));
+        {
+            auto func = bind(&Helper::orOperator,this,key, keyParams, rule[i], fact);
+            futures.push_back(async(launch::async,func));
+            cout << "Thread " << threadCount++ << " started\n";
+            
+//            data.push_back(orOperator(key, keyParams, rule[i], fact));
+        }
     }
+    for(int i=0; i < futures.size(); i++)
+    {
+        auto a = futures[i].get();
+//        futures[i].
+        
+        cout << "Thread " << i << " terminated\n";
+//        futures.erase (futures.begin(),futures.begin()+i);
+        
+        data.push_back(a);
+    }
+//    cout << endl;
+    
     return data;
 }
 
@@ -1204,8 +1230,11 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<vector<string>> factData;
     
     vector<vector<vector<string>>> factDataT;
-    vector<future<vector<vector<string>>>> futures;
-    int threadCount = 0;
+    vector<future<vector<vector<string>>>> futures; // theres an error if I dont have this variable created in here
+    // if i make it a member of helper there's a mutex error
+
+    
+//    int threadTemp = threadCount;
     
     bool ruleLeft = true;
     bool ruleRight = true;
@@ -1391,7 +1420,10 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     
     tempRelData.clear();
     
-    // looks at 2nd rule target and on
+    // ================================================================================================
+    // LOOKING AT SECOND RULE TARGET
+    // ================================================================================================
+    
     
     // this holds the corelation fact data from the rule target based on parameters
     //    vector<vector<string>> relationalData;
@@ -1456,7 +1488,11 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 //                {
                 // multi-threading
                 auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
-                futures.push_back(async(launch::async,func));
+                futures.push_back(async(launch::async,func,[](){
+                    cout << this_thread::get_id() << endl;
+//                    return 8;
+                }));
+//                cout << "Thread " << threadTemp++ << " started" << endl;
                 cout << "Thread " << threadCount++ << " started" << endl;
                 //                }
             }
@@ -1477,7 +1513,12 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
                     
                     auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),facts[i][1],paramData[1][1]);
-                    futures.push_back(async(launch::async,func));
+                    futures.push_back(async(launch::async,func,[](){
+                        cout << this_thread::get_id() << endl;
+                        //                    return 8;
+                    }));
+                    
+//                    cout << "Thread " << threadTemp++ << " started" << endl;
                     cout << "Thread " << threadCount++ << " started" << endl;
                 }
                 else
@@ -1485,7 +1526,20 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     //                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
                     //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
                     auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
-                    futures.push_back(async(launch::async,func));
+                    
+//                    promise<vector<vector<string>>> p;
+//                    auto f = p.get_future();
+//                    std::thread t(func, std::move(p));
+//                    t.join();
+//                    auto i = f.get();
+                    
+//                    thread t1(func);
+                    
+                    futures.push_back(async(launch::async,func,[](){
+                        cout << this_thread::get_id() << endl;
+                        //                    return 8;
+                    }));
+//                    cout << "Thread " << threadTemp++ << " started" << endl;
                     cout << "Thread " << threadCount++ << " started" << endl;
                 }
             }
@@ -1518,7 +1572,8 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     //    {
     //        f.get();
     //    }
-    for(int i=0; i< futures.size(); i++)
+//    for(int i=threadTemp; i==threadCount; i--)
+    for(int i=0; i < futures.size(); i++)
     {
         auto a = futures[i].get();
         cout << "Thread " << i << " terminated\n";

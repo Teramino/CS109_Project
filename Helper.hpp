@@ -19,7 +19,10 @@ private:
     
     Transactional_Commands* tCommands;
     static Helper * h_instance;
-    func f;
+    
+    // for threading
+    int threadCount;
+//    vector<future<vector<vector<string>>>> futures;
     
 public:
     ~Helper();

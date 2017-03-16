@@ -548,13 +548,15 @@ void Interface:: run()
     Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
     Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
     Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
+    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- OR FATHER($X,$Y) PARENT($X,$Y)");
     Helper::instance()->parseCommand("RULE GF($X,$Z):- OR FATHER($X,$Y) MOTHER($Z,$Y)");
     Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
     Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
     
     
 //    Helper::instance()->parseCommand("INFERENCE GF($X,$Z)");
-    Helper::instance()->parseCommand("INFERENCE PARENT($X,$Y)");
+//    Helper::instance()->parseCommand("INFERENCE PARENT($X,$Y)");
+    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
     
 //    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
     

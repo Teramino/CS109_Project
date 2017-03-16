@@ -54,7 +54,7 @@ void Rule:: parseParams(string input)
     pos = parsedInput.find(delimiter);
     parameters.push_back(parsedInput.substr(0, pos));
     
-    def = parameters;
+    keyParam = parameters;
 }
 
 void Rule:: parseDefinition(string input)
