@@ -70,12 +70,12 @@ void Transactional_Commands:: dropCommand(string command)
 
 void Transactional_Commands:: factCommand(string fact)
 {
-    Helper:: instance()->parseDefinition('f',fact);
+    Helper:: instance()->parseDeligate('f',fact);
 }
 
 void Transactional_Commands:: ruleCommand(string rule)
 {
-    Helper:: instance()->parseDefinition('r',rule);
+    Helper:: instance()->parseDeligate('r',rule);
 }
 
 typedef void (*command_operations)(string);

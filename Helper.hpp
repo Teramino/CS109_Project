@@ -41,14 +41,14 @@ public:
     vector<vector<string>> vectorCondense(vector<vector<vector<string>>>);
     vector<string> singleVecCondense(vector<vector<string>>);
     void parseCommand(string);
-    void parseDefinition(char,string);
-    vector<string> parseRuleParam(string);
-    string parseKey(string&);
+    void parseDeligate(char,string);
+//    vector<string> parseRuleParam(string);
+//    string parseKey(string&);
     vector<vector<string>> retrieveFact(string,string&,string&);
     tuple<string,string,vector<string>,vector<vector<string>>> retrieveRule(vector<string>,string);
-    vector<string> parseParams(string&);
+//    vector<string> parseParams(string&);
     vector<tuple<int,int,int,int>> paramCorr(vector<vector<string>>);
-    vector<string> dropDuplicates (vector<string>);
+    vector<string> dropDuplicates(vector<string>);
     
 };
 
