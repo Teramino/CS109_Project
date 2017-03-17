@@ -25,7 +25,6 @@ private:
     vector<future<vector<vector<string>>>> futures;
 //    vector<tuple<int,future<vector<vector<string>>>>> futures;
     string result_string; // result for server
-//    vector<future<vector<vector<string>>>> futures;
     
 public:
     ~Helper();
