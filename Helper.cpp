@@ -1488,6 +1488,14 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 //                {
                 // multi-threading
                 auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
+                
+//                promise<vector<vector<string>>> p;
+//                auto f = p.get_future();
+//                std::thread t(func, std::move(p));
+////                t.join();
+//                auto i = f.get();
+                
+                
                 futures.push_back(async(launch::async,func,[](){
                     cout << this_thread::get_id() << endl;
 //                    return 8;
@@ -1513,10 +1521,18 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
                     
                     auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),facts[i][1],paramData[1][1]);
-                    futures.push_back(async(launch::async,func,[](){
-                        cout << this_thread::get_id() << endl;
-                        //                    return 8;
-                    }));
+                    
+                    promise<vector<vector<string>>> p;
+                    auto f = p.get_future();
+                    std::thread t(func, std::move(p));
+//                    t.join();
+                    auto i = f.get();
+                    
+                    
+//                    futures.push_back(async(launch::async,func,[](){
+//                        cout << this_thread::get_id() << endl;
+//                        //                    return 8;
+//                    }));
                     
 //                    cout << "Thread " << threadTemp++ << " started" << endl;
                     cout << "Thread " << threadCount++ << " started" << endl;
@@ -1527,18 +1543,18 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
                     auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
                     
-//                    promise<vector<vector<string>>> p;
-//                    auto f = p.get_future();
-//                    std::thread t(func, std::move(p));
+                    promise<vector<vector<string>>> p;
+                    auto f = p.get_future();
+                    std::thread t(func, std::move(p));
 //                    t.join();
-//                    auto i = f.get();
+                    auto i = f.get();
                     
 //                    thread t1(func);
                     
-                    futures.push_back(async(launch::async,func,[](){
-                        cout << this_thread::get_id() << endl;
-                        //                    return 8;
-                    }));
+//                    futures.push_back(async(launch::async,func,[](){
+//                        cout << this_thread::get_id() << endl;
+//                        //                    return 8;
+//                    }));
 //                    cout << "Thread " << threadTemp++ << " started" << endl;
                     cout << "Thread " << threadCount++ << " started" << endl;
                 }
@@ -1828,7 +1844,9 @@ void Helper:: LoadHelp(string path)
         cerr << "Failed to load file\n";
     }
     // print to the interface
-    cout << endl << setw(20) << "File Loaded\n";
+    cout << "==============FILE LOADED==============\n";
+    cout << endl << setw(20) << path << endl;
+    cout << "=======================================\n";
     cout << "----------------------------------------" << endl << endl;
 }
 
@@ -1846,6 +1864,10 @@ void Helper:: LoadHelp(string path)
 
 void Helper:: dropBase(string command)
 {
+    
+    // Read ME
+    // When your dropping if a rule and fact is name the samed they will both be dropped
+    
     // iterates through the for loops
     int count = 0;
     // print to the interface drop information for user
