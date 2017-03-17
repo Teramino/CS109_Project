@@ -10,7 +10,11 @@
 class Interface{
     
 public:
-    void run(); 
+    // void run(); 
+    string start();
+    string display();
+    void test(char*);
+    string clientInput(char*);
 };
 
 #endif /* Interface_hpp */

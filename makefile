@@ -1,5 +1,5 @@
-all: Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Parse.o Rule.o
-	g++ -std=gnu++14 Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Parse.o Rule.o -pthread
+all: Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o
+	g++ -std=gnu++14 Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o -pthread
 
 Main.o: Main.cpp
 	g++ -std=gnu++14 -c Main.cpp
@@ -19,14 +19,23 @@ Fact.o: Fact.cpp
 Base.o: Base.cpp
 	g++ -std=gnu++14 -c Base.cpp
 
-Parse.o: Parse.cpp
-	g++ -std=gnu++14 -c Parse.cpp
-
 Rule.o: Rule.cpp
 	g++ -std=gnu++14 -c Rule.cpp
 
+server: server_stream.o
+	g++ -std=gnu++14 Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o server_stream.o
+
+server_stream.o: server_stream.cpp
+	g++ -std=gnu++14 -c server_stream.cpp
+
+client: client_stream.o
+	g++ -std=gnu++14 Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o client_stream.o
+
+client_stream.o: client_stream.cpp
+	g++ -std=gnu++14 -c client_stream.cpp
+
 clean:
-	rm Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Parse.o Rule.o
+	rm Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o server_stream.o client_stream.o
 
 wipe:
-	rm Main.o Helper.o Interface.o Transactional_Commands.o Main.cpp Helper.cpp Helper.hpp Interface.cpp Interface.hpp Transactional_Commands.cpp Transactional_Commands.hpp Common.hpp Fact.o Fact.cpp Fact.hpp Rule.o Rule.cpp Rule.hpp Parse.o Parse.cpp Parse.hpp Base.o Base.cpp Base.hpp
+	rm Main.o Helper.o Interface.o Transactional_Commands.o Main.cpp Helper.cpp Helper.hpp Interface.cpp Interface.hpp Transactional_Commands.cpp Transactional_Commands.hpp Common.hpp Fact.o Fact.cpp Fact.hpp Rule.o Rule.cpp Rule.hpp Base.o Base.cpp Base.hpp

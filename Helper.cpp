@@ -164,6 +164,7 @@ void Helper:: parseDeligate(char function, string def)
 
 void Helper:: ParseQuery(string rest)
 {
+    string s = "\n\n";
     vector<vector<string>> tempFacts;
     //    string key;
     string empty_string = "";
@@ -209,16 +210,21 @@ void Helper:: ParseQuery(string rest)
             vector<string> result = dropDuplicates(fact);
             
             cout << endl;
-            cout << "=================FACTS=================\n";
+            s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                // cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                s.append<int>(8,0x20);
+                s.append("[");
+                s.append(result[i]);
+                s.append("]\n");
             }
-            cout << "=======================================\n";
-            cout << "----------------------------------------" << endl << endl;
+            s.append("=======================================\n");
+            s.append("----------------------------------------");
         }
         else
         {
-            cout << "Whoops! Inference is not defined\n\n";
+            // cout << "Whoops! Inference is not defined\n\n";
+            s.append("Whoops! Inference is not defined");
         }
     }
     else
@@ -252,8 +258,10 @@ void Helper:: ParseQuery(string rest)
             cout << "Parameter(" << i << "): " << b.getDefinition()[i] << endl;
         }
         
-        cout << "Inference saved under: " << inferKey << endl;
-        
+        // cout << "Inference saved under: " << inferKey << endl;
+        s.append("Inference saved under: ");
+        s.append(inferKey);
+        s.append("\n");
         
         if (rule.size() == 0) // rule not defined
         {
@@ -280,18 +288,25 @@ void Helper:: ParseQuery(string rest)
             tCommands->getFacts().push_back(f);
             
             cout << endl;
-            cout << "=================FACTS=================\n";
+            s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                // cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                s.append<int>(8,0x20);
+                s.append("[");
+                s.append(result[i]);
+                s.append("]\n");
             }
-            cout << "=======================================\n";
-            cout << "----------------------------------------" << endl << endl;
+            s.append("=======================================\n");
+            s.append("----------------------------------------");
         }
         else
         {
-            cout << "Whoops! Inference is not defined\n\n";
+            // cout << "Whoops! Inference is not defined\n\n";
+            s.append("Whoops! Inference is not defined");
         }
     }
+    s.append("\n\n");
+    result_string.assign(s);
 }
 
 
@@ -1706,10 +1721,14 @@ void Helper:: DumpHelp(string path)
     {
         // open/create file
         file.open (f, ios::out);
-        cout << "===============FILE DUMP===============\n";
-        cout << setw(24) << f << endl;
-        cout << "=======================================\n";
-        cout << "----------------------------------------" << endl << endl;
+        // cout << "===============FILE DUMP===============\n";
+        // cout << setw(24) << f << endl;
+        // cout << "=======================================\n";
+        // cout << "----------------------------------------" << endl << endl;
+        result_string.assign("===============FILE DUMP===============\n");
+        result_string.append<int>(8,0x20);
+        result_string.append("\n=======================================\n");
+        result_string.append("----------------------------------------\n\n");
         if(Factbase.size() != 0)
         {
             for_each(Factbase.begin(), Factbase.end(),[&](decltype(*Factbase.begin()) fact) -> void // iterates through vector.  Lambda function.
@@ -1775,10 +1794,9 @@ void Helper:: DumpHelp(string path)
     }
     catch (ifstream::failure e)
     {
-        cerr << "Failed to dump file\n";
+        result_string.assign("Failed to dump file\n");
     }
-    cout <<"File has been saved"<<endl;
-    cout << endl;
+    result_string.append("File has been saved\n\n");
 }
 
 
@@ -1803,6 +1821,7 @@ void Helper:: LoadHelp(string path)
     string drop_string = "DROP";
     string dump_string = "DUMP";
     file.exceptions ( fstream::badbit );
+    string s;
     
     try
     {
@@ -1907,17 +1926,21 @@ void Helper:: LoadHelp(string path)
         }
         // close file
         file.close();
+        // print to the interface
+        s.append("\n===============FILE LOAD===============\n");
+        s.append<int>(8,0x20);
+        s.append(path);
+        s.append("\n");
+        s.append("=======================================\n");
+        s.append("----------------------------------------");
+        s.append("\n\n");
+        result_string.assign(s);
     }
     // failure
     catch (fstream::failure e)
     {
-        cerr << "Failed to load file\n";
+        result_string.assign("\n\nFailed to load file\n\n");
     }
-    // print to the interface
-    cout << "===============FILE LOAD===============\n";
-    cout << setw(24) << path << endl;
-    cout << "=======================================\n";
-    cout << "----------------------------------------" << endl << endl;
 }
 
 
@@ -1941,7 +1964,9 @@ void Helper:: dropBase(string command)
     // iterates through the for loops
     int count = 0;
     // print to the interface drop information for user
-    cout << "Dropping: " << command << endl;
+    // cout << "Dropping: " << command << endl;
+    result_string.assign("Dropping ");
+    result_string.append(command);
     // vector that contains the index within the fact vector to remove from
     vector<int> factIndex;
     // iterates through the facts in the KB searching for all instances of the target
@@ -1993,3 +2018,7 @@ void Helper:: dropBase(string command)
     }
 }
 
+string Helper::getString()
+{
+    return result_string;
+}
