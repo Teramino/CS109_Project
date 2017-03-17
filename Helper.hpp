@@ -6,6 +6,7 @@
 #include "Common.hpp"
 #include "Rule.hpp"
 #include "Fact.hpp"
+#include "Threading.hpp"
 
 class Transactional_Commands; // forward declaration
 
@@ -19,16 +20,21 @@ private:
     
     Transactional_Commands* tCommands;
     static Helper * h_instance;
+    vector<Threading*> threads;
+
     
     // for threading
-    int threadCount;
-    vector<future<vector<vector<string>>>> futures;
-//    vector<tuple<int,future<vector<vector<string>>>>> futures;
+   // int threadCount = 0;
+    int threadID = 0;
+    //vector<future<vector<vector<string>>>> futures;
+   // vector<tuple<int,future<vector<vector<string>>>>> futures;
     string result_string; // result for server
+    vector<Threading*> threadvec;
     
 public:
     ~Helper();
     static Helper * instance();
+    //int threadCount;
     
     string getString(); // returns string to interface to be sent to server/client socket
     void DumpHelp(string);

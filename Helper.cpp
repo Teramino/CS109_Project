@@ -8,7 +8,7 @@ Helper:: Helper()
 {
     // new object
     tCommands = new Transactional_Commands;
-    threadCount = 0;
+    //threadCount = 0;
 }
 
 
@@ -210,21 +210,21 @@ void Helper:: ParseQuery(string rest)
             vector<string> result = dropDuplicates(fact);
             
             cout << endl;
-             cout << "\n=================FACTS=================\n";
-//            s.append("\n=================FACTS=================\n");
+            cout << "\n=================FACTS=================\n";
+            //            s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                 cout << setw(13) << "[ " << result[i] << " ]" << endl;
-//                s.append("        ");
-//                s.append("[");
-//                s.append(result[i]);
-//                s.append("]\n");
+                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                //                s.append("        ");
+                //                s.append("[");
+                //                s.append(result[i]);
+                //                s.append("]\n");
             }
             
             cout <<"=======================================\n";
             cout <<"----------------------------------------";
             
-//            s.append("=======================================\n");
-//            s.append("----------------------------------------");
+            //            s.append("=======================================\n");
+            //            s.append("----------------------------------------");
         }
         else
         {
@@ -294,29 +294,29 @@ void Helper:: ParseQuery(string rest)
             
             cout << endl;
             cout << "\n=================FACTS=================\n";
-//            s.append("\n=================FACTS=================\n");
+            //            s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                 cout << setw(13) << "[ " << result[i] << " ]" << endl;
-//                s.append("        ");
-//                s.append("[");
-//                s.append(result[i]);
-//                s.append("]\n");
+                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                //                s.append("        ");
+                //                s.append("[");
+                //                s.append(result[i]);
+                //                s.append("]\n");
             }
             
             cout <<"=======================================\n";
             cout <<"----------------------------------------";
             
-//            s.append("=======================================\n");
-//            s.append("----------------------------------------");
+            //            s.append("=======================================\n");
+            //            s.append("----------------------------------------");
         }
         else
         {
-             cout << "Whoops! Inference is not defined\n\n";
-//            s.append("Whoops! Inference is not defined");
+            cout << "Whoops! Inference is not defined\n\n";
+            //            s.append("Whoops! Inference is not defined");
         }
     }
-//    s.append("\n\n");
-//    result_string.assign(s);
+    //    s.append("\n\n");
+    //    result_string.assign(s);
 }
 
 
@@ -1230,58 +1230,69 @@ vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,
 {
     vector<vector<vector<string>>> data;
     //    vector<future<vector<vector<string>>>> futures;
-    //    int threadCount = 0;
+    int threadCount = 0;
     for(int i=0; i < rule.size(); i++)
     {
         if(logicalOp=="AND")
         {
+            Threading *t = new Threading(++threadID);
+            ++threadCount;
             auto func = bind(&Helper::andOperator,this,key, keyParams, rule[i], fact);
             
-            //            tuple<int,future<vector<vector<string>>>> a;
-            //
+            //tuple<int,future<vector<vector<string>>>> a;
+            
             //            get<0>(a) = ++threadCount;
             //            get<1>(a) = async(launch::async,func);
-            //
-            //            futures.push_back(a);
             
-            futures.push_back(async(launch::async,func));
+            //futures.push_back(a);
             
-            cout << "Thread " << threadCount++ << " started\n";
+            t->getFutures() = async(launch::async,func);
+            threadvec.push_back(t);
+            
+            cout << "Thread " << t->getID() << " started\n";
+            
+            
             
             //            data.push_back(andOperator(key, keyParams, rule[i], fact));
         }
         else if (logicalOp=="OR")
         {
+            Threading *t = new Threading(++threadID);
+            ++threadCount;
             auto func = bind(&Helper::orOperator,this,key, keyParams, rule[i], fact);
             
-            //            tuple<int,future<vector<vector<string>>>> a;
+            //                        tuple<int,future<vector<vector<string>>>> a;
             //
-            //            get<0>(a) = ++threadCount;
-            //            get<1>(a) = async(launch::async,func);
+            //                        get<0>(a) = ++threadCount;
+            //                        get<1>(a) = async(launch::async,func);
             //
-            //            futures.push_back(a);
-            
-            futures.push_back(async(launch::async,func));
-            
-            cout << "Thread " << threadCount << " started\n";
+            //                        futures.push_back(a);
+            t->getFutures() = async(launch::async,func);
+            threadvec.push_back(t);
+            cout << "Thread " << t->getID() << " started\n";
             
             //            data.push_back(orOperator(key, keyParams, rule[i], fact));
         }
     }
     
-    for(int i=0; i < futures.size(); i++)
+    for(int i=threadvec.size()-1; i >= 0; i--)
     {
-        //        int a = get<0>(futures[i]);
-        //        auto b = get<1>(futures[i]).get(); // this ends the thread and returns any data from the function in future
-        
-        auto a = futures[i].get();
-        
-        //        cout << "Thread " << a << " terminated\n";
-        cout << "Thread " << i << " terminated\n";
-        //        futures.erase (futures.begin(),futures.begin()+i);
-        
-        //        data.push_back(b);
-        data.push_back(a);
+        //int a = get<0>(futures[i]);
+        //auto b = get<1>(futures[i]).get(); // this ends the thread and returns any data from the function in future
+        if (threadCount > 0)
+        {
+            auto a = threadvec[i]->getFutures().get();
+            //auto a = futures[i].get();
+            
+            //cout << "Thread " << a << " terminated\n";
+            cout << "Thread " << threadvec[i]->getID() << " terminated\n";
+            threadvec.pop_back();
+            threadCount--;
+            //        futures.erase (futures.begin(),futures.begin()+i);
+            
+            //      data.push_back(b);
+            data.push_back(a);
+        }
     }
     //    cout << endl;
     
@@ -1311,7 +1322,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     // if i make it a member of helper there's a mutex error
     
     
-    //    int threadTemp = threadCount;
+        int threadCount = 0;
     
     bool ruleLeft = true;
     bool ruleRight = true;
@@ -1399,6 +1410,11 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     //        {
     //            sameParam = true;
     //        }
+    
+    
+    // ================================================================================================
+    // LOOKING AT FIRST RULE TARGET
+    // ================================================================================================
     
     vector<vector<vector<string>>> tempRelData; // used to hold data from each fact temporarily
     b.parseKey(rule[0]);
@@ -1500,7 +1516,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     tempRelData.clear();
     
     // ================================================================================================
-    // LOOKING AT SECOND RULE TARGET
+    // LOOKING AT SECOND RULE TARGET AND BEYOND
     // ================================================================================================
     
     
@@ -1569,6 +1585,8 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 // multi-threading
                 Base b;
                 b.parseKey(rule[1]);
+                Threading *t = new Threading(++threadID);
+                ++threadCount;
                 auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
                 
                 //                promise<vector<vector<string>>> p;
@@ -1577,14 +1595,18 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 ////                t.join();
                 //                auto i = f.get();
                 
-                futures.push_back(async(launch::async,func));
+                //futures.push_back(async(launch::async,func));
                 
                 //                futures.push_back(async(launch::async,func,[](){
                 //                    cout << this_thread::get_id() << endl;
                 ////                    return 8;
                 //                }));
                 //                cout << "Thread " << threadTemp++ << " started" << endl;
-                cout << "Thread " << threadCount++ << " started" << endl;
+                
+                t->getFutures() = async(launch::async,func);
+                threadvec.push_back(t);
+                cout << "Thread " << t->getID() << " started\n";
+                //cout << "Thread " << threadCount++ << " started" << endl;
                 //                }
             }
             else // if rule is defined  // RECURSIVE CALL
@@ -1677,15 +1699,38 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     //    {
     //        f.get();
     //    }
-    //    for(int i=threadTemp; i==threadCount; i--)
-    for(int i=0; i < futures.size(); i++)
+    
+    
+    for(int i=threadvec.size()-1; i >= 0; i--)
     {
-        auto a = futures[i].get();
-        cout << "Thread " << i << " terminated\n";
-        //        for(int j=0; j< futures.size(); j++)
-        //        inferData.push_back(futures[i][j].get());
-        factDataT.push_back(a);
+        //int a = get<0>(futures[i]);
+        //auto b = get<1>(futures[i]).get(); // this ends the thread and returns any data from the function in future
+        if (threadCount > 0)
+        {
+            auto a = threadvec[i]->getFutures().get();
+            //auto a = futures[i].get();
+            
+            //cout << "Thread " << a << " terminated\n";
+            cout << "Thread " << threadvec[i]->getID() << " terminated\n";
+            threadvec.pop_back();
+            threadCount--;
+            //        futures.erase (futures.begin(),futures.begin()+i);
+            
+            //      data.push_back(b);
+            factDataT.push_back(a);
+        }
     }
+    
+    
+    //    for(int i=threadTemp; i==threadCount; i--)
+//    for(int i=0; i < futures.size(); i++)
+//    {
+//        auto a = futures[i].get();
+//        cout << "Thread " << i << " terminated\n";
+//        //        for(int j=0; j< futures.size(); j++)
+//        //        inferData.push_back(futures[i][j].get());
+//        factDataT.push_back(a);
+//    }
     
     for(int i=0; i<factDataT.size(); i++)
     {
@@ -2008,7 +2053,7 @@ void Helper:: dropBase(string command)
     
     for_each(tCommands->getRules().begin(), tCommands->getRules().end(),[&](decltype(*tCommands->getRules().begin()) rule) -> void // iterates through vector
              {
-                 //        for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
+                 // for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
                  //        {
                  // found a match
                  if (command.compare(rule->getKey()) == 0)
