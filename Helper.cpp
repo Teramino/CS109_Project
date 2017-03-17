@@ -213,7 +213,7 @@ void Helper:: ParseQuery(string rest)
             s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
                 // cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                s.append<int>(8,0x20);
+                s.append("        ");
                 s.append("[");
                 s.append(result[i]);
                 s.append("]\n");
@@ -291,7 +291,7 @@ void Helper:: ParseQuery(string rest)
             s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
                 // cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                s.append<int>(8,0x20);
+                s.append("        ");
                 s.append("[");
                 s.append(result[i]);
                 s.append("]\n");
@@ -1726,7 +1726,7 @@ void Helper:: DumpHelp(string path)
         // cout << "=======================================\n";
         // cout << "----------------------------------------" << endl << endl;
         result_string.assign("===============FILE DUMP===============\n");
-        result_string.append<int>(8,0x20);
+        result_string.append("        ");
         result_string.append("\n=======================================\n");
         result_string.append("----------------------------------------\n\n");
         if(Factbase.size() != 0)
@@ -1928,7 +1928,7 @@ void Helper:: LoadHelp(string path)
         file.close();
         // print to the interface
         s.append("\n===============FILE LOAD===============\n");
-        s.append<int>(8,0x20);
+        s.append("        ");
         s.append(path);
         s.append("\n");
         s.append("=======================================\n");

@@ -543,11 +543,11 @@ string Interface::clientInput(char* input)
 
 	string first_part_of_command = " ";//Stores the first part of the command, the type of command itself
 	string second_part_of_command;//Stores the second part of the command, the defenition of the command
-	int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
+	//int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
 
-	char endsession = '\0'; //Checks if the user wants to exit the program or not 
+	//char endsession = '\0'; //Checks if the user wants to exit the program or not
 	bool error_commited = false;//checks to see if an error is commited at all or not
-	bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
+	//bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
 	bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
 	bool second_half_error_commited = false;
 
@@ -579,9 +579,9 @@ string Interface::clientInput(char* input)
 			if (i == 6)//If you get to six, you are outside the size of the array, indicating you didn't type in one of the commands properly 
 			{
 				return "Error: You need to type in one of those six commands in all capital and proper spelling\n";
-				first_half_error_commited = true;
-				error_commited = true;
-				break;
+//				first_half_error_commited = true;
+//				error_commited = true;
+				//break;
 			}
 
 			if (first_part_of_command.compare(all_commands[i]) == 0)//if the user input for the first part matches the command, continue on
