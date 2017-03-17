@@ -1519,7 +1519,9 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 //                else // there's no correlation between rule targets
                 //                {
                 // multi-threading
-                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
+                Base b;
+                b.parseKey(rule[1]);
+                auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
                 
 //                promise<vector<vector<string>>> p;
 //                auto f = p.get_future();
@@ -1551,8 +1553,9 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 {
                     //                    tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
                     //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
-                    
-                    auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),facts[i][1],paramData[1][1]);
+                    Base b;
+                    b.parseKey(rule[1]);
+                    auto func = bind(&Helper::retrieveFact,this,b.getKey(),facts[i][1],paramData[1][1]);
                     
                     promise<vector<vector<string>>> p;
                     auto f = p.get_future();
@@ -1573,7 +1576,9 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 {
                     //                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
                     //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
-                    auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],keyParams[1]);
+                    Base b;
+                    b.parseKey(rule[1]);
+                    auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
                     
                     promise<vector<vector<string>>> p;
                     auto f = p.get_future();
