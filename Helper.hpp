@@ -22,7 +22,8 @@ private:
     
     // for threading
     int threadCount;
-//    vector<future<vector<vector<string>>>> futures;
+    vector<future<vector<vector<string>>>> futures;
+//    vector<tuple<int,future<vector<vector<string>>>>> futures;
     
 public:
     ~Helper();

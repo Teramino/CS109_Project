@@ -165,7 +165,7 @@ void Helper:: parseDeligate(char function, string def)
 void Helper:: ParseQuery(string rest)
 {
     vector<vector<string>> tempFacts;
-//    string key;
+    //    string key;
     string empty_string = "";
     string temp = "";
     // find the location of the space in our string
@@ -183,8 +183,8 @@ void Helper:: ParseQuery(string rest)
         b.parseKey(temp); // Father
         b.parseDefition(temp); // (Roger, John)
         
-//        parameters = parseParams(temp);
-//        key = parseKey(temp);
+        //        parameters = parseParams(temp);
+        //        key = parseKey(temp);
         auto opParams = retrieveRule(b.getDefinition(),b.getKey());
         vector<vector<string>> rule = get<3>(opParams);
         
@@ -223,7 +223,7 @@ void Helper:: ParseQuery(string rest)
     }
     else
     {
-//        cout << "else\n";
+        //        cout << "else\n";
         //there is an extra part of the string for inference.
         
         Base b;
@@ -234,15 +234,15 @@ void Helper:: ParseQuery(string rest)
         //        parameters = parseParams(temp);
         //        key = parseKey(temp);
         
-//        key = parseKey(temp); //parses our full string saved in temp to get key2 as Grandmother.
-//        
-//        parameters = parseParams(temp);
+        //        key = parseKey(temp); //parses our full string saved in temp to get key2 as Grandmother.
+        //
+        //        parameters = parseParams(temp);
         size_t space = rest.find(" ");
         space++;
         string inferKey = rest.substr (space); //Obtain the acronym (GF) as our key and save it for when we store the results in the fact vector.
         
-          auto opParams = retrieveRule(b.getDefinition(),b.getKey());
-//        auto opParams = retrieveRule(parameters,key);
+        auto opParams = retrieveRule(b.getDefinition(),b.getKey());
+        //        auto opParams = retrieveRule(parameters,key);
         vector<vector<string>> rule = get<3>(opParams);
         
         cout << "Key: " << b.getKey() << endl;
@@ -257,7 +257,7 @@ void Helper:: ParseQuery(string rest)
         
         if (rule.size() == 0) // rule not defined
         {
-//            cout << "Not defined!" << endl;
+            //            cout << "Not defined!" << endl;
             tempFacts = retrieveFact(b.getKey(), get<2>(opParams)[0], get<2>(opParams)[1]);
         }
         else // rule defined
@@ -310,10 +310,10 @@ void Helper:: ParseQuery(string rest)
 //    string delimiter = "(";
 //    size_t pos = 0; // position of delimiter
 //    string key = ""; // holds the key or fact name
-//    
+//
 //    pos = input.find(delimiter);
 //    key = input.substr(0, pos); // assings string from given input up to delimiter
-//    
+//
 //    return key;
 //}
 
@@ -332,19 +332,19 @@ void Helper:: ParseQuery(string rest)
 //    string delimiter = "(";
 //    string delimiter2 = ",";
 //    size_t pos = 0; // position of delimiter
-//    
+//
 //    vector<string> parameters; // holds each parameter
-//    
+//
 //    pos = input.find(delimiter); // find the
-//    
+//
 //    string temp = input.substr(0, pos);
-//    
+//
 //    // Print key
 //    //    cout << "Key: " << input.substr(0, pos) << endl;
 //    pos++; // eats delimiter;
-//    
+//
 //    string parsedInput = input.substr(pos, input.length());
-//    
+//
 //    while ((pos = parsedInput.find(delimiter2)) != string::npos)  // will loop through as many parameters except the last one
 //    {
 //        parameters.push_back(parsedInput.substr(0, pos));
@@ -360,7 +360,7 @@ void Helper:: ParseQuery(string rest)
 //    parameters.push_back(parsedInput.substr(0, pos));
 //    //    cout << "Parameter(" << count << "): " << parameters[parameters.size()-1] << endl;
 //    //    cout <<"----------------------------------------"<<endl;
-//    
+//
 //    return parameters;
 //}
 //
@@ -383,12 +383,12 @@ void Helper:: ParseQuery(string rest)
 //    //    cout << "Key: " << input.substr(0, pos) << endl;
 //    pos++; // eats up delimiter :
 //    pos++; // eats up delimiter -
-//    
+//
 //    delimiter = " ";
 //    pos++; // eats up delimiter ' '(space)
-//    
+//
 //    string parsedInput = input.substr(pos, input.length());
-//    
+//
 //    while ((pos = parsedInput.find(delimiter)) != string::npos)  // will loop through as many parameters except the last one
 //    {
 //        param.push_back(parsedInput.substr(0, pos));
@@ -396,13 +396,13 @@ void Helper:: ParseQuery(string rest)
 //        pos++; // eats delimiter
 //        parsedInput = parsedInput.substr(pos, input.length());
 //    }
-//    
+//
 //    delimiter = "\n";
 //    pos = parsedInput.find(delimiter);
 //    param.push_back(parsedInput.substr(0, pos));
 //    //    cout << "Parameter(" << count << "): " << param[param.size()-1] << endl;
 //    //    cout <<"----------------------------------------"<<endl;
-//    
+//
 //    return param;
 //}
 
@@ -967,7 +967,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             // check if rule target has a defined rule
             if(tempRule.size() == 0) // theres no defined rule
             {
-                 b.parseKey(rule[0]);
+                b.parseKey(rule[0]);
                 factData = retrieveFact(b.getKey(),keyParams[0],keyParams[1]);
             }
             else // rule defined // RECURSIVE CALL
@@ -1204,38 +1204,61 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
-    vector<future<vector<vector<string>>>> futures;
-    int threadCount = 0;
+    //    vector<future<vector<vector<string>>>> futures;
+    //    int threadCount = 0;
     for(int i=0; i < rule.size(); i++)
     {
         if(logicalOp=="AND")
         {
             auto func = bind(&Helper::andOperator,this,key, keyParams, rule[i], fact);
+            
+            //            tuple<int,future<vector<vector<string>>>> a;
+            //
+            //            get<0>(a) = ++threadCount;
+            //            get<1>(a) = async(launch::async,func);
+            //
+            //            futures.push_back(a);
+            
             futures.push_back(async(launch::async,func));
+            
             cout << "Thread " << threadCount++ << " started\n";
-
-//            data.push_back(andOperator(key, keyParams, rule[i], fact));
+            
+            //            data.push_back(andOperator(key, keyParams, rule[i], fact));
         }
         else if (logicalOp=="OR")
         {
             auto func = bind(&Helper::orOperator,this,key, keyParams, rule[i], fact);
-            futures.push_back(async(launch::async,func));
-            cout << "Thread " << threadCount++ << " started\n";
             
-//            data.push_back(orOperator(key, keyParams, rule[i], fact));
+            //            tuple<int,future<vector<vector<string>>>> a;
+            //
+            //            get<0>(a) = ++threadCount;
+            //            get<1>(a) = async(launch::async,func);
+            //
+            //            futures.push_back(a);
+            
+            futures.push_back(async(launch::async,func));
+            
+            cout << "Thread " << threadCount << " started\n";
+            
+            //            data.push_back(orOperator(key, keyParams, rule[i], fact));
         }
     }
+    
     for(int i=0; i < futures.size(); i++)
     {
+        //        int a = get<0>(futures[i]);
+        //        auto b = get<1>(futures[i]).get(); // this ends the thread and returns any data from the function in future
+        
         auto a = futures[i].get();
-//        futures[i].
         
+        //        cout << "Thread " << a << " terminated\n";
         cout << "Thread " << i << " terminated\n";
-//        futures.erase (futures.begin(),futures.begin()+i);
+        //        futures.erase (futures.begin(),futures.begin()+i);
         
+        //        data.push_back(b);
         data.push_back(a);
     }
-//    cout << endl;
+    //    cout << endl;
     
     return data;
 }
@@ -1261,9 +1284,9 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     vector<vector<vector<string>>> factDataT;
     vector<future<vector<vector<string>>>> futures; // theres an error if I dont have this variable created in here
     // if i make it a member of helper there's a mutex error
-
     
-//    int threadTemp = threadCount;
+    
+    //    int threadTemp = threadCount;
     
     bool ruleLeft = true;
     bool ruleRight = true;
@@ -1523,19 +1546,19 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 b.parseKey(rule[1]);
                 auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
                 
-//                promise<vector<vector<string>>> p;
-//                auto f = p.get_future();
-//                std::thread t(func, std::move(p));
-////                t.join();
-//                auto i = f.get();
+                //                promise<vector<vector<string>>> p;
+                //                auto f = p.get_future();
+                //                std::thread t(func, std::move(p));
+                ////                t.join();
+                //                auto i = f.get();
                 
                 futures.push_back(async(launch::async,func));
                 
-//                futures.push_back(async(launch::async,func,[](){
-//                    cout << this_thread::get_id() << endl;
-////                    return 8;
-//                }));
-//                cout << "Thread " << threadTemp++ << " started" << endl;
+                //                futures.push_back(async(launch::async,func,[](){
+                //                    cout << this_thread::get_id() << endl;
+                ////                    return 8;
+                //                }));
+                //                cout << "Thread " << threadTemp++ << " started" << endl;
                 cout << "Thread " << threadCount++ << " started" << endl;
                 //                }
             }
@@ -1558,20 +1581,20 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     b.parseKey(rule[1]);
                     auto func = bind(&Helper::retrieveFact,this,b.getKey(),facts[i][1],paramData[1][1]);
                     
-//                    promise<vector<vector<string>>> p;
-//                    auto f = p.get_future();
-//                    std::thread t(func, std::move(p));
-////                    t.join();
-//                    auto i = f.get();
+                    //                    promise<vector<vector<string>>> p;
+                    //                    auto f = p.get_future();
+                    //                    std::thread t(func, std::move(p));
+                    ////                    t.join();
+                    //                    auto i = f.get();
                     
                     futures.push_back(async(launch::async,func));
-                                      
-//                    futures.push_back(async(launch::async,func,[](){
-//                        cout << this_thread::get_id() << endl;
-//                        //                    return 8;
-//                    }));
                     
-//                    cout << "Thread " << threadTemp++ << " started" << endl;
+                    //                    futures.push_back(async(launch::async,func,[](){
+                    //                        cout << this_thread::get_id() << endl;
+                    //                        //                    return 8;
+                    //                    }));
+                    
+                    //                    cout << "Thread " << threadTemp++ << " started" << endl;
                     cout << "Thread " << threadCount++ << " started" << endl;
                 }
                 else
@@ -1582,21 +1605,21 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     b.parseKey(rule[1]);
                     auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
                     
-//                    promise<vector<vector<string>>> p;
-//                    auto f = p.get_future();
-//                    std::thread t(func, std::move(p));
-////                    t.join();
-//                    auto i = f.get();
+                    //                    promise<vector<vector<string>>> p;
+                    //                    auto f = p.get_future();
+                    //                    std::thread t(func, std::move(p));
+                    ////                    t.join();
+                    //                    auto i = f.get();
                     
-//                    thread t1(func);
+                    //                    thread t1(func);
                     
                     futures.push_back(async(launch::async,func));
                     
-//                    futures.push_back(async(launch::async,func,[](){
-//                        cout << this_thread::get_id() << endl;
-//                        //                    return 8;
-//                    }));
-//                    cout << "Thread " << threadTemp++ << " started" << endl;
+                    //                    futures.push_back(async(launch::async,func,[](){
+                    //                        cout << this_thread::get_id() << endl;
+                    //                        //                    return 8;
+                    //                    }));
+                    //                    cout << "Thread " << threadTemp++ << " started" << endl;
                     cout << "Thread " << threadCount++ << " started" << endl;
                 }
             }
@@ -1629,7 +1652,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     //    {
     //        f.get();
     //    }
-//    for(int i=threadTemp; i==threadCount; i--)
+    //    for(int i=threadTemp; i==threadCount; i--)
     for(int i=0; i < futures.size(); i++)
     {
         auto a = futures[i].get();
@@ -1823,7 +1846,7 @@ void Helper:: LoadHelp(string path)
                 //                    parameters = parseParams(l);
                 // store the fact
                 tCommands->getFacts().push_back(f);
-
+                
                 
                 //                    storeBase(tCommands->getFact(), parameters, key);
             }
@@ -1837,7 +1860,7 @@ void Helper:: LoadHelp(string path)
                 // set the value of the '('
                 size_t pos2 = l.find("(");
                 // holds the key or fact name
-                               string key = "";
+                string key = "";
                 // set pos2 to the index where the ( is located in the string
                 pos2 = l.find(delimiter);
                 // saves the relaton part of the string as key, so it can be passed to storeBase later
