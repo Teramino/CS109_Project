@@ -210,16 +210,21 @@ void Helper:: ParseQuery(string rest)
             vector<string> result = dropDuplicates(fact);
             
             cout << endl;
-            s.append("\n=================FACTS=================\n");
+             cout << "\n=================FACTS=================\n";
+//            s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                // cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                s.append("        ");
-                s.append("[");
-                s.append(result[i]);
-                s.append("]\n");
+                 cout << setw(13) << "[ " << result[i] << " ]" << endl;
+//                s.append("        ");
+//                s.append("[");
+//                s.append(result[i]);
+//                s.append("]\n");
             }
-            s.append("=======================================\n");
-            s.append("----------------------------------------");
+            
+            cout <<"=======================================\n";
+            cout <<"----------------------------------------";
+            
+//            s.append("=======================================\n");
+//            s.append("----------------------------------------");
         }
         else
         {
@@ -288,25 +293,30 @@ void Helper:: ParseQuery(string rest)
             tCommands->getFacts().push_back(f);
             
             cout << endl;
-            s.append("\n=================FACTS=================\n");
+            cout << "\n=================FACTS=================\n";
+//            s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                // cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                s.append("        ");
-                s.append("[");
-                s.append(result[i]);
-                s.append("]\n");
+                 cout << setw(13) << "[ " << result[i] << " ]" << endl;
+//                s.append("        ");
+//                s.append("[");
+//                s.append(result[i]);
+//                s.append("]\n");
             }
-            s.append("=======================================\n");
-            s.append("----------------------------------------");
+            
+            cout <<"=======================================\n";
+            cout <<"----------------------------------------";
+            
+//            s.append("=======================================\n");
+//            s.append("----------------------------------------");
         }
         else
         {
-            // cout << "Whoops! Inference is not defined\n\n";
-            s.append("Whoops! Inference is not defined");
+             cout << "Whoops! Inference is not defined\n\n";
+//            s.append("Whoops! Inference is not defined");
         }
     }
-    s.append("\n\n");
-    result_string.assign(s);
+//    s.append("\n\n");
+//    result_string.assign(s);
 }
 
 
