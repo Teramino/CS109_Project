@@ -10,7 +10,7 @@
 class Interface{
     
 public:
-//     void run(); 
+     void run(); 
     string start();
     string display();
     void test(char*);
