@@ -22,12 +22,14 @@ private:
     
     // for threading
     int threadCount;
+    string result_string; // result for server
 //    vector<future<vector<vector<string>>>> futures;
     
 public:
     ~Helper();
     static Helper * instance();
     
+    string getString(); // returns string to interface to be sent to server/client socket
     void DumpHelp(string);
     void LoadHelp(string);
     void ParseQuery(string);

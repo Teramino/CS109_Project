@@ -25,6 +25,18 @@ Parse.o: Parse.cpp
 Rule.o: Rule.cpp
 	g++ -std=gnu++14 -c Rule.cpp
 
+server: server_stream.o
+	g++ -std=gnu++14 Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Parse.o Rule.o server_stream.o
+
+server_stream.o: server_stream.cpp
+	g++ -std=gnu++14 -c server_stream.cpp
+
+client: client_stream.o
+	g++ -std=gnu++14 Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Parse.o Rule.o client_stream.o
+
+client_stream.o: client_stream.cpp
+	g++ -std=gnu++14 -c client_stream.cpp
+
 clean:
 	rm Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Parse.o Rule.o
 
