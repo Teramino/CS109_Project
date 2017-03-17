@@ -1529,11 +1529,12 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
 ////                t.join();
 //                auto i = f.get();
                 
+                futures.push_back(async(launch::async,func));
                 
-                futures.push_back(async(launch::async,func,[](){
-                    cout << this_thread::get_id() << endl;
-//                    return 8;
-                }));
+//                futures.push_back(async(launch::async,func,[](){
+//                    cout << this_thread::get_id() << endl;
+////                    return 8;
+//                }));
 //                cout << "Thread " << threadTemp++ << " started" << endl;
                 cout << "Thread " << threadCount++ << " started" << endl;
                 //                }
@@ -1557,13 +1558,14 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     b.parseKey(rule[1]);
                     auto func = bind(&Helper::retrieveFact,this,b.getKey(),facts[i][1],paramData[1][1]);
                     
-                    promise<vector<vector<string>>> p;
-                    auto f = p.get_future();
-                    std::thread t(func, std::move(p));
-//                    t.join();
-                    auto i = f.get();
+//                    promise<vector<vector<string>>> p;
+//                    auto f = p.get_future();
+//                    std::thread t(func, std::move(p));
+////                    t.join();
+//                    auto i = f.get();
                     
-                    
+                    futures.push_back(async(launch::async,func));
+                                      
 //                    futures.push_back(async(launch::async,func,[](){
 //                        cout << this_thread::get_id() << endl;
 //                        //                    return 8;
@@ -1580,13 +1582,15 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                     b.parseKey(rule[1]);
                     auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
                     
-                    promise<vector<vector<string>>> p;
-                    auto f = p.get_future();
-                    std::thread t(func, std::move(p));
-//                    t.join();
-                    auto i = f.get();
+//                    promise<vector<vector<string>>> p;
+//                    auto f = p.get_future();
+//                    std::thread t(func, std::move(p));
+////                    t.join();
+//                    auto i = f.get();
                     
 //                    thread t1(func);
+                    
+                    futures.push_back(async(launch::async,func));
                     
 //                    futures.push_back(async(launch::async,func,[](){
 //                        cout << this_thread::get_id() << endl;
