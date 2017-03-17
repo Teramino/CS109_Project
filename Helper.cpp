@@ -8,7 +8,7 @@ Helper:: Helper()
 {
     // new object
     tCommands = new Transactional_Commands;
-    threadCount = 0;
+    //threadCount = 0;
 }
 
 
@@ -1262,59 +1262,70 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
-    vector<future<vector<vector<string>>>> futures;
-    //    int threadCount = 0;
+    //    vector<future<vector<vector<string>>>> futures;
+    int threadCount = 0;
     for(int i=0; i < rule.size(); i++)
     {
         if(logicalOp=="AND")
         {
+            Threading *t = new Threading(++threadID);
+            ++threadCount;
             auto func = bind(&Helper::andOperator,this,key, keyParams, rule[i], fact);
             
-            //            tuple<int,future<vector<vector<string>>>> a;
-            //
+            //tuple<int,future<vector<vector<string>>>> a;
+            
             //            get<0>(a) = ++threadCount;
             //            get<1>(a) = async(launch::async,func);
-            //
-            //            futures.push_back(a);
             
-            futures.push_back(async(launch::async,func));
+            //futures.push_back(a);
             
-            cout << "Thread " << threadCount++ << " started\n";
+            t->getFutures() = async(launch::async,func);
+            threadvec.push_back(t);
+            
+            cout << "Thread " << t->getID() << " started\n";
+            
+            
             
             //            data.push_back(andOperator(key, keyParams, rule[i], fact));
         }
         else if (logicalOp=="OR")
         {
+            Threading *t = new Threading(++threadID);
+            ++threadCount;
             auto func = bind(&Helper::orOperator,this,key, keyParams, rule[i], fact);
             
-            //            tuple<int,future<vector<vector<string>>>> a;
+            //                        tuple<int,future<vector<vector<string>>>> a;
             //
-            //            get<0>(a) = ++threadCount;
-            //            get<1>(a) = async(launch::async,func);
+            //                        get<0>(a) = ++threadCount;
+            //                        get<1>(a) = async(launch::async,func);
             //
-            //            futures.push_back(a);
-            
-            futures.push_back(async(launch::async,func));
-            
-            cout << "Thread " << threadCount++ << " started\n";
+            //                        futures.push_back(a);
+            t->getFutures() = async(launch::async,func);
+            threadvec.push_back(t);
+            cout << "Thread " << t->getID() << " started\n";
             
             //            data.push_back(orOperator(key, keyParams, rule[i], fact));
         }
     }
     
-    for(int i=0; i < futures.size(); i++)
+    for(int i=threadvec.size()-1; i >= 0; i--)
     {
-        //        int a = get<0>(futures[i]);
-        //        auto b = get<1>(futures[i]).get(); // this ends the thread and returns any data from the function in future
-        
-        auto a = futures[i].get();
-        
-        //        cout << "Thread " << a << " terminated\n";
-        cout << "Thread " << i << " terminated\n";
-        //        futures.erase (futures.begin(),futures.begin()+i);
-        
-        //        data.push_back(b);
-        data.push_back(a);
+        //int a = get<0>(futures[i]);
+        //auto b = get<1>(futures[i]).get(); // this ends the thread and returns any data from the function in future
+        if (threadCount > 0)
+        {
+            auto a = threadvec[i]->getFutures().get();
+            //auto a = futures[i].get();
+            
+            //cout << "Thread " << a << " terminated\n";
+            cout << "Thread " << threadvec[i]->getID() << " terminated\n";
+            threadvec.pop_back();
+            threadCount--;
+            //        futures.erase (futures.begin(),futures.begin()+i);
+            
+            //      data.push_back(b);
+            data.push_back(a);
+        }
     }
     //    cout << endl;
     
@@ -1344,7 +1355,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     // if i make it a member of helper there's a mutex error
     
     
-    //    int threadTemp = threadCount;
+        int threadCount = 0;
     
     bool ruleLeft = true;
     bool ruleRight = true;
@@ -1410,7 +1421,9 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 ruleRight = false;
             }
         }
+        
     }
+    
     
     // this part of code doesnt do what I thought
     // keyParams needs to hold where params go on a recursion call, currently it doesnt
@@ -1424,6 +1437,17 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
             break;
         }
     }
+    
+    //    if(isGeneric)
+    //        if(keyParams[0][1] == keyParams[1][1])
+    //        {
+    //            sameParam = true;
+    //        }
+    
+    
+    // ================================================================================================
+    // LOOKING AT FIRST RULE TARGET
+    // ================================================================================================
     
     vector<vector<vector<string>>> tempRelData; // used to hold data from each fact temporarily
     b.parseKey(rule[0]);
@@ -1508,7 +1532,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     tempRelData.clear();
     
     // ================================================================================================
-    // LOOKING AT SECOND RULE TARGET
+    // LOOKING AT SECOND RULE TARGET AND BEYOND
     // ================================================================================================
     
     if (ruleRight == true) // right rule is valid
@@ -1523,88 +1547,136 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
                 auto tempRule = get<3>(tempTuple);
                 string generic = "$";
                 
-                if( tempRule.size() == 0) // if rule is not defined
+                //                if(get<0>(paramIndex[0]) != -1) // when code is able to take more than one parameter than the index will change from 0 to i
+                //                {
+                //                    for(int i=0; i < factDataT[0].size(); i++)
+                //                    {
+                //                        if(get<1>(paramIndex[0]) == 0) // means the first param in the first vector is being used for second vector
+                //                        {
+                //                            if(get<3>(paramIndex[0]) == 0) // place first param in the (first parm of second vector)
+                //                            {
+                //                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], generic));
+                //                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),factDataT[0][i][get<1>(paramIndex[0])],keyParams[1]);
+                //                                futures.push_back(async(launch::async,func));
+                //                                cout << "Thread " << threadCount++ << " started" << endl;
+                //                            }
+                //                            else // place first param in the (second parm of second vector)
+                //                            {
+                //                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]),generic,factData[i][get<1>(paramIndex[0])]));
+                //                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],factDataT[0][i][get<1>(paramIndex[0])]);
+                //                                futures.push_back(async(launch::async,func));
+                //                                cout << "Thread " << threadCount++ << " started" << endl;
+                //                            }
+                //                        }
+                //                        else if (get<1>(paramIndex[0]) == 1) // means the second param in the first vector is being used for second vector
+                //                        {
+                //                            if(get<3>(paramIndex[0]) == 0) // place second param in the (first parm of second vector)
+                //                            {
+                //                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]), factData[i][get<1>(paramIndex[0])], generic));
+                //                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),factDataT[0][i][get<1>(paramIndex[0])],keyParams[1]);
+                //                                futures.push_back(async(launch::async,func));
+                //                                cout << "Thread " << threadCount++ << " started" << endl;
+                //                            }
+                //                            else // place second param in the (second parm of second vector)
+                //                            {
+                //                                //                            relationalData.push_back(retrieveFact(parseKey(rule[1]),generic,factData[i][get<1>(paramIndex[0])]));
+                //                                auto func = bind(&Helper::retrieveFact,this,parseKey(rule[1]),keyParams[0],factDataT[0][i][get<1>(paramIndex[0])]);
+                //                                futures.push_back(async(launch::async,func));
+                //                                cout << "Thread " << threadCount++ << " started" << endl;
+                //                            }
+                //                        }
+                //                    }
+                //                }
+                //                else // there's no correlation between rule targets
+                //                {
+                // multi-threading
+                Base b;
+                b.parseKey(rule[1]);
+                Threading *t = new Threading(++threadID);
+                ++threadCount;
+                auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
+                
+                //                promise<vector<vector<string>>> p;
+                //                auto f = p.get_future();
+                //                std::thread t(func, std::move(p));
+                ////                t.join();
+                //                auto i = f.get();
+                
+                //futures.push_back(async(launch::async,func));
+                
+                //                futures.push_back(async(launch::async,func,[](){
+                //                    cout << this_thread::get_id() << endl;
+                ////                    return 8;
+                //                }));
+                //                cout << "Thread " << threadTemp++ << " started" << endl;
+                
+                t->getFutures() = async(launch::async,func);
+                threadvec.push_back(t);
+                cout << "Thread " << t->getID() << " started\n";
+                //cout << "Thread " << threadCount++ << " started" << endl;
+                //                }
+            }
+            else // if rule is defined  // RECURSIVE CALL
+            {
+                //            op(string logicalOp, string key, vector<string> keyParams, vector<vector<string> > rule, vector<vector<string> > fact)
+                //                tempRelData = opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData);
+                factDataT.push_back(vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData)));
+            }
+        }
+        else
+        {
+            for (int i=0; i<facts.size(); i++)
+            {
+                if(!isGeneric)
                 {
-                    // multi-threading
+                    //                    tempRelData.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
+                    //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), facts[i][1], paramData[1][1]));
                     Base b;
-                    b.parseKey(rule[i]);
-                    auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
+                    b.parseKey(rule[1]);
+                    auto func = bind(&Helper::retrieveFact,this,b.getKey(),facts[i][1],paramData[1][1]);
                     
-                    //                promise<vector<vector<string>>> p;
-                    //                auto f = p.get_future();
-                    //                std::thread t(func, std::move(p));
-                    ////                t.join();
-                    //                auto i = f.get();
+                    //                    promise<vector<vector<string>>> p;
+                    //                    auto f = p.get_future();
+                    //                    std::thread t(func, std::move(p));
+                    ////                    t.join();
+                    //                    auto i = f.get();
                     
                     futures.push_back(async(launch::async,func));
                     
-                    //                futures.push_back(async(launch::async,func,[](){
-                    //                    cout << this_thread::get_id() << endl;
-                    ////                    return 8;
-                    //                }));
-                    //                cout << "Thread " << threadTemp++ << " started" << endl;
+                    //                    futures.push_back(async(launch::async,func,[](){
+                    //                        cout << this_thread::get_id() << endl;
+                    //                        //                    return 8;
+                    //                    }));
+                    
+                    //                    cout << "Thread " << threadTemp++ << " started" << endl;
                     cout << "Thread " << threadCount++ << " started" << endl;
-                    //                }
                 }
                 else // if rule is defined  // RECURSIVE CALL
                 {
-                    factDataT.push_back(vectorCondense(opFunction(get<0>(tempTuple), get<1>(tempTuple), keyParams, tempRule, factData)));
+                    //                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
+                    //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
+                    Base b;
+                    b.parseKey(rule[1]);
+                    auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
+                    
+                    //                    promise<vector<vector<string>>> p;
+                    //                    auto f = p.get_future();
+                    //                    std::thread t(func, std::move(p));
+                    ////                    t.join();
+                    //                    auto i = f.get();
+                    
+                    //                    thread t1(func);
+                    
+                    futures.push_back(async(launch::async,func));
+                    
+                    //                    futures.push_back(async(launch::async,func,[](){
+                    //                        cout << this_thread::get_id() << endl;
+                    //                        //                    return 8;
+                    //                    }));
+                    //                    cout << "Thread " << threadTemp++ << " started" << endl;
+                    cout << "Thread " << threadCount++ << " started" << endl;
                 }
             }
-            else
-            {
-                for (int j=0; j<facts.size(); j++)
-                {
-                    if(!isGeneric)
-                    {
-                        Base b;
-                        b.parseKey(rule[i]);
-                        auto func = bind(&Helper::retrieveFact,this,b.getKey(),facts[j][1],paramData[1][1]);
-                        
-                        //                    promise<vector<vector<string>>> p;
-                        //                    auto f = p.get_future();
-                        //                    std::thread t(func, std::move(p));
-                        ////                    t.join();
-                        //                    auto i = f.get();
-                        
-                        futures.push_back(async(launch::async,func));
-                        
-                        //                    futures.push_back(async(launch::async,func,[](){
-                        //                        cout << this_thread::get_id() << endl;
-                        //                        //                    return 8;
-                        //                    }));
-                        
-                        //                    cout << "Thread " << threadTemp++ << " started" << endl;
-                        cout << "Thread " << threadCount++ << " started" << endl;
-                    }
-                    else
-                    {
-                        //                    relationalData = retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]);
-                        //                    factDataT.push_back(retrieveFact(parseKey(rule[1]), keyParams[0], keyParams[1]));
-                        Base b;
-                        b.parseKey(rule[i]);
-                        auto func = bind(&Helper::retrieveFact,this,b.getKey(),keyParams[0],keyParams[1]);
-                        
-                        //                    promise<vector<vector<string>>> p;
-                        //                    auto f = p.get_future();
-                        //                    std::thread t(func, std::move(p));
-                        ////                    t.join();
-                        //                    auto i = f.get();
-                        
-                        //                    thread t1(func);
-                        
-                        futures.push_back(async(launch::async,func));
-                        
-                        //                    futures.push_back(async(launch::async,func,[](){
-                        //                        cout << this_thread::get_id() << endl;
-                        //                        //                    return 8;
-                        //                    }));
-                        //                    cout << "Thread " << threadTemp++ << " started" << endl;
-                        cout << "Thread " << threadCount++ << " started" << endl;
-                    }
-                }
-            }
-            
         }
     }
     
@@ -1612,14 +1684,26 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     //    {
     //        f.get();
     //    }
-    //    for(int i=threadTemp; i==threadCount; i--)
-    for(int i=0; i < futures.size(); i++)
+    
+    
+    for(int i=threadvec.size()-1; i >= 0; i--)
     {
-        auto a = futures[i].get();
-        cout << "Thread " << i << " terminated\n";
-        //        for(int j=0; j< futures.size(); j++)
-        //        inferData.push_back(futures[i][j].get());
-        factDataT.push_back(a);
+        //int a = get<0>(futures[i]);
+        //auto b = get<1>(futures[i]).get(); // this ends the thread and returns any data from the function in future
+        if (threadCount > 0)
+        {
+            auto a = threadvec[i]->getFutures().get();
+            //auto a = futures[i].get();
+            
+            //cout << "Thread " << a << " terminated\n";
+            cout << "Thread " << threadvec[i]->getID() << " terminated\n";
+            threadvec.pop_back();
+            threadCount--;
+            //        futures.erase (futures.begin(),futures.begin()+i);
+            
+            //      data.push_back(b);
+            factDataT.push_back(a);
+        }
     }
     
     for(int i=0; i<factDataT.size(); i++)
@@ -1943,7 +2027,7 @@ void Helper:: dropBase(string command)
     
     for_each(tCommands->getRules().begin(), tCommands->getRules().end(),[&](decltype(*tCommands->getRules().begin()) rule) -> void // iterates through vector
              {
-                 //        for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
+                 // for(vector<tuple<string,vector<string>,vector<string>>>::iterator i = tCommands->getRule().begin(); i != tCommands->getRule().end(); i++) // iterates through vector
                  //        {
                  // found a match
                  if (command.compare(rule->getKey()) == 0)
