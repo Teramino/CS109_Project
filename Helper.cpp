@@ -212,7 +212,7 @@ void Helper:: ParseQuery(string rest)
             cout << endl;
             s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                // cout << setw(13) << "[ " << result[i] << " ]" << endl;
                 s.append<int>(8,0x20);
                 s.append("[");
                 s.append(result[i]);
@@ -223,7 +223,7 @@ void Helper:: ParseQuery(string rest)
         }
         else
         {
-            cout << "Whoops! Inference is not defined\n\n";
+            // cout << "Whoops! Inference is not defined\n\n";
             s.append("Whoops! Inference is not defined");
         }
     }
@@ -290,7 +290,7 @@ void Helper:: ParseQuery(string rest)
             cout << endl;
             s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                cout << setw(13) << "[ " << result[i] << " ]" << endl;
+                // cout << setw(13) << "[ " << result[i] << " ]" << endl;
                 s.append<int>(8,0x20);
                 s.append("[");
                 s.append(result[i]);
@@ -301,7 +301,7 @@ void Helper:: ParseQuery(string rest)
         }
         else
         {
-            cout << "Whoops! Inference is not defined\n\n";
+            // cout << "Whoops! Inference is not defined\n\n";
             s.append("Whoops! Inference is not defined");
         }
     }

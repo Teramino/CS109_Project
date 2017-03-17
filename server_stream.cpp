@@ -130,6 +130,7 @@ void *connection_handler(void *sock) {
 					if ( bytes_read > 0 ) 
 					{
 						// printf ("Received Message from %s:%d\n%s\n",(char *)inet_ntoa(clientAddr.sin_addr),clientAddr.sin_port,buffer);
+						cout << "\n----------------------------------------\n";
 						printf ("Received Message: %s\n",buffer);
 				        s = i.clientInput(buffer);
 				        c = s.c_str();
