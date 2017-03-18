@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <string>
+
 using namespace std;
 
 Interface i;
@@ -69,12 +71,21 @@ void *connection(void *sock)
         bytes_read = recv (newsock,buffer,maxBytes,0);
         if ( toupper(*buffer) == 'Q' )
         {
+//            string quit = buffer;
+//            for(int i=0; i<quit.length(); i++)
+//                quit[i] = toupper(quit[i]);
+//            
+//            if(quit.compare("QUIT"))
+//            {
+        
             stop = true;
             cout << "Client disconnected.\n";
             i.clientInput(buffer);
             strcpy(buffer, "Disconnected.\n");
             send(newsock,buffer,maxBytes,0);
-            close(newsock);
+                close(newsock);
+//            }
+            
         }
         else
         {

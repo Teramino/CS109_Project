@@ -390,7 +390,7 @@ string Interface::start(void)
 
 string Interface::display(void)
 {
-	return "Please enter one of the six commands with their proper content:\n-FACT(store in a fact)\n-RULE(store in a rule)\n-LOAD(load in a file)\n-INFERENCE(issue a query)\n-DUMP(download all facts and rule into a file)\n-DROP(remove a fact or rule)\n-QUIT(end the session)\n\nEnter here: ";	
+	return "Please enter one of the six commands with their proper content:\n=======================================\n-FACT(store in a fact)\n-RULE(store in a rule)\n-LOAD(load in a file)\n-INFERENCE(issue a query)\n-DUMP(download all facts and rule into a file)\n-DROP(remove a fact or rule)\n-QUIT(end the session)\n=======================================\n\nEnter here: ";
 }
 
 

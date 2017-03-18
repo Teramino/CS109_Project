@@ -40,9 +40,6 @@ public:
     void DumpHelp(string);
     void LoadHelp(string);
     void ParseQuery(string);
-    void storeBase(vector<tuple<string,vector<string>>>&,vector<string>&,string);
-    void storeBase(vector<tuple<string,vector<string>,vector<string>>>&,vector<string>&,string,vector<string>);
-    //void getBase(vector<tuple<string,vector<string>>>&,string);
     void dropBase(string);
     vector<vector<vector<string>>> opFunction(string,string,vector<string>,vector<vector<string>>,vector<vector<string>>);
     vector<vector<string>> andOperator(string,vector<string>,vector<string>,vector<vector<string>>);
@@ -51,11 +48,8 @@ public:
     vector<string> singleVecCondense(vector<vector<string>>);
     void parseCommand(string);
     void parseDeligate(char,string);
-//    vector<string> parseRuleParam(string);
-//    string parseKey(string&);
     vector<vector<string>> retrieveFact(string,string&,string&);
-    tuple<string,string,vector<string>,vector<vector<string>>> retrieveRule(vector<string>,string);
-//    vector<string> parseParams(string&);
+    tuple<string,string,vector<string>,vector<vector<string>>> retrieveRule(vector<string>,string);;
     vector<tuple<int,int,int,int>> paramCorr(vector<vector<string>>);
     vector<vector<string>> dropDuplicates(vector<string>);
     
