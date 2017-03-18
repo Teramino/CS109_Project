@@ -393,10 +393,6 @@ string Interface::display(void)
 	return "Please enter one of the six commands with their proper content:\n-FACT(store in a fact)\n-RULE(store in a rule)\n-LOAD(load in a file)\n-INFERENCE(issue a query)\n-DUMP(download all facts and rule into a file)\n-DROP(remove a fact or rule)\n-QUIT(end the session)\nEnter here: ";	
 }
 
-void Interface::test(char* c)
-{
-	cout << "c = " << c << endl;
-}
 
 string Interface::clientInput(char* input)
 {
@@ -411,7 +407,7 @@ string Interface::clientInput(char* input)
 	//char endsession = '\0'; //Checks if the user wants to exit the program or not
 	bool error_commited = false;//checks to see if an error is commited at all or not
 	//bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
-	bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
+	//bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
 	bool second_half_error_commited = false;
 
 	string all_commands[6] = { "FACT", "RULE", "DROP", "INFERENCE", "LOAD", "DUMP" };//All the commands the user can type in
@@ -497,7 +493,7 @@ string Interface::clientInput(char* input)
 			}
 		}
 
-		if (!first_half_error_commited && !second_half_error_commited)//If there are no errors in the input, pass it into the function
+		if (/*!first_half_error_commited && */!second_half_error_commited)//If there are no errors in the input, pass it into the function
 		{
 			string total_command = first_part_of_command + " " + second_part_of_command;
 			Helper::instance()->parseCommand(total_command);

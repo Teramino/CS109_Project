@@ -1913,7 +1913,7 @@ void Helper:: LoadHelp(string path)
         s.append(path);
         s.append("\n=======================================\n");
         cout <<"=======================================\n\n";
-        s.append("\n\n");
+        s.append("\n");
         result_string.assign(s);
     }
     // failure
@@ -1943,10 +1943,23 @@ void Helper:: dropBase(string command)
     
     // iterates through the for loops
     int count = 0;
+    string s;
     // print to the interface drop information for user
     // cout << "Dropping: " << command << endl;
-    result_string.assign("Dropping ");
-    result_string.append(command);
+    
+    s.append("----------------------------------------\n");
+    cout << "----------------------------------------\n";
+    s.append("\n===============COMMAND DROPPED=========\n");
+    cout << "\n===============COMMAND DROPPED=========\n";
+    s.append("Dropping: ");
+    cout << "Dropping: " << command << endl;
+    result_string.append("         ");
+    s.append(command);
+    s.append("\n=======================================\n");
+    cout <<"=======================================\n\n";
+    s.append("\n");
+    result_string.assign(s);
+    
     // vector that contains the index within the fact vector to remove from
     vector<int> factIndex;
     // iterates through the facts in the KB searching for all instances of the target
