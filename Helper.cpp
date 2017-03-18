@@ -142,7 +142,7 @@ void Helper:: parseDeligate(char function, string def)
         
         s.append("----------------------------------------\n");
         s.append("\n===============RULE====================\n");
-        s.append("Fact: '");
+        s.append("Rule: '");
         result_string.append("         ");
         s.append(def);
         s.append("' stored");
