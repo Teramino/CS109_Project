@@ -217,7 +217,7 @@ void Helper:: ParseQuery(string rest)
             for(int i=0; i < result.size(); i++)  //prints out final vector with no duplicates.
             {
                 cout << setw(13) << "[ ";
-                s.append("["); s.append("        ");
+                s.append("        "); s.append("["); s.append("  ");
                 
                 for(int j=0; j < result[i].size(); j++)
                 {
@@ -232,6 +232,7 @@ void Helper:: ParseQuery(string rest)
                     //                s.append("]\n");
                 }
                 cout << "]" << endl;
+                s.append("  ");
                 s.append("]\n");
             }
             
@@ -365,7 +366,7 @@ void Helper:: ParseQuery(string rest)
             for(int i=0; i < result.size(); i++)  //prints out final vector with no duplicates.
             {
                 cout << setw(13) << "[ ";
-                s.append("["); s.append("        ");
+                s.append("        "); s.append("["); s.append("  ");
                 
                 for(int j=0; j < result[i].size(); j++)
                 {
@@ -380,6 +381,7 @@ void Helper:: ParseQuery(string rest)
 //                s.append("]\n");
             }
             cout << "]" << endl;
+            s.append("  ");
             s.append("]\n");
             }
             

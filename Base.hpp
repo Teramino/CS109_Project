@@ -24,8 +24,7 @@ public:
     
     virtual void parseKey(string);
     virtual void parseDefition(string input);
-//    virtual void storeBase(string k, vector<string> def);
-//    virtual void dropBase(string command)=0;
+
     
     void setKey(string);
     void setDefintion(vector<string>);
