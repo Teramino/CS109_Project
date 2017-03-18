@@ -256,26 +256,97 @@ void Helper:: ParseQuery(string rest)
         
         if (tempFacts.size() != 0)
         {
-            vector<string> fact = singleVecCondense(tempFacts);
-            vector<string> result = dropDuplicates(fact);
+            // danielle
+            // //            storeBase(tCommands->getFact(), fact, inferKey);
+            // for (int i = 0; i < tempFacts.size(); i++ )
+            // {
+            //     cout << "outside vector\n";
+            //     for ( int j = 0; j < tempFacts[i].size(); j++ )
+            //     {
+            //         cout << "inside vector: " << tempFacts[i][j] << endl;
+
+            //     }
+            // }
+            // // vector<string> fact = singleVecCondense(tempFacts);
+            // // vector<string> result = dropDuplicates(fact);
+            // cout <<"----------------------------------------\n";
+            // s.append("----------------------------------------\n");
+            // cout << "\n=================FACTS=================\n";
+            // s.append("\n=================FACTS=================\n");
+            // for ( int i = 0; i < tempfacts.size(); i++ )
+            // {
+
+            // // vector<string> fact = singleVecCondense(tempFacts);
+            // vector<string> result = tempfacts[i];
+            // Fact *f = new Fact();
             
+            // f->setKey(inferKey);
+            // f->setDefintion(result);
+            
+            // tCommands->getFacts().push_back(f);
+            // cout << setw(13) << "[ " << result[i] << " ]" << endl;
+            //                    s.append("        ");
+            //                    s.append("[");
+            //                    s.append(result[i]);
+            //                    s.append("]\n");
+            // }
+            // //            cout << endl;
+            
+            // // for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
+            // //     cout << setw(13) << "[ " << result[i] << " ]" << endl;
+            // //                    s.append("        ");
+            // //                    s.append("[");
+            // //                    s.append(result[i]);
+            // //                    s.append("]\n");
+            // // }
+            
+            // cout <<"=======================================\n";
+            // //            cout <<"----------------------------------------\n\n";
+            
+            // s.append("=======================================\n\n");
+            // //            s.append("----------------------------------------\n\n");
+
+
+
+
+
+            // old stuff
+            //            storeBase(tCommands->getFact(), fact, inferKey);
+            for (int i = 0; i < tempFacts.size(); i++ )
+            {
+                cout << "outside vector\n";
+                for ( int j = 0; j < tempFacts[i].size(); j++ )
+                {
+                    cout << "inside vector: " << tempFacts[i][j] << endl;
+
+                }
+            }
+            // vector<string> fact = singleVecCondense(tempFacts);
+            // vector<string> result = dropDuplicates(fact);
+            
+            for ( int i = 0; i < tempfacts.size(); i++ )
+            {
+
+            // vector<string> fact = singleVecCondense(tempFacts);
+            vector<string> result = tempfacts[i];
             Fact *f = new Fact();
             
             f->setKey(inferKey);
             f->setDefintion(result);
             
             tCommands->getFacts().push_back(f);
-            
+            }
+            //            cout << endl;
             cout <<"----------------------------------------\n";
             s.append("----------------------------------------\n");
             cout << "\n=================FACTS=================\n";
             s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
                 cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                s.append("        ");
-                s.append("[");
-                s.append(result[i]);
-                s.append("]\n");
+                               s.append("        ");
+                               s.append("[");
+                               s.append(result[i]);
+                               s.append("]\n");
             }
             
             cout <<"=======================================\n";
@@ -943,18 +1014,18 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 //
 //
 // ===================================================================================
-vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
+vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> ruleDef,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
     //    vector<future<vector<vector<string>>>> futures;
     int threadCount = 0;
-    for(int i=0; i < rule.size(); i++)
+    for(int i=0; i < ruleDef.size(); i++)
     {
         if(logicalOp=="AND")
         {
             Threading *t = new Threading(++threadID);
             ++threadCount;
-            auto func = bind(&Helper::andOperator,this,key, keyParams, rule[i], fact);
+            auto func = bind(&Helper::andOperator,this,key, keyParams, ruleDef[i], fact);
             
             //tuple<int,future<vector<vector<string>>>> a;
             
@@ -976,7 +1047,7 @@ vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,
         {
             Threading *t = new Threading(++threadID);
             ++threadCount;
-            auto func = bind(&Helper::orOperator,this,key, keyParams, rule[i], fact);
+            auto func = bind(&Helper::orOperator,this,key, keyParams, ruleDef[i], fact);
             
             //                        tuple<int,future<vector<vector<string>>>> a;
             //
@@ -1403,7 +1474,7 @@ void Helper:: DumpHelp(string path)
                                  temp.append(")");
                              }
                          }
-                         file << temp <<endl;
+                            file << temp <<endl;
                      });
         }
         else
@@ -1431,14 +1502,15 @@ void Helper:: DumpHelp(string path)
                                  logicalOperater = rule->getDefinition()[i]; // holds the operator
                                  temp.append(logicalOperater + " ");
                              }
-                             else if (i <= rule->getDefinition().size()-1)
+                             else if (i < rule->getDefinition().size()-1)
                              {
                                  temp.append(rule->getDefinition()[i] + " ");
                              }
+                             else if (i == rule->getDefinition().size()-1) //Dont add extra space
+                             {
+                                 temp.append(rule->getDefinition()[i]); //
+                             }
                          }
-                         
-                         
-                         
                          file << temp << endl;
                      });
         }
