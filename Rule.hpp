@@ -26,8 +26,7 @@ public:
     virtual void parseDefinition(string);
     virtual void storeBase(string,vector<string>,vector<string>);
     
-    
-    void setParam(vector<string>);
+   
     vector<string> getKeyParam();
     
 };
