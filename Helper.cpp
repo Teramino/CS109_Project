@@ -264,21 +264,21 @@ void Helper:: ParseQuery(string rest)
             //     for ( int j = 0; j < tempFacts[i].size(); j++ )
             //     {
             //         cout << "inside vector: " << tempFacts[i][j] << endl;
-
+            
             //     }
             // }
-            // // vector<string> fact = singleVecCondense(tempFacts);
-            // // vector<string> result = dropDuplicates(fact);
+//            vector<string> fact = singleVecCondense(tempFacts);
+//            vector<string> result = dropDuplicates(fact);
             // cout <<"----------------------------------------\n";
             // s.append("----------------------------------------\n");
             // cout << "\n=================FACTS=================\n";
             // s.append("\n=================FACTS=================\n");
             // for ( int i = 0; i < tempfacts.size(); i++ )
             // {
-
-            // // vector<string> fact = singleVecCondense(tempFacts);
-            // vector<string> result = tempfacts[i];
-            // Fact *f = new Fact();
+            
+            // vector<string> fact = singleVecCondense(tempFacts);
+            //             vector<string> result = tempfacts[i];
+            //             Fact *f = new Fact();
             
             // f->setKey(inferKey);
             // f->setDefintion(result);
@@ -305,48 +305,32 @@ void Helper:: ParseQuery(string rest)
             
             // s.append("=======================================\n\n");
             // //            s.append("----------------------------------------\n\n");
-
-
-
-
-
-            // old stuff
-            //            storeBase(tCommands->getFact(), fact, inferKey);
-            for (int i = 0; i < tempFacts.size(); i++ )
-            {
-                cout << "outside vector\n";
-                for ( int j = 0; j < tempFacts[i].size(); j++ )
-                {
-                    cout << "inside vector: " << tempFacts[i][j] << endl;
-
-                }
-            }
-            // vector<string> fact = singleVecCondense(tempFacts);
-            // vector<string> result = dropDuplicates(fact);
             
-            for ( int i = 0; i < tempfacts.size(); i++ )
-            {
-
-            // vector<string> fact = singleVecCondense(tempFacts);
-            vector<string> result = tempfacts[i];
+            
+            
+            
+            
+            // old stuff
+            vector<string> fact = singleVecCondense(tempFacts);
+            vector<string> result = dropDuplicates(fact);
+            
             Fact *f = new Fact();
             
             f->setKey(inferKey);
             f->setDefintion(result);
             
             tCommands->getFacts().push_back(f);
-            }
-            //            cout << endl;
+            
             cout <<"----------------------------------------\n";
             s.append("----------------------------------------\n");
             cout << "\n=================FACTS=================\n";
             s.append("\n=================FACTS=================\n");
             for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
                 cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                               s.append("        ");
-                               s.append("[");
-                               s.append(result[i]);
-                               s.append("]\n");
+                s.append("        ");
+                s.append("[");
+                s.append(result[i]);
+                s.append("]\n");
             }
             
             cout <<"=======================================\n";
@@ -990,7 +974,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
                         }// end for
                         
                         if(inferDataTemp.size() != 0)
-                        inferData.push_back(inferDataTemp);
+                            inferData.push_back(inferDataTemp);
                         inferDataTemp.clear();
                         
                     }// end for
@@ -1474,7 +1458,7 @@ void Helper:: DumpHelp(string path)
                                  temp.append(")");
                              }
                          }
-                            file << temp <<endl;
+                         file << temp <<endl;
                      });
         }
         else
