@@ -91,6 +91,7 @@ void Helper::parseCommand(string user_input)
 
 void Helper:: parseDeligate(char function, string def)
 {
+    string s;
     // char acts as a tag for our function so that def can go through the proper conditional branch
     // def represents the entire string without the command, example being Father(Roger, John)
     if (function=='f')
@@ -109,6 +110,16 @@ void Helper:: parseDeligate(char function, string def)
         
         tCommands->getFacts().push_back(f);
         cout << "----------------------------------------" << endl << endl;
+        
+        s.append("----------------------------------------\n");
+        s.append("\n===============FACT====================\n");
+        s.append("Fact: '");
+        result_string.append("         ");
+        s.append(def);
+        s.append("' stored");
+        s.append("\n=======================================\n");
+        result_string.assign(s);
+        
     }
     // if our tagged string is a rule
     else if (function=='r')
@@ -128,6 +139,15 @@ void Helper:: parseDeligate(char function, string def)
         
         tCommands->getRules().push_back(r);
         cout << "----------------------------------------" << endl << endl;
+        
+        s.append("----------------------------------------\n");
+        s.append("\n===============RULE====================\n");
+        s.append("Rule: '");
+        result_string.append("         ");
+        s.append(def);
+        s.append("' stored");
+        s.append("\n=======================================\n");
+        result_string.assign(s);
     }
 }
 
@@ -186,18 +206,32 @@ void Helper:: ParseQuery(string rest)
         if (tempFacts.size() != 0)
         {
             vector<string> fact = singleVecCondense(tempFacts);
-            vector<string> result = dropDuplicates(fact);
+            vector<vector<string>> result = dropDuplicates(fact);
             
             //            cout << endl;
             cout <<"----------------------------------------\n";
             s.append("----------------------------------------\n");
             cout << "\n=================FACTS=================\n";
             s.append("\n=================FACTS=================\n");
-            for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                s.append("        ");
-                s.append("[");
-                s.append(result[i]);
+            
+            for(int i=0; i < result.size(); i++)  //prints out final vector with no duplicates.
+            {
+                cout << setw(13) << "[ ";
+                s.append("["); s.append("        ");
+                
+                for(int j=0; j < result[i].size(); j++)
+                {
+                    cout << result[i][j] << " ";
+                    s.append(result[i][j]);
+                    s.append(" ");
+                    
+                    //                cout << setw(13) << "[ " << result[i][j] << " ]" << endl;
+                    //                s.append("        ");
+                    //                s.append("[");
+                    //                s.append(result[i][j]);
+                    //                s.append("]\n");
+                }
+                cout << "]" << endl;
                 s.append("]\n");
             }
             
@@ -312,28 +346,44 @@ void Helper:: ParseQuery(string rest)
             
             // old stuff
             vector<string> fact = singleVecCondense(tempFacts);
-            vector<string> result = dropDuplicates(fact);
+            vector<vector<string>> result = dropDuplicates(fact);
             
+            for(int i=0; i < result.size(); i++)
+            {
             Fact *f = new Fact();
             
             f->setKey(inferKey);
-            f->setDefintion(result);
+            f->setDefintion(result[i]);
             
             tCommands->getFacts().push_back(f);
+            }
             
             cout <<"----------------------------------------\n";
             s.append("----------------------------------------\n");
             cout << "\n=================FACTS=================\n";
             s.append("\n=================FACTS=================\n");
-            for(int i=0; i < result.size(); i++){  //prints out final vector with no duplicates.
-                cout << setw(13) << "[ " << result[i] << " ]" << endl;
-                s.append("        ");
-                s.append("[");
-                s.append(result[i]);
-                s.append("]\n");
+            for(int i=0; i < result.size(); i++)  //prints out final vector with no duplicates.
+            {
+                cout << setw(13) << "[ ";
+                s.append("["); s.append("        ");
+                
+                for(int j=0; j < result[i].size(); j++)
+                {
+                    cout << result[i][j] << " ";
+                    s.append(result[i][j]);
+                    s.append(" ");
+                    
+//                cout << setw(13) << "[ " << result[i][j] << " ]" << endl;
+//                s.append("        ");
+//                s.append("[");
+//                s.append(result[i][j]);
+//                s.append("]\n");
+            }
+            cout << "]" << endl;
+            s.append("]\n");
             }
             
-            cout <<"=======================================\n";
+            cout <<"=======================================\n\n";
             //            cout <<"----------------------------------------\n\n";
             
             s.append("=======================================\n\n");
@@ -345,7 +395,7 @@ void Helper:: ParseQuery(string rest)
             s.append("Whoops! Inference is not defined");
         }
     }
-    s.append("\n\n");
+    s.append("\n");
     result_string.assign(s);
     
     threadID = 0;
@@ -518,9 +568,10 @@ tuple<string,string,vector<string>,vector<vector<string>>> Helper:: retrieveRule
 //
 //
 // ===================================================================================
-vector<string> Helper:: dropDuplicates(vector<string> fact)
+vector<vector<string>> Helper:: dropDuplicates(vector<string> fact)
 {
-    vector<string> result; //holds the final vector with no duplicates
+    vector<vector<string>> result; //holds the final vector with no duplicates
+    vector<string> temp_final;
     vector<string> final_fact; //used to concatinate strings
     
     for(int i=0; i<fact.size(); i++)
@@ -530,20 +581,37 @@ vector<string> Helper:: dropDuplicates(vector<string> fact)
         { //using mod so that concatinate every 2 strings together
             fact[i-1].append(" "); //put the space between two strings
             fact[i-1].append(fact[i]); //append both names together
-            final_fact.push_back(fact[i-1]);
+            temp_final.push_back(fact[i-1]);
         }
     }
-    for (int j = 0; j < final_fact.size(); j++){
+    for (int j = 0; j < temp_final.size(); j++){
         bool check = true; //set defualt value of the duplicate check to true until we find a duplicate.
-        for (int k = j+1; k < final_fact.size(); k++)
+        for (int k = j+1; k < temp_final.size(); k++)
         {
-            if ( final_fact[j].compare(final_fact[k]) == 0)
+            if ( temp_final[j].compare(temp_final[k]) == 0)
             {
                 check = false; //set the boolean to false so that we know that there is a duplicate present.
             }
         }
         if (check){ //if the string is unique in our vector we push it into the final vector.
-            result.push_back(final_fact[j]);
+            string a = temp_final[j];
+            string delimiter = " ";
+            size_t pos = 0; // position of delimiter
+            
+            while((pos = a.find(delimiter)) != string::npos)
+            {
+            // can be used in a method parseSpace 
+            string temp = a.substr(0, pos);
+            a.erase(0, pos + delimiter.length());
+            final_fact.push_back(temp);
+            }
+            // grabs the last name 
+            string temp = a.substr(0, pos);
+            a.erase(0, pos + delimiter.length());
+            final_fact.push_back(temp);
+            
+            result.push_back(final_fact);
+            final_fact.clear();
         }
     }
     return result; //returns the vector that was just printed.
@@ -1508,7 +1576,7 @@ void Helper:: DumpHelp(string path)
     {
         result_string.assign("Failed to dump file\n");
     }
-    result_string.append("File has been saved\n\n");
+    result_string.append("File has been saved\n");
 }
 
 
