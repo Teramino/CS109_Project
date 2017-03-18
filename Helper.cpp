@@ -1688,14 +1688,18 @@ void Helper:: DumpHelp(string path)
     {
         // open/create file
         file.open (f, ios::out);
-        // cout << "===============FILE DUMP===============\n";
-        // cout << setw(24) << f << endl;
-        // cout << "=======================================\n";
-        // cout << "----------------------------------------" << endl << endl;
-        result_string.assign("===============FILE DUMP===============\n");
-        result_string.append("        ");
-        result_string.append("\n=======================================\n");
-        result_string.append("----------------------------------------\n\n");
+        
+        cout << "----------------------------------------\n";
+         cout << "\n===============FILE DUMP===============\n";
+         cout << setw(25) << f << endl;
+         cout << "=======================================\n\n";
+        
+        result_string.append("----------------------------------------\n");
+        result_string.assign("\n===============FILE DUMP===============\n");
+        result_string.append("         ");
+        result_string.append(f);
+        result_string.append("\n=======================================\n\n");
+        
         if(Factbase.size() != 0)
         {
             for_each(Factbase.begin(), Factbase.end(),[&](decltype(*Factbase.begin()) fact) -> void // iterates through vector.  Lambda function.
@@ -1854,7 +1858,7 @@ void Helper:: LoadHelp(string path)
                 
                 //                    key = parseKey(l);
                 r->parseParams(l);
-                r->parseDefition(l);
+                r->parseDefinition(l);
                 
                 //                    vector<string> keyParam = parseParams(l);
                 //                    vector<string> params = parseRuleParam(l);
@@ -1894,12 +1898,16 @@ void Helper:: LoadHelp(string path)
         // close file
         file.close();
         // print to the interface
+        s.append("----------------------------------------\n");
+        cout << "----------------------------------------\n";
         s.append("\n===============FILE LOAD===============\n");
+        cout << "\n===============FILE LOAD===============\n";
         s.append("        ");
+        cout << setw(20) << path << endl;
+        result_string.append("         ");
         s.append(path);
-        s.append("\n");
-        s.append("=======================================\n");
-        s.append("----------------------------------------");
+        s.append("\n=======================================\n");
+        cout <<"=======================================\n\n";
         s.append("\n\n");
         result_string.assign(s);
     }
