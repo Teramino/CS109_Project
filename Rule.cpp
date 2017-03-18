@@ -92,10 +92,6 @@ void Rule:: storeBase(string k, vector<string> d, vector<string> kp)
     keyParam = kp;
 }
 
-void Rule:: setParam(vector<string> p)
-{
-    keyParam = p;
-}
 
 vector<string> Rule:: getKeyParam()
 {

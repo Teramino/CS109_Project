@@ -390,7 +390,7 @@ string Interface::start(void)
 
 string Interface::display(void)
 {
-	return "Please enter one of the six commands with their proper content:\n-FACT(store in a fact)\n-RULE(store in a rule)\n-LOAD(load in a file)\n-INFERENCE(issue a query)\n-DUMP(download all facts and rule into a file)\n-DROP(remove a fact or rule)\n-QUIT(end the session)\nEnter here: ";	
+	return "Please enter one of the six commands with their proper content:\n-FACT(store in a fact)\n-RULE(store in a rule)\n-LOAD(load in a file)\n-INFERENCE(issue a query)\n-DUMP(download all facts and rule into a file)\n-DROP(remove a fact or rule)\n-QUIT(end the session)\n\nEnter here: ";	
 }
 
 void Interface::test(char* c)
@@ -663,9 +663,6 @@ string Interface::clientInput(char* input)
 // 	}
 // }
 
-
-
-
 // void Interface::run()
 // {
 // 	// char UserInput[200];//Stores what the user inputs into the stream, can take spaces 
@@ -842,18 +839,23 @@ string Interface::clientInput(char* input)
 //     Helper::instance()->parseCommand("RULE Fathers($X,$Y):- OR FATHER($X,$Y) FATHER($X,$Y) FATHER($X,$Y)");
 //      Helper::instance()->parseCommand("RULE GF($X,$Z):- OR FATHER($X,$Y) MOTHER($Z,$Y)");
 //      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
-//      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
+////      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
 //     
 //     Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
 //     Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
 //     Helper::instance()->parseCommand("FACT MOTHER(Danielle,Bill)");
-//     Helper::instance()->parseCommand("RULE GreatGrandMother($V,$Z):- AND MOTHER($V,$W) MOTHER($W,$X) MOTHER($X,$Z)");
-//    
-//     Helper::instance()->parseCommand("INFERENCE GreatGrandMother($V,$Z)");
+////     Helper::instance()->parseCommand("RULE GreatGrandMother($V,$Z):- AND MOTHER($V,$W) MOTHER($W,$X) MOTHER($X,$Z)");
+//     
+//          Helper::instance()->parseCommand("INFERENCE GM($X,Danielle)");
+////     Helper::instance()->parseCommand("INFERENCE GM(Lianne,$Y)");
+//     
+////     Helper::instance()->parseCommand("INFERENCE GreatGrandMother($V,$Z)");
 ////     Helper::instance()->parseCommand("INFERENCE GM($X,$Y)");
 ////      Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y) GF");
 ////     Helper::instance()->parseCommand("INFERENCE Fathers($X,$Y)");
-//      Helper::instance()->parseCommand("DUMP output2.txt");
+//     
+//     
+////      Helper::instance()->parseCommand("DUMP output2.txt");
 //
 //    
 //    

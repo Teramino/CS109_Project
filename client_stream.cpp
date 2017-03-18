@@ -40,13 +40,21 @@ int main (int argc,char ** argv)
 		exit(1);
 	}
 	cout << "Socket client has been created." << endl;
+    
 	memset((char *) &serverAddr, 0,sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(portNum);
+    
     struct hostent *server = gethostbyname(argv[1]);
-	if ( server == NULL ) terminate_with_error(sock);
+    
+	if ( server == NULL )
+    {
+        terminate_with_error(sock);
+    }
+    
 	memcpy((char *)&serverAddr.sin_addr.s_addr,(char *)server->h_addr, server->h_length);
     memset(&(serverAddr.sin_zero), 0, 8);
+    
     int bytes_read;
 	if (connect(sock,(sockaddr *)&serverAddr,sizeof(serverAddr)) == -1 ) 
 	{
@@ -69,7 +77,7 @@ int main (int argc,char ** argv)
 		// cout << buffer << endl;
 		if ( bytes_read > 0 )
 		{
-			cout << buffer << endl;
+			cout << buffer;
 		}
 		memset(buffer,0,bufsize);
 		getline(cin,input);
