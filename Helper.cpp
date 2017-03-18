@@ -221,7 +221,7 @@ void Helper:: ParseQuery(string rest)
             }
             
             cout <<"=======================================\n";
-            cout <<"----------------------------------------";
+            cout <<"----------------------------------------\n";
             
             //            s.append("=======================================\n");
             //            s.append("----------------------------------------");
@@ -304,7 +304,7 @@ void Helper:: ParseQuery(string rest)
             }
             
             cout <<"=======================================\n";
-            cout <<"----------------------------------------";
+            cout <<"----------------------------------------\n";
             
             //            s.append("=======================================\n");
             //            s.append("----------------------------------------");
@@ -1226,18 +1226,18 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
 //
 //
 // ===================================================================================
-vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> rule,vector<vector<string>> fact)
+vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,vector<string> keyParams,vector<vector<string>> ruleDef,vector<vector<string>> fact)
 {
     vector<vector<vector<string>>> data;
     //    vector<future<vector<vector<string>>>> futures;
     int threadCount = 0;
-    for(int i=0; i < rule.size(); i++)
+    for(int i=0; i < ruleDef.size(); i++)
     {
         if(logicalOp=="AND")
         {
             Threading *t = new Threading(++threadID);
             ++threadCount;
-            auto func = bind(&Helper::andOperator,this,key, keyParams, rule[i], fact);
+            auto func = bind(&Helper::andOperator,this,key, keyParams, ruleDef[i], fact);
             
             //tuple<int,future<vector<vector<string>>>> a;
             
@@ -1259,7 +1259,7 @@ vector<vector<vector<string>>> Helper:: opFunction(string logicalOp, string key,
         {
             Threading *t = new Threading(++threadID);
             ++threadCount;
-            auto func = bind(&Helper::orOperator,this,key, keyParams, rule[i], fact);
+            auto func = bind(&Helper::orOperator,this,key, keyParams, ruleDef[i], fact);
             
             //                        tuple<int,future<vector<vector<string>>>> a;
             //
@@ -1322,7 +1322,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     // if i make it a member of helper there's a mutex error
     
     
-        int threadCount = 0;
+    int threadCount = 0;
     
     bool ruleLeft = true;
     bool ruleRight = true;
@@ -1803,7 +1803,7 @@ void Helper:: DumpHelp(string path)
                                  temp.append(")");
                              }
                          }
-                         file << temp <<endl;
+                            file << temp <<endl;
                      });
         }
         else
@@ -1831,13 +1831,15 @@ void Helper:: DumpHelp(string path)
                                  logicalOperater = rule->getDefinition()[i]; // holds the operator
                                  temp.append(logicalOperater + " ");
                              }
-                             else if (i <= rule->getDefinition().size()-1)
+                             else if (i < rule->getDefinition().size()-1)
                              {
                                  temp.append(rule->getDefinition()[i] + " ");
                              }
+                             else if (i == rule->getDefinition().size()-1) //Dont add extra space
+                             {
+                                 temp.append(rule->getDefinition()[i]); //
+                             }
                          }
-                         
-                         
                          file << temp << endl;
                      });
         }
@@ -1942,7 +1944,7 @@ void Helper:: LoadHelp(string path)
                 
                 //                    key = parseKey(l);
                 r->parseParams(l);
-                r->parseDefition(l);
+                r->parseDefinition(l);
                 
                 //                    vector<string> keyParam = parseParams(l);
                 //                    vector<string> params = parseRuleParam(l);
