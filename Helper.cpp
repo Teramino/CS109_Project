@@ -91,6 +91,7 @@ void Helper::parseCommand(string user_input)
 
 void Helper:: parseDeligate(char function, string def)
 {
+    string s;
     // char acts as a tag for our function so that def can go through the proper conditional branch
     // def represents the entire string without the command, example being Father(Roger, John)
     if (function=='f')
@@ -109,6 +110,16 @@ void Helper:: parseDeligate(char function, string def)
         
         tCommands->getFacts().push_back(f);
         cout << "----------------------------------------" << endl << endl;
+        
+        s.append("----------------------------------------\n");
+        s.append("\n===============FACT====================\n");
+        s.append("Fact: '");
+        result_string.append("         ");
+        s.append(def);
+        s.append("' stored");
+        s.append("\n=======================================\n");
+        result_string.assign(s);
+        
     }
     // if our tagged string is a rule
     else if (function=='r')
@@ -128,6 +139,15 @@ void Helper:: parseDeligate(char function, string def)
         
         tCommands->getRules().push_back(r);
         cout << "----------------------------------------" << endl << endl;
+        
+        s.append("----------------------------------------\n");
+        s.append("\n===============RULE====================\n");
+        s.append("Fact: '");
+        result_string.append("         ");
+        s.append(def);
+        s.append("' stored");
+        s.append("\n=======================================\n");
+        result_string.assign(s);
     }
 }
 
@@ -345,7 +365,7 @@ void Helper:: ParseQuery(string rest)
             s.append("Whoops! Inference is not defined");
         }
     }
-    s.append("\n\n");
+    s.append("\n");
     result_string.assign(s);
     
     threadID = 0;
@@ -1508,7 +1528,7 @@ void Helper:: DumpHelp(string path)
     {
         result_string.assign("Failed to dump file\n");
     }
-    result_string.append("File has been saved\n\n");
+    result_string.append("File has been saved\n");
 }
 
 
