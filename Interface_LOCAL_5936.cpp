@@ -381,43 +381,46 @@ bool Quit_Session(char answer)//Ask the user if they want to end the program, if
 	return false;//user indicates they want the program to continue running 
 }
 
-
-
-string Interface::start(void)
+void Interface::run()
 {
-	return "Welcome to the Simple Rule-Base Inference Engine or SRI for short";
-}
-
-string Interface::display(void)
-{
-	return "Please enter one of the six commands with their proper content:\n-FACT(store in a fact)\n-RULE(store in a rule)\n-LOAD(load in a file)\n-INFERENCE(issue a query)\n-DUMP(download all facts and rule into a file)\n-DROP(remove a fact or rule)\n-QUIT(end the session)\n\nEnter here: ";	
-}
-
-
-string Interface::clientInput(char* input)
-{
-
-	// char UserInput[200];//Stores what the user inputs into the stream, can take spaces 
+	char UserInput[200];//Stores what the user inputs into the stream, can take spaces 
 	string string_version_UserInput;//convert what the user typed in the stream into a string to be able to work on it
 
 	string first_part_of_command = " ";//Stores the first part of the command, the type of command itself
 	string second_part_of_command;//Stores the second part of the command, the defenition of the command
-	//int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
+	int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
 
-	//char endsession = '\0'; //Checks if the user wants to exit the program or not
+	char endsession = '\0'; //Checks if the user wants to exit the program or not 
 	bool error_commited = false;//checks to see if an error is commited at all or not
-	//bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
-	//bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
-	bool second_half_error_commited = false;
+	bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
 
 	string all_commands[6] = { "FACT", "RULE", "DROP", "INFERENCE", "LOAD", "DUMP" };//All the commands the user can type in
 
-	string_version_UserInput = input;//convert what char the user typed in into a string 
+	cout << "Welcome to the Simple Rule-Base Inference Engine or SRI for short" << endl << endl;
+
+	while (program_looping == true)// This loop keeps the program running until the user indicates they want to exit out
+	{
+
+		bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
+		bool second_half_error_commited = false;//Has the user commited an error by having the wrong syntax
+
+		cout << "Please enter one of the six commands with their proper content=>" << endl << "	-(1)FACT(store in a fact)"<< endl << "	-(2)RULE(store in a rule)"
+			<< endl << "	-(3)LOAD(load in a file)" << endl << "	-(4)INFERENCE(issue a query)" << endl
+			<< "	-(5)DUMP(download all facts and rule into a file)" << endl <<"	-(6)DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)"
+			<< endl <<"Enter here: ";
+
+		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
+		//or the new line char is encountered
+		cin.clear();
+		cout << endl;
+
+		string_version_UserInput = UserInput;//convert what char the user typed in into a string 
 
 		//if the user indicates they want to quit, with three different variations of how they can type in quit, the program ends 
 		if(string_version_UserInput.compare("QUIT")==0 || string_version_UserInput.compare("Quit")==0 || string_version_UserInput.compare("quit") ==0)
 		{
-			return "Goodbye";
+			cout << "Goodbye" << endl;
+			break;
 		}
 
 		string delimeter = " ";//break the line into two parts, the first part is the command
@@ -437,10 +440,11 @@ string Interface::clientInput(char* input)
 		{
 			if (i == 6)//If you get to six, you are outside the size of the array, indicating you didn't type in one of the commands properly 
 			{
-				return "Error: You need to type in one of those six commands in all capital and proper spelling\n";
-//				first_half_error_commited = true;
-//				error_commited = true;
-				//break;
+				cout << "Error: You need to type in one of those six commands in all capital and proper spelling" << endl;
+				cout << "Proceeding to the quit option" << endl;
+				first_half_error_commited = true;
+				error_commited = true;
+				break;
 			}
 
 			if (first_part_of_command.compare(all_commands[i]) == 0)//if the user input for the first part matches the command, continue on
@@ -493,313 +497,27 @@ string Interface::clientInput(char* input)
 			}
 		}
 
-		if (/*!first_half_error_commited && */!second_half_error_commited)//If there are no errors in the input, pass it into the function
+		if (!first_half_error_commited && !second_half_error_commited)//If there are no errors in the input, pass it into the function
 		{
 			string total_command = first_part_of_command + " " + second_part_of_command;
 			Helper::instance()->parseCommand(total_command);
 		}
 
-		// if (error_commited == true)//Time to exit
-		// {
-		// 	if (Quit_Session(endsession))
-		// 	{
-		// 		return;
-		// 	}
-  //          else
-  //          {
-  //              error_commited = false;
-  //          }
-		// }
-		// cin.ignore(1, '\n');
-	return Helper::instance()->getString();
+		if (error_commited == true)//Time to exit
+		{
+			if (Quit_Session(endsession))
+			{
+				program_looping = false;
+			}
+           else
+           {
+               error_commited = false;
+           }
+		}
 
+		cin.ignore(1, '\n');
+	}
 }
-
-
-
-
-
-
-
-// void Interface::run()
-// {
-// 	char UserInput[200];//Stores what the user inputs into the stream, can take spaces
-// 	string string_version_UserInput;//convert what the user typed in the stream into a string to be able to work on it
-//
-// 	string first_part_of_command = " ";//Stores the first part of the command, the type of command itself
-// 	string second_part_of_command;//Stores the second part of the command, the defenition of the command
-// 	int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
-//
-// 	char endsession = '\0'; //Checks if the user wants to exit the program or not
-// 	bool error_commited = false;//checks to see if an error is commited at all or not
-// 	bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
-//
-// 	string all_commands[6] = { "FACT", "RULE", "DROP", "INFERENCE", "LOAD", "DUMP" };//All the commands the user can type in
-//
-// 	cout << "Welcome to the Simple Rule-Base Inference Engine or SRI for short" << endl << endl;
-//
-// 	while (program_looping == true)// This loop keeps the program running until the user indicates they want to exit out
-// 	{
-//
-// 		bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
-// 		bool second_half_error_commited = false;//Has the user commited an error by having the wrong syntax
-//
-// 		cout << "Please enter one of the six commands with their proper content=>" << endl << "	-(1)FACT(store in a fact)"<< endl << "	-(2)RULE(store in a rule)"
-// 			<< endl << "	-(3)LOAD(load in a file)" << endl << "	-(4)INFERENCE(issue a query)" << endl
-// 			<< "	-(5)DUMP(download all facts and rule into a file)" << endl <<"	-(6)DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)"
-// 			<< endl <<"Enter here: ";
-//
-// 		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
-// 		//or the new line char is encountered
-// 		cin.clear();
-// 		cout << endl;
-//
-// 		string_version_UserInput = UserInput;//convert what char the user typed in into a string
-//
-// 		//if the user indicates they want to quit, with three different variations of how they can type in quit, the program ends
-// 		if(string_version_UserInput.compare("QUIT")==0 || string_version_UserInput.compare("Quit")==0 || string_version_UserInput.compare("quit") ==0)
-// 		{
-// 			cout << "Goodbye" << endl;
-// 			break;
-// 		}
-//
-// 		string delimeter = " ";//break the line into two parts, the first part is the command
-// 			//the rest is the content of the command
-// 		size_t pos = 0;
-// 		pos = string_version_UserInput.find(delimeter);
-// 		first_part_of_command = string_version_UserInput.substr(0, pos);
-// 		string_version_UserInput.erase(0, pos + delimeter.length());
-// 		second_part_of_command = string_version_UserInput;
-//
-// 		for (int i = 0; i < (int)first_part_of_command.size(); ++i) //captalizes all the words in the first part
-// 		{
-// 			first_part_of_command[i] = toupper(first_part_of_command[i]);
-// 		}
-//
-// 		for (int i = 0; i <= 6; ++i)//checks if the first word matches any command, if not, proceed to the quit menu
-// 		{
-// 			if (i == 6)//If you get to six, you are outside the size of the array, indicating you didn't type in one of the commands properly
-// 			{
-// 				cout << "Error: You need to type in one of those six commands in all capital and proper spelling" << endl;
-// 				cout << "Proceeding to the quit option" << endl;
-// 				first_half_error_commited = true;
-// 				error_commited = true;
-// 				break;
-// 			}
-//
-// 			if (first_part_of_command.compare(all_commands[i]) == 0)//if the user input for the first part matches the command, continue on
-// 			{
-// 				break;
-// 			}
-// 		}
-//
-// 		//depending on which command is called, call the proper syntax check
-// 		if (first_part_of_command == "FACT")
-// 		{
-// 			if (Valid_FACT_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "RULE")
-// 		{
-// 			if (Valid_RULE_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "INFERENCE")
-// 		{
-// 			if (Valid_INFERENCE_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "DROP")
-// 		{
-// 			if (Valid_DROP_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "DUMP")
-// 		{
-// 			if (Valid_DUMP_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "LOAD")
-// 		{
-// 			if (Valid_LOAD_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-//
-// 		if (!first_half_error_commited && !second_half_error_commited)//If there are no errors in the input, pass it into the function
-// 		{
-// 			string total_command = first_part_of_command + " " + second_part_of_command;
-// 			Helper::instance()->parseCommand(total_command);
-// 		}
-//
-// 		if (error_commited == true)//Time to exit
-// 		{
-// 			if (Quit_Session(endsession))
-// 			{
-// 				program_looping = false;
-// 			}
-//            else
-//            {
-//                error_commited = false;
-//            }
-// 		}
-//
-// 		cin.ignore(1, '\n');
-// 	}
-// }
-
-// void Interface::run()
-// {
-// 	// char UserInput[200];//Stores what the user inputs into the stream, can take spaces 
-// 	// string string_version_UserInput;//convert what the user typed in the stream into a string to be able to work on it
-//
-// 	// string first_part_of_command = " ";//Stores the first part of the command, the type of command itself
-// 	// string second_part_of_command;//Stores the second part of the command, the defenition of the command
-// 	// int counter_of_char = 0; //counter to keep track of how many characters the user inputed into the array
-//
-// 	// char endsession = '\0'; //Checks if the user wants to exit the program or not 
-// 	// bool error_commited = false;//checks to see if an error is commited at all or not
-// 	// bool program_looping = true;//keeps the while loop going as long as the user doesn't indicate they want to quit
-//
-// 	// string all_commands[6] = { "FACT", "RULE", "DROP", "INFERENCE", "LOAD", "DUMP" };//All the commands the user can type in
-//
-// 	// cout << "Welcome to the Simple Rule-Base Inference Engine or SRI for short" << endl << endl;
-// 	start();
-// 	while (program_looping == true)// This loop keeps the program running until the user indicates they want to exit out
-// 	{
-//
-// 		bool first_half_error_commited = false;//Has the user commited an error by miscalling a certain command?
-// 		bool second_half_error_commited = false;//Has the user commited an error by having the wrong syntax
-// 		display();
-// 		// cout << "Please enter one of the six commands with their proper content=>" << endl << "	-(1)FACT(store in a fact)"<< endl << "	-(2)RULE(store in a rule)"
-// 		// 	<< endl << "	-(3)LOAD(load in a file)" << endl << "	-(4)INFERENCE(issue a query)" << endl
-// 		// 	<< "	-(5)DUMP(download all facts and rule into a file)" << endl <<"	-(6)DROP(remove a fact or rule)" << endl << "	-QUIT(end the session)"
-// 		// 	<< endl <<"Enter here: ";
-//
-// 		cin.get(UserInput, sizeof(UserInput) - 1, '\n');//get char for input stream until either the array is full
-// 		//or the new line char is encountered
-// 		cin.clear();
-// 		cout << endl;
-//
-// 		string_version_UserInput = UserInput;//convert what char the user typed in into a string 
-//
-// 		//if the user indicates they want to quit, with three different variations of how they can type in quit, the program ends 
-// 		if(string_version_UserInput.compare("QUIT")==0 || string_version_UserInput.compare("Quit")==0 || string_version_UserInput.compare("quit") ==0)
-// 		{
-// 			cout << "Goodbye" << endl;
-// 			break;
-// 		}
-//
-// 		string delimeter = " ";//break the line into two parts, the first part is the command
-// 			//the rest is the content of the command
-// 		size_t pos = 0;
-// 		pos = string_version_UserInput.find(delimeter);
-// 		first_part_of_command = string_version_UserInput.substr(0, pos);
-// 		string_version_UserInput.erase(0, pos + delimeter.length());
-// 		second_part_of_command = string_version_UserInput;
-//
-// 		for (int i = 0; i < (int)first_part_of_command.size(); ++i) //captalizes all the words in the first part
-// 		{
-// 			first_part_of_command[i] = toupper(first_part_of_command[i]);
-// 		}
-//
-// 		for (int i = 0; i <= 6; ++i)//checks if the first word matches any command, if not, proceed to the quit menu
-// 		{
-// 			if (i == 6)//If you get to six, you are outside the size of the array, indicating you didn't type in one of the commands properly 
-// 			{
-// 				cout << "Error: You need to type in one of those six commands in all capital and proper spelling" << endl;
-// 				cout << "Proceeding to the quit option" << endl;
-// 				first_half_error_commited = true;
-// 				error_commited = true;
-// 				break;
-// 			}
-//
-// 			if (first_part_of_command.compare(all_commands[i]) == 0)//if the user input for the first part matches the command, continue on
-// 			{
-// 				break;
-// 			}
-// 		}
-//
-// 		//depending on which command is called, call the proper syntax check 
-// 		if (first_part_of_command == "FACT")
-// 		{
-// 			if (Valid_FACT_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "RULE")
-// 		{
-// 			if (Valid_RULE_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "INFERENCE")
-// 		{
-// 			if (Valid_INFERENCE_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "DROP")
-// 		{
-// 			if (Valid_DROP_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "DUMP")
-// 		{
-// 			if (Valid_DUMP_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-// 		else if (first_part_of_command == "LOAD")
-// 		{
-// 			if (Valid_LOAD_Input(second_part_of_command, error_commited) == false)
-// 			{
-// 				second_half_error_commited = true;
-// 			}
-// 		}
-//
-// 		if (!first_half_error_commited && !second_half_error_commited)//If there are no errors in the input, pass it into the function
-// 		{
-// 			string total_command = first_part_of_command + " " + second_part_of_command;
-// 			Helper::instance()->parseCommand(total_command);
-// 		}
-//
-// 		if (error_commited == true)//Time to exit
-// 		{
-// 			if (Quit_Session(endsession))
-// 			{
-// 				program_looping = false;
-// 			}
-//            else
-//            {
-//                error_commited = false;
-//            }
-// 		}
-//
-// 		cin.ignore(1, '\n');
-// 	}
-// }
-
-
-
-
 
 // void Interface:: run()
 // {
@@ -821,46 +539,50 @@ string Interface::clientInput(char* input)
 // ////    Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($X,$Y) Mother($A,$B)"); // works
 // ////        Helper::instance()->parseCommand("RULE Parent($X,$Y):- OR Father($A,$B) Mother($X,$Y)"); // works
 // //    Helper::instance()->parseCommand("INFERENCE Parent($X,$Y)"); // this works under the ASSUMPTION the parameters defined are the same being entered // READ ME
-//    
-//     // Helper::instance()->parseCommand("LOAD output.txt");
-//    
-//      Helper::instance()->parseCommand("FACT FATHER(Jeff,Danielle)");
-////      Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
-//      Helper::instance()->parseCommand("FACT FATHER(Nick,Jeff)");
-//      Helper::instance()->parseCommand("FACT MOTHER(Judy,Jeff)");
-//      Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
-////      Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
-//      Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
-//      Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- OR FATHER($X,$Y) PARENT($X,$Y)");
-//     Helper::instance()->parseCommand("RULE Fathers($X,$Y):- OR FATHER($X,$Y) FATHER($X,$Y) FATHER($X,$Y)");
-//      Helper::instance()->parseCommand("RULE GF($X,$Z):- OR FATHER($X,$Y) MOTHER($Z,$Y)");
-//      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
-////      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
-//     
-//     Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
+    
+    Helper::instance()->parseCommand("LOAD output.txt");
+    
+<<<<<<< HEAD
+//     Helper::instance()->parseCommand("FACT FATHER(Jeff,Danielle)");
 //     Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
-//     Helper::instance()->parseCommand("FACT MOTHER(Danielle,Bill)");
-////     Helper::instance()->parseCommand("RULE GreatGrandMother($V,$Z):- AND MOTHER($V,$W) MOTHER($W,$X) MOTHER($X,$Z)");
-//     
-//          Helper::instance()->parseCommand("INFERENCE GM($X,Danielle)");
-////     Helper::instance()->parseCommand("INFERENCE GM(Lianne,$Y)");
-//     
-////     Helper::instance()->parseCommand("INFERENCE GreatGrandMother($V,$Z)");
-////     Helper::instance()->parseCommand("INFERENCE GM($X,$Y)");
-////      Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y) GF");
-////     Helper::instance()->parseCommand("INFERENCE Fathers($X,$Y)");
-//     
-//     
-////      Helper::instance()->parseCommand("DUMP output2.txt");
-//
-//    
-//    
+//     Helper::instance()->parseCommand("FACT FATHER(Nick,Jeff)");
+//     Helper::instance()->parseCommand("FACT MOTHER(Judy,Jeff)");
+//     Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
+//     Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
+//     Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
+//     Helper::instance()->parseCommand("RULE GF($X,$Z):- OR FATHER($X,$Y) MOTHER($Z,$Y)");
+//     Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
+//     Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
+=======
+    Helper::instance()->parseCommand("FACT FATHER(Jeff,Danielle)");
+    Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
+    Helper::instance()->parseCommand("FACT FATHER(Nick,Jeff)");
+    Helper::instance()->parseCommand("FACT MOTHER(Judy,Jeff)");
+    Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
+    Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
+    //Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
+    Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- OR FATHER($X,$Y) PARENT($X,$Y)");
+    Helper::instance()->parseCommand("RULE GF($X,$Z):- OR FATHER($X,$Y) MOTHER($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
+    Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
+>>>>>>> 7cf46747ce7289cca089bfbeb651c5f3f70c94ad
+    
+    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y) GF");
+    Helper::instance()->parseCommand("DUMP output2.txt");
+
+    
+    
+<<<<<<< HEAD
 // //    Helper::instance()->parseCommand("INFERENCE GF($X,$Z)");
 // //    Helper::instance()->parseCommand("INFERENCE PARENT($X,$Y)");
-//     //Helper::instance()->parseCommand("INFERENCE MOTHER($X,$Y) M");
-//    
+=======
+//    Helper::instance()->parseCommand("INFERENCE GF($X,$Z)");
+//    Helper::instance()->parseCommand("INFERENCE PARENT($X,$Y)");
+    //Helper::instance()->parseCommand("INFERENCE MOTHER($X,$Y) M");
+>>>>>>> 7cf46747ce7289cca089bfbeb651c5f3f70c94ad
+    
 // //    Helper::instance()->parseCommand("INFERENCE GrandMother($A,$B)");
-//    
+    
 //     //	Helper::instance()->parseCommand("FACT Father(Jeff,Danielle)");
 //     //	Helper::instance()->parseCommand("FACT Mother(Sandy,Danielle)");
 //     //	Helper::instance()->parseCommand("FACT Father(Nick,Jeff)");
@@ -917,5 +639,5 @@ string Interface::clientInput(char* input)
 //     //    //                  Helper::instance()->parseCommand("INFERENCE GrandMother($X,$Y)");
 //     //    //    Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y)");
 //     //    //      Helper::instance()->parseCommand("DUMP output2.txt");
-//    
+    
 // }

@@ -49,7 +49,7 @@ public:
     vector<vector<string>> retrieveFact(string,string&,string&);
     tuple<string,string,vector<string>,vector<vector<string>>> retrieveRule(vector<string>,string);
     vector<tuple<int,int,int,int>> paramCorr(vector<vector<string>>);
-    vector<string> dropDuplicates(vector<string>);
+    vector<vector<string>> dropDuplicates(vector<string>);
     
 };
 
