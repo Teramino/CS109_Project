@@ -96,28 +96,24 @@ int main (int argc,char ** argv)
         }
         close(sock);
         string serverReq;
-        
-        if ( serverReq.compare("no") == 0 )
+        cout << "Do you wish to connect to a different server? If so, type in the ip address you wish to connect to or type 'no' to quit. ";
+        getline(cin,serverReq);
+        for( int i = 0; i < input.size(); i++)
         {
-            cout << "Do you wish to connect to a different server? If so, type in the ip address you wish to connect to or type 'no' to quit. ";
-            getline(cin,serverReq);
-            for( int i = 0; i < input.size(); i++)
-            {
-                serverReq[i]=toupper(serverReq[i]);
-            }
-            if ( serverReq.compare("NO") == 0 )
-            {
-                cout << "Goodbye!";
-                return 0;
-            }
-            else
-            {
-                cout << "Attempting to connect to " << serverReq << endl;
-                newserver = true;
-                const char* temp = serverReq.c_str();
-                strcpy(addr,temp);
-            }	
+            serverReq[i]=toupper(serverReq[i]);
         }
+        if ( serverReq.compare("NO") == 0 )
+        {
+            cout << "Goodbye!";
+            return 0;
+        }
+        else
+        {
+            cout << "Attempting to connect to " << serverReq << endl;
+            newserver = true;
+            const char* temp = serverReq.c_str();
+            strcpy(addr,temp);
+        }	
         return 0;
     }
 }
