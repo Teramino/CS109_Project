@@ -767,7 +767,7 @@ vector<vector<string>> Helper:: andOperator(string key, vector<string> keyParams
             //            factData = retrieveFact(b.getKey(),keyParams[0],keyParams[1]);
             if(isGeneric)
             {
-                factData = retrieveFact(b.getKey(),generic,generic);
+                factData = retrieveFact(b.getKey(),keyParams[0],keyParams[1]);
             }
             else // if params arent generic the only param we need to worry about for the first rule target is the first param
             {

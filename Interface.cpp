@@ -824,32 +824,34 @@ string Interface::clientInput(char* input)
 //    
 //     // Helper::instance()->parseCommand("LOAD output.txt");
 //    
-//      Helper::instance()->parseCommand("FACT FATHER(Jeff,Danielle)");
-////      Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
-//      Helper::instance()->parseCommand("FACT FATHER(Nick,Jeff)");
-//      Helper::instance()->parseCommand("FACT MOTHER(Judy,Jeff)");
-//      Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
-////      Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
-//      Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
-//      Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- OR FATHER($X,$Y) PARENT($X,$Y)");
-//     Helper::instance()->parseCommand("RULE Fathers($X,$Y):- OR FATHER($X,$Y) FATHER($X,$Y) FATHER($X,$Y)");
-//      Helper::instance()->parseCommand("RULE GF($X,$Z):- OR FATHER($X,$Y) MOTHER($Z,$Y)");
-//      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
+////      Helper::instance()->parseCommand("FACT FATHER(Jeff,Danielle)");
+//////      Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
+////      Helper::instance()->parseCommand("FACT FATHER(Nick,Jeff)");
+////      Helper::instance()->parseCommand("FACT MOTHER(Judy,Jeff)");
+////      Helper::instance()->parseCommand("FACT FATHER(Paul,Sandy)");
+//////      Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
+////      Helper::instance()->parseCommand("RULE PARENT($X,$Y):- OR FATHER($X,$Y) MOTHER($X,$Y)");
+////      Helper::instance()->parseCommand("RULE GrandFather($X,$Y):- OR FATHER($X,$Y) PARENT($X,$Y)");
+////     Helper::instance()->parseCommand("RULE Fathers($X,$Y):- OR FATHER($X,$Y) FATHER($X,$Y) FATHER($X,$Y)");
+////      Helper::instance()->parseCommand("RULE GF($X,$Z):- OR FATHER($X,$Y) MOTHER($Z,$Y)");
+////      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) MOTHER($Z,$Y)");
 ////      Helper::instance()->parseCommand("RULE GM($X,$Y):- AND MOTHER($X,$Z) FATHER($Z,$Y)");
 //     
-//     Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
-//     Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
-//     Helper::instance()->parseCommand("FACT MOTHER(Danielle,Bill)");
+////     Helper::instance()->parseCommand("FACT MOTHER(Lianne,Sandy)");
+////     Helper::instance()->parseCommand("FACT MOTHER(Sandy,Danielle)");
+////     Helper::instance()->parseCommand("FACT MOTHER(Danielle,Bill)");
 ////     Helper::instance()->parseCommand("RULE GreatGrandMother($V,$Z):- AND MOTHER($V,$W) MOTHER($W,$X) MOTHER($X,$Z)");
 //     
-//          Helper::instance()->parseCommand("INFERENCE GM($X,Danielle)");
+////          Helper::instance()->parseCommand("INFERENCE GM($X,Danielle)");
 ////     Helper::instance()->parseCommand("INFERENCE GM(Lianne,$Y)");
 //     
 ////     Helper::instance()->parseCommand("INFERENCE GreatGrandMother($V,$Z)");
 ////     Helper::instance()->parseCommand("INFERENCE GM($X,$Y)");
 ////      Helper::instance()->parseCommand("INFERENCE GrandFather($X,$Y) GF");
 ////     Helper::instance()->parseCommand("INFERENCE Fathers($X,$Y)");
+//     Helper::instance()->parseCommand("LOAD code_breaker.sri");
 //     
+//      Helper::instance()->parseCommand("INFERENCE STAAAR($W,$Z)");
 //     
 ////      Helper::instance()->parseCommand("DUMP output2.txt");
 //
