@@ -113,7 +113,7 @@ int main (int argc,char ** argv)
             newserver = true;
             const char* temp = serverReq.c_str();
             strcpy(addr,temp);
-        }	
-        return 0;
-    }
+        }
+    }	
+    return 0;
 }
