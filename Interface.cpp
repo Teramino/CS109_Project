@@ -852,6 +852,7 @@ string Interface::clientInput(char* input)
 //     Helper::instance()->parseCommand("LOAD code_breaker.sri");
 //     
 //      Helper::instance()->parseCommand("INFERENCE STAAAR($W,$Z)");
+//Helper::instance()->parseCommand("INFERENCE SYSTEMTWO($X,$Y)");
 //     
 ////      Helper::instance()->parseCommand("DUMP output2.txt");
 //

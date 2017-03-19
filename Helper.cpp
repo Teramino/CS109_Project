@@ -1180,7 +1180,7 @@ vector<vector<string>> Helper:: orOperator(string key, vector<string> keyParams,
     paramIndex = paramCorr(paramData);
     
     vector<vector<bool>> validTarget;
-    if (paramIndex.size() == keyParams.size()) // if every param matches then theres no correlation
+    if (paramIndex.size() >= rule.size()) // if every param matches then theres no correlation
     {
         paramIndex.clear();
     }
