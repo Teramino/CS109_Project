@@ -92,10 +92,7 @@ void Rule:: storeBase(string k, vector<string> d, vector<string> kp)
     keyParam = kp;
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 4029a5e05469b58197ad6c628e48df24fca137e4
 vector<string> Rule:: getKeyParam()
 {
     return keyParam;

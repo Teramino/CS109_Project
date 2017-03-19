@@ -20,6 +20,8 @@ private:
     
     Transactional_Commands* tCommands;
     static Helper * h_instance;
+    vector<Threading*> threads;
+
     
     // for threading
    // int threadCount = 0;
@@ -47,7 +49,7 @@ public:
     void parseCommand(string);
     void parseDeligate(char,string);
     vector<vector<string>> retrieveFact(string,string&,string&);
-    tuple<string,string,vector<string>,vector<vector<string>>> retrieveRule(vector<string>,string);
+    tuple<string,string,vector<string>,vector<vector<string>>> retrieveRule(vector<string>,string);;
     vector<tuple<int,int,int,int>> paramCorr(vector<vector<string>>);
     vector<vector<string>> dropDuplicates(vector<string>);
     

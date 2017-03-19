@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <string>
+
 using namespace std;
 
 Interface i;
@@ -33,8 +35,8 @@ void setupServer(int& sock)
 
 void *connection(void *sock)
 {
-    int newsock = *(int*)sock;
     cout << "Client Connected" << endl;
+    int newsock = *(int*)sock;
     int maxBytes = 1024;
     char buffer[maxBytes];
     memset(buffer,0,maxBytes);
@@ -69,12 +71,21 @@ void *connection(void *sock)
         bytes_read = recv (newsock,buffer,maxBytes,0);
         if ( toupper(*buffer) == 'Q' )
         {
+//            string quit = buffer;
+//            for(int i=0; i<quit.length(); i++)
+//                quit[i] = toupper(quit[i]);
+//            
+//            if(quit.compare("QUIT"))
+//            {
+        
             stop = true;
             cout << "Client disconnected.\n";
             i.clientInput(buffer);
             strcpy(buffer, "Disconnected.\n");
             send(newsock,buffer,maxBytes,0);
-            close(newsock);
+                close(newsock);
+//            }
+            
         }
         else
         {
@@ -102,7 +113,7 @@ void *connection(void *sock)
 int main (int argc,char ** argv)
 {
     static int sock;
-    static int portNum = 9999;
+    static int portNum = 6969;
     struct sockaddr_in serverAddr;
     struct sockaddr_in clientAddr;
     socklen_t sin_size = sizeof(struct sockaddr_in);
@@ -120,9 +131,11 @@ int main (int argc,char ** argv)
     if (listen(sock, 10) == -1) terminate_with_error("Error Listening: ",sock);
     int newsock;
     pthread_t thread_id;
-    while((newsock = accept(sock, (struct sockaddr *)&clientAddr, &sin_size))) {
+    while((newsock = accept(sock, (struct sockaddr *)&clientAddr, &sin_size))) 
+    {
         cout << "Connection accepted\n";
-        if(pthread_create(&thread_id, NULL,  connection, (void*) &newsock) < 0) {
+        if(pthread_create(&thread_id, NULL,  connection, (void*) &newsock) < 0) 
+        {
             perror("could not create thread");
             return 1	;
         }

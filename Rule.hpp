@@ -26,10 +26,6 @@ public:
     virtual void parseDefinition(string);
     virtual void storeBase(string,vector<string>,vector<string>);
     
-<<<<<<< HEAD
-   
-=======
->>>>>>> 4029a5e05469b58197ad6c628e48df24fca137e4
     vector<string> getKeyParam();
     
 };

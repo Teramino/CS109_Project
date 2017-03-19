@@ -5,6 +5,15 @@
  make all : creates an executable
  make clean : removes object files from directory
  make wipe : removes all files from directory excluding makefile
+ make server: creates server executable
+ make client: creates client executable
+
+ IMPORTANT - HOW TO BUILD
+ 	=> make all
+	=> make server
+	// run the executable ( => ./a.out)
+	=> make client
+	// run the executable ( => ./a.out)
 
 ===========================================================================
  ASSUMPTIONS
@@ -88,3 +97,10 @@
    independent of eachother. Therefore, we created a thread within 
    OrOperator so that the rule targets can both run and extract information 
    from the fact base without having to wait for the other to compute. 
+
+===========================================================================
+ PHASE FOUR FIXES
+===========================================================================
+
+ + Implemented unlimited amount of rule targets for AND and OR
+ + Fixed specific inferences
