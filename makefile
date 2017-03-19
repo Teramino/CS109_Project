@@ -1,9 +1,9 @@
 all: server client
 
-server: server_stream.o
+server: server_stream.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Threading.o Rule.o
 	g++ -std=gnu++14 Helper.o Threading.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o server_stream.o -pthread -o server
 
-client: client_stream.o
+client: client_stream.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Threading.o Rule.o
 	g++ -std=gnu++14 Helper.o Interface.o Threading.o Transactional_Commands.o Fact.o Base.o Rule.o client_stream.o -pthread -o client
 
 client_stream.o: client_stream.cpp
