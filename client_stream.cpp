@@ -96,6 +96,9 @@ int main (int argc,char ** argv)
 		}
 		close(sock);
 		string serverReq;
+
+		if ( serverReq.compare("no") == 0 )
+		{
 		cout << "Do you wish to connect to a different server? If so, type in the ip address you wish to connect to or type 'no' to quit. ";
 		getline(cin,serverReq);
 		for( int i = 0; i < input.size(); i++)
