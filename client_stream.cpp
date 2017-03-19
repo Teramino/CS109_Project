@@ -93,9 +93,8 @@ int main (int argc,char ** argv)
 			{
 				input[i]=toupper(input[i]);
 			}
-			close(sock);
 		}
-		
+		close(sock);
 		string serverReq;
 		cout << "Do you wish to connect to a different server? If so, type in the ip address you wish to connect to or 'no' to quit.";
 		getline(cin,serverReq);
