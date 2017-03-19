@@ -1,8 +1,16 @@
-all: Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o Threading.o
-	g++ -std=gnu++14 Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o Threading.o 
+all: server client
 
-Main.o: Main.cpp
-	g++ -std=gnu++14 -c Main.cpp
+server: server_stream.o
+	g++ -std=gnu++14 Helper.o Threading.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o server_stream.o -pthread -o server
+
+client: client_stream.o
+	g++ -std=gnu++14 Helper.o Interface.o Threading.o Transactional_Commands.o Fact.o Base.o Rule.o client_stream.o -pthread -o client
+
+client_stream.o: client_stream.cpp
+	g++ -std=gnu++14 -c client_stream.cpp
+
+server_stream.o: server_stream.cpp
+	g++ -std=gnu++14 -c server_stream.cpp
 
 Helper.o: Helper.cpp
 	g++ -std=gnu++14 -c Helper.cpp
@@ -24,18 +32,6 @@ Rule.o: Rule.cpp
 
 Threading.o: Threading.cpp
 	g++ -std=gnu++14 -c Threading.cpp
-
-server: server_stream.o
-	g++ -std=gnu++14 Helper.o Threading.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o server_stream.o 
-
-server_stream.o: server_stream.cpp
-	g++ -std=gnu++14 -c server_stream.cpp
-
-client: client_stream.o
-	g++ -std=gnu++14 Helper.o Interface.o Threading.o Transactional_Commands.o Fact.o Base.o Rule.o client_stream.o 
-
-client_stream.o: client_stream.cpp
-	g++ -std=gnu++14 -c client_stream.cpp
 
 clean:
 	rm Main.o Helper.o Interface.o Transactional_Commands.o Fact.o Base.o Rule.o server_stream.o client_stream.o Threading.o
