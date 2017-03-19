@@ -2,18 +2,14 @@
  MAKEFILE COMMANDS
 ==========================================================================
 
- make all : creates an executable
+ make all : creates two executables
  make clean : removes object files from directory
  make wipe : removes all files from directory excluding makefile
- make server: creates server executable
- make client: creates client executable
 
  IMPORTANT - HOW TO BUILD
  	=> make all
-	=> make server
-	// run the executable ( => ./a.out)
-	=> make client
-	// run the executable ( => ./a.out)
+	=> ./server
+	=> ./client <ip address>
 
 ===========================================================================
  ASSUMPTIONS
